@@ -1,0 +1,28 @@
+{
+  "osc": {
+    "localPort": 57122,
+    "remoteAddress": "127.0.0.1",
+    "remotePort": 57120,
+    "ipVersion": "udp4"
+  },
+  "graph": {
+    "nodeSize": 10,
+    "linkWidth": 3,
+    "alphaDecay": 0.01,
+    "velocityDecay": 0.9,
+    "cooldownTicks": 200
+  },
+  "paths": {
+    "defaultDataPath": "/Users/maurizioberta/Documents/Development/graph-sonification/public/data"
+  },
+  "colors": {
+    "gold": "#fff260a7",
+    "green": "#cdfec5a6",
+    "diamond": "#1eeff6a1",
+    "closed": "#d4d4d466",
+    "hybrid": "#cf6acc7e"
+  },
+  "creative": {
+    "modeEnabled": true
+  }
+}

@@ -1,0 +1,591 @@
+import { Plugin, ItemView, WorkspaceLeaf, Modal, App, Notice } from 'obsidian';
+import type { Component } from 'svelte';
+import ForceGraphComponent from './ForceGraphComponent.svelte';
+import InfoPanelComponent from './utilities/InfoPanelComponent.svelte';
+import MetadataPanelComponent from 'utilities/MetadataPanelComponent.svelte';
+import LinkPanelComponent from 'utilities/LinkPanelComponent.svelte';
+import { mount, unmount } from 'svelte';
+import { createGraphState, GraphState } from './graphState.svelte';
+import * as fs from 'fs';
+import * as path from 'path';
+import FileListModal from './modals/FileListModal.svelte';
+import { FileLoader } from './modals/FileLoader'
+import { OSCManager } from 'osc/osc';
+import { Config, DEFAULT_CONFIG } from './config.svelte';
+import { ForceGraphSettingTab } from './utilities/SettingsTab';
+import { OSReplView, VIEW_TYPE_OSREPL } from './OSReplView';
+import { createOSReplState, OSReplState } from './osrepl/osreplState.svelte';
+
+//================================================================================================
+// File Explorer
+//================================================================================================
+
+export interface FileInfo {
+	name: string;
+	path: string;
+	size: number;
+	modified: Date;
+	isDirectory: boolean;  // Added this
+}
+
+class FileExplorerModal extends Modal {
+	component: FileListModal | undefined;
+	plugin: ExamplePlugin;
+	dirPath: string;
+
+	constructor(app: App, plugin: ExamplePlugin, dirPath: string,) {
+		super(app);
+		this.plugin = plugin;
+		this.dirPath = dirPath;
+	}
+
+	async onOpen() {
+		const { contentEl } = this;
+
+		this.component = mount(FileListModal, {
+			target: this.contentEl,
+			props: {
+				dirPath: this.dirPath,
+				graphState: this.plugin.graphState,
+				onClose: () => this.close()
+			}
+		});
+	}
+
+	onClose() {
+		if (this.component) {
+			unmount(this.component);
+			// this.component.$destroy();
+		}
+	}
+}
+
+//================================================================================================
+// Link Panel
+//================================================================================================
+
+export const VIEW_TYPE_LINK_PANEL = "link-view";
+
+export class LinkView extends ItemView {
+	component: Component | undefined;
+	plugin: ExamplePlugin | undefined;
+
+	constructor(leaf: WorkspaceLeaf, plugin: ExamplePlugin) {
+		super(leaf);
+		this.plugin = plugin;
+	};
+
+	getViewType(): string {
+		return VIEW_TYPE_LINK_PANEL;
+	}
+	getDisplayText(): string {
+		return 'Graph Link Edit Panel';
+	}
+
+	protected async onOpen(): Promise<void> {
+		this.component = mount(LinkPanelComponent, {
+			target: this.contentEl,
+			props: {
+				//Here I should define the props, the runes I am passing to the component
+				graphState: this.plugin.graphState
+			}
+		});
+	}
+
+	protected async onClose(): Promise<void> {
+		if (this.component) {
+			unmount(this.component);
+		}
+	}
+}
+
+//================================================================================================
+// Metadata Panel
+//================================================================================================
+
+export const VIEW_TYPE_METADATA_PANEL = "metadata-view";
+
+export class MetadataView extends ItemView {
+	component: Component | undefined;
+	plugin: ExamplePlugin | undefined;
+
+	constructor(leaf: WorkspaceLeaf, plugin: ExamplePlugin) {
+		super(leaf);
+		this.plugin = plugin;
+	};
+
+	getViewType(): string {
+		return VIEW_TYPE_METADATA_PANEL;
+	}
+	getDisplayText(): string {
+		return 'Graph Metadata Edit Panel';
+	}
+
+	protected async onOpen(): Promise<void> {
+		this.component = mount(MetadataPanelComponent, {
+			target: this.contentEl,
+			props: {
+				//Here I should define the props, the runes I am passing to the component
+				graphState: this.plugin.graphState
+			}
+		});
+	}
+
+	protected async onClose(): Promise<void> {
+		if (this.component) {
+			unmount(this.component);
+		}
+	}
+}
+
+//================================================================================================
+// Info Panel
+//================================================================================================
+
+export const VIEW_TYPE_INFO_PANEL = "info-panel-view";
+
+export class InfoPanelView extends ItemView {
+	// First get the component I had created externally
+	// component: ReturnType<typeof InfoPanelComponent> | undefined;
+	component: Component | undefined;
+	plugin: ExamplePlugin;
+	//This is a bit unclear but I guess it inherits the constructor
+	constructor(leaf: WorkspaceLeaf, plugin: ExamplePlugin) {
+		super(leaf);
+		this.plugin = plugin;
+	}
+	//The view type is that const I had defined earlier, I don't know why i need this
+	getViewType(): string {
+		return VIEW_TYPE_INFO_PANEL;
+	}
+	//When the software calls this it gets this name, probably popup when hovering
+	getDisplayText(): string {
+		return 'Graph Info Panel';
+	}
+
+	async onOpen() {
+		//Here it mounts the Svelte component before I created a generic component of the same type
+		//Now I assign it to the actual component, using the new mount syntax
+		this.component = mount(InfoPanelComponent, {
+			target: this.contentEl,
+			props: {
+				//Here I should define the props, the runes I am passing to the component
+				// graphState: (this.app as any).plugins.plugins[''];
+				graphState: this.plugin.graphState
+			}
+		});
+	}
+
+	// So when I define the class I need an onclose with unmount and an open with mount
+	protected async onClose(): Promise<void> {
+		if (this.component) {
+			unmount(this.component);
+		}
+	}
+
+}
+
+//================================================================================================
+// Graph View
+//================================================================================================
+
+export const VIEW_TYPE_EXAMPLE = 'example-view';
+
+export class GraphView extends ItemView {
+	// A variable to hold on to the Counter instance mounted in this ItemView.
+	// counter: ReturnType<typeof ForceGraphComponent> | undefined;
+	component: Component | undefined;
+	plugin: ExamplePlugin
+
+	constructor(leaf: WorkspaceLeaf, plugin: ExamplePlugin) {
+		super(leaf);
+		this.plugin = plugin;
+	}
+
+	getViewType() {
+		return VIEW_TYPE_EXAMPLE;
+	}
+
+	getDisplayText() {
+		return 'Force-layout graph';
+	}
+
+	// async getProvidersFiles(folderPath: string): Promise<string[]> {
+	// 	const folderContent = await this.app.vault.adapter.list(folderPath);
+	// 	return folderContent.files;
+	// }
+
+	async onOpen() {
+
+		if (!this.plugin.graphState.graphData) {
+			this.contentEl.createEl('div', {
+				text: 'Loading graph data...',
+				cls: 'graph-loading'
+			});
+
+			await this.plugin.dataLoaderPromise;
+
+			this.contentEl.empty();
+		}
+		// const graphData = await this.getGraphData();
+		// const peppino = await this.getProvidersFiles("/gianni");
+		// console.log(peppino)
+		// console.log('Plugin graphState:', this.plugin.graphState);
+		// Attach the Svelte component to the ItemViews content element and provide the needed props.
+		// this.plugin.graphState.graphData = graphData;
+
+		this.component = mount(ForceGraphComponent, {
+			target: this.contentEl,
+			props: {
+				// data: graphData,
+				graphState: this.plugin.graphState
+			}
+		});
+
+		//
+		// Since the component instance is typed, the exported `increment` method is known to TypeScript.
+		// this.counter.increment();
+	}
+
+	async onClose() {
+		if (this.component) {
+			// Remove the Counter from the ItemView.
+			unmount(this.component);
+		}
+	}
+
+	async getGraphData() {
+	}
+}
+
+
+//================================================================================================
+// Main Plugin Class
+//================================================================================================
+export default class ExamplePlugin extends Plugin {
+	graphState: GraphState; // Declare property
+	oscManager: OSCManager;
+	config: Config;
+	dataLoaderPromise: Promise<void> | undefined;
+	replState: OSReplState;
+
+	private dataLoadedResolve: () => void;
+	DEFAULT_CONFIG = DEFAULT_CONFIG;
+	trackerProcess: any;
+
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	//
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	async onload() {
+		try {
+			//Initialize config
+			this.config = new Config();
+			await this.config.load(this);
+
+			await this.initializeOSC();
+			this.replState = createOSReplState(this.oscManager);
+
+			// this.oscManager = new OSCManager(57122, '127.0.0.1', 57120);
+
+			this.graphState = createGraphState(this.oscManager, this.config);
+
+			this.dataLoaderPromise = new Promise((resolve) => {
+				this.dataLoadedResolve = resolve;
+			})
+
+			const fileLoader = new FileLoader(this.graphState);
+			const dataPath = this.config.current.paths.defaultDataPath + '/sandbox.json';// /sandbox.json 5-co-cit-coupling
+
+			try {
+				await fileLoader.loadGraphData(dataPath);
+				this.dataLoadedResolve();
+			} catch (error) {
+				console.error("Failed to load graph data:", error);
+				this.dataLoadedResolve();
+			}
+
+			this.registerView(
+				VIEW_TYPE_EXAMPLE,
+				(leaf) => new GraphView(leaf, this),
+			);
+			this.registerView(
+				VIEW_TYPE_INFO_PANEL,
+				(leaf) => new InfoPanelView(leaf, this)
+			);
+
+			this.registerView(
+				VIEW_TYPE_METADATA_PANEL,
+				(leaf) => new MetadataView(leaf, this)
+			);
+
+			this.registerView(
+				VIEW_TYPE_OSREPL,
+				(leaf) => new OSReplView(leaf, this)
+			);
+
+			this.registerView(
+				VIEW_TYPE_LINK_PANEL,
+				(leaf) => new LinkView(leaf, this)
+			);
+
+			this.addRibbonIcon(
+				'link',
+				'Open Link View',
+				() => this.activateLinkView()
+			);
+
+			this.addRibbonIcon(
+				'circle',
+				'Open Metadata View',
+				() => this.activateMetadataView()
+			);
+
+			this.addRibbonIcon(
+				'terminal',
+				'Open OS REPL',
+				() => this.activateReplView()
+			);
+
+			this.addRibbonIcon('git-fork', 'Open Force Graph', () => {
+				// this.activateView();
+				this.activateBothViews();
+			});
+
+			this.addSettingTab(new ForceGraphSettingTab(this.app, this));
+
+			this.addCommand({
+				id: 'browse-external-files',
+				name: 'Browse external files',
+				callback: () => {
+					new FileExplorerModal(this.app, this, '/Users/maurizioberta/Documents/Development/graph-sonification/public/data').open();
+				}
+			});
+
+		} catch (error) {
+			console.error("Plugin initialization failed:", error);
+			new Notice("Failed to initialize Force Graph plugin");
+		}
+	}
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	//
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	async activateReplView() {
+		const { workspace } = this.app;
+		const leaves = workspace.getLeavesOfType(VIEW_TYPE_OSREPL);
+		if (leaves.length > 0) {
+			workspace.revealLeaf(leaves[0]);
+		} else {
+			const leaf = workspace.getLeaf('split', 'vertical');
+			await leaf.setViewState({ type: VIEW_TYPE_OSREPL, active: true });
+			workspace.revealLeaf(leaf);
+		}
+	}
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	//
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	async activateLinkView() {
+		const { workspace } = this.app;
+		const leaves = workspace.getLeavesOfType(VIEW_TYPE_LINK_PANEL);
+		if (leaves.length > 0) {
+			workspace.revealLeaf(leaves[0]);
+		} else {
+			const leaf = workspace.getLeaf('split', 'vertical');
+			await leaf.setViewState({ type: VIEW_TYPE_LINK_PANEL, active: true });
+			workspace.revealLeaf(leaf);
+		}
+	}
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	//
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	async activateMetadataView() {
+		const { workspace } = this.app;
+		const leaves = workspace.getLeavesOfType(VIEW_TYPE_METADATA_PANEL);
+		if (leaves.length > 0) {
+			workspace.revealLeaf(leaves[0]);
+		} else {
+			const leaf = workspace.getLeaf('split', 'horizontal');
+			await leaf.setViewState({ type: VIEW_TYPE_METADATA_PANEL, active: true });
+			workspace.revealLeaf(leaf);
+		}
+	}
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	//
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	async activateBothViews() {
+		const { workspace } = this.app;
+
+		if (!this.graphState.graphData) {
+			await this.dataLoaderPromise;
+		}
+
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		// Activate the graph view
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		// First I activate the ForceGraph View
+		// I should check if with this method both gets open or I can control them individually
+		let forceGraphLeaf: WorkspaceLeaf | null = null;
+		const forceGraphLeaves = workspace.getLeavesOfType(VIEW_TYPE_EXAMPLE)
+
+		if (forceGraphLeaves.length > 0) {
+			// It exist, so show it
+			forceGraphLeaf = forceGraphLeaves[0]
+		} else {
+			// Create it
+			const leaf = workspace.getRightLeaf(false);
+			if (!leaf) return; // or throw new Error("Could not get leaf")
+			forceGraphLeaf = leaf;
+			// forceGraphLeaf = workspace.getRightLeaf(false);
+			await forceGraphLeaf.setViewState({
+				type: VIEW_TYPE_EXAMPLE,
+				active: true
+			});
+		}
+
+		workspace.revealLeaf(forceGraphLeaf);
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		// Activate the info view
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		let infoPanelLeaf: WorkspaceLeaf | null = null;
+		const infoPanelLeaves = workspace.getLeavesOfType(VIEW_TYPE_INFO_PANEL);
+
+		if (infoPanelLeaves.length > 0) {
+			//it exist reveal it
+			infoPanelLeaf = infoPanelLeaves[0];
+		} else {
+			// workspace.setActiveLeaf(forceGraphLeaf, { focus: true });
+			//create it
+			const leaf = workspace.getLeftLeaf(
+				'split',
+				'vertical'
+			);
+			// This construct allows to remove the  blablaleaf is possibly null
+			// because I write if null then stop so then it's for sure WorkSpaceLeaf
+			if (!leaf) return;
+			infoPanelLeaf = leaf;
+			await infoPanelLeaf.setViewState({
+				type: VIEW_TYPE_INFO_PANEL,
+				active: true
+			})
+		}
+
+		workspace.revealLeaf(infoPanelLeaf)
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		// Activate the metadata edit view
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		let metadataPanelLeaf: WorkspaceLeaf | null = null;
+		const metadataPanelLeaves = workspace.getLeavesOfType(VIEW_TYPE_METADATA_PANEL);
+
+		if (metadataPanelLeaves.length > 0) {
+			//it exist reveal it
+			metadataPanelLeaf = metadataPanelLeaves[0];
+		} else {
+			// workspace.setActiveLeaf(forceGraphLeaf, { focus: true });
+			//create it
+			const leaf = workspace.getLeftLeaf(
+				'split',
+				'vertical'
+			);
+			// This construct allows to remove the  blablaleaf is possibly null
+			// because I write if null then stop so then it's for sure WorkSpaceLeaf
+			if (!leaf) return;
+			metadataPanelLeaf = leaf;
+			await metadataPanelLeaf.setViewState({
+				type: VIEW_TYPE_METADATA_PANEL,
+				active: true
+			})
+		}
+
+		workspace.revealLeaf(metadataPanelLeaf)
+	}
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	// Where is this used???
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	getFilesFromDirectory(dirPath: string): FileInfo[] {
+		try {
+			if (!fs.existsSync(dirPath)) {
+				throw new Error('Directory does not exist');
+			}
+
+			const items = fs.readdirSync(dirPath);
+
+			return items.map(item => {
+				const fullPath = path.join(dirPath, item);
+				const stats = fs.statSync(fullPath);
+
+				return {
+					name: item,
+					path: fullPath,
+					size: stats.size,
+					modified: stats.mtime,
+					isDirectory: stats.isDirectory()
+				};
+			});
+		} catch (error) {
+			console.error('Error reading directory:', error);
+			return [];
+		}
+	}
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	// Initialize OSC connection
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	private async initializeOSC(): Promise<void> {
+		try {
+			const { localPort, remoteAddress, remotePort, ipVersion } = this.config.current.osc;
+
+			this.oscManager = new OSCManager(
+				localPort,
+				remoteAddress,
+				remotePort,
+				ipVersion
+			);
+
+			console.log(`OSC initialized: ${localPort} -> ${remoteAddress}:${remotePort}`);
+		} catch (error) {
+			console.error("Failed to initialize OSC:", error);
+			throw error;
+		}
+	}
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	// Restart OSC with new settings (called from settings tab)
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	async restartOSC(): Promise<void> {
+		try {
+			new Notice('Restarting OSC connection...');
+
+			// Close existing connection
+			if (this.oscManager) {
+				this.oscManager.close();
+			}
+
+			// Reinitialize with new config
+			await this.initializeOSC();
+
+			// Update graphState with new OSC manager
+			this.graphState.oscManager = this.oscManager;
+
+			new Notice('OSC connection restarted successfully');
+		} catch (error) {
+			console.error("Failed to restart OSC:", error);
+			new Notice('Failed to restart OSC connection');
+		}
+	}
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	// When Closing App release everything
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	async onunload() {
+		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_EXAMPLE);
+		this.app.workspace.detachLeavesOfType(VIEW_TYPE_INFO_PANEL);
+		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_METADATA_PANEL);
+		//this.app.workspace.detachLeavesOfType(VIEW_TYPE_LINK_PANEL);
+		this.app.workspace.detachLeavesOfType(VIEW_TYPE_OSREPL);
+
+		if (this.graphState) {
+			this.graphState.close();
+		}
+		if (this.oscManager) {
+			this.oscManager.close();
+		}
+		if (this.replState) this.replState.close();
+		// Release any resources configured by the plugin.
+	}
+}
