@@ -1,6 +1,14 @@
 <script>
 	import { Menu } from "obsidian";
 	import { slide } from "svelte/transition";
+	import { setIcon } from "obsidian";
+	import { onMount } from "svelte";
+
+	let btnEl;
+
+	onMount(() => {
+		setIcon(btnEl, "x");
+	});
 	let { name, dict = $bindable(), onDeleteMetadata } = $props();
 
 	function triggerDelete(test) {
@@ -31,20 +39,52 @@
 	}
 </script>
 
-<div class="setting-item">
-	<div class="setting-item-info">
-		<div class="setting-item-name">{name}</div>
+<div class="metadata-property">
+	<div class="metadata-property-key">
+		<input
+			class="metadata-property-key-input"
+			type="text"
+			bind:value={name}
+		/>
 	</div>
-	<div class="setting-item-control">
-		<input type="text" bind:value={dict[name]} />
-		<!-- <button style="cursor: pointer;" onclick={triggerDelete}>X</button> -->
+	<div class="metadata-property-value">
+		<input
+			class="metadata-input-text"
+			type="text"
+			bind:value={dict[name]}
+		/>
+		<button
+			bind:this={btnEl}
+			class="clickable-icon"
+			aria-label="Delete property"
+			onclick={() => triggerDelete(name)}
+		></button>
+	</div>
+</div>
+
+<!-- 
+<div class="metadata-property">
+	<div class="metadata-property-key">
+		<input
+			class="metadata-property-key-input"
+			type="text"
+			bind:value={name}
+		/>
+	</div>
+	<div class="metadata-property-value">
+		<input
+			class="metadata-input-text"
+			type="text"
+			bind:value={dict[name]}
+		/>
 		<button style="cursor: pointer;" onclick={() => triggerDelete(name)}
 			>X</button
 		>
 	</div>
-</div>
+</div> -->
+
+<!-- <button style="cursor: pointer;" onclick={triggerDelete}>X</button> -->
 
 <!-- <button onclick={openMenu}>Open Menu</button> -->
 
-<style>
-</style>
+

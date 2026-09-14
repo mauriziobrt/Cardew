@@ -8,8 +8,8 @@
   "graph": {
     "nodeSize": 10,
     "linkWidth": 3,
-    "alphaDecay": 0.01,
-    "velocityDecay": 0.9,
+    "alphaDecay": 0.03,
+    "velocityDecay": 0.3,
     "cooldownTicks": 200
   },
   "paths": {

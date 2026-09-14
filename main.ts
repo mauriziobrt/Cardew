@@ -82,6 +82,10 @@ export class LinkView extends ItemView {
 		return 'Graph Link Edit Panel';
 	}
 
+	getIcon() {
+		return "link"; // lucide icon id shown in the tab
+	}
+
 	protected async onOpen(): Promise<void> {
 		this.component = mount(LinkPanelComponent, {
 			target: this.contentEl,
@@ -118,7 +122,10 @@ export class MetadataView extends ItemView {
 		return VIEW_TYPE_METADATA_PANEL;
 	}
 	getDisplayText(): string {
-		return 'Graph Metadata Edit Panel';
+		return 'Properties';
+	}
+	getIcon() {
+		return "info"; // lucide icon id shown in the tab
 	}
 
 	protected async onOpen(): Promise<void> {
@@ -189,7 +196,7 @@ export class InfoPanelView extends ItemView {
 // Graph View
 //================================================================================================
 
-export const VIEW_TYPE_EXAMPLE = 'example-view';
+export const VIEW_TYPE_FORCE_GRAPH = 'graph-view';
 
 export class GraphView extends ItemView {
 	// A variable to hold on to the Counter instance mounted in this ItemView.
@@ -203,11 +210,15 @@ export class GraphView extends ItemView {
 	}
 
 	getViewType() {
-		return VIEW_TYPE_EXAMPLE;
+		return VIEW_TYPE_FORCE_GRAPH;
 	}
 
 	getDisplayText() {
 		return 'Force-layout graph';
+	}
+
+	getIcon() {
+		return "chart-network"; // lucide icon id shown in the tab
 	}
 
 	// async getProvidersFiles(folderPath: string): Promise<string[]> {
@@ -294,7 +305,7 @@ export default class ExamplePlugin extends Plugin {
 			})
 
 			const fileLoader = new FileLoader(this.graphState);
-			const dataPath = this.config.current.paths.defaultDataPath + '/sandbox.json';// /sandbox.json 5-co-cit-coupling
+			const dataPath = this.config.current.paths.defaultDataPath + '/5-co-cit-coupling.json';// /sandbox.json 5-co-cit-coupling
 
 			try {
 				await fileLoader.loadGraphData(dataPath);
@@ -305,7 +316,7 @@ export default class ExamplePlugin extends Plugin {
 			}
 
 			this.registerView(
-				VIEW_TYPE_EXAMPLE,
+				VIEW_TYPE_FORCE_GRAPH,
 				(leaf) => new GraphView(leaf, this),
 			);
 			this.registerView(
@@ -361,6 +372,12 @@ export default class ExamplePlugin extends Plugin {
 				}
 			});
 
+			this.app.workspace.onLayoutReady(() => {
+				this.activateBothViews();
+				this.activateMetadataView();
+				this.activateLinkView();
+			});
+
 		} catch (error) {
 			console.error("Plugin initialization failed:", error);
 			new Notice("Failed to initialize Force Graph plugin");
@@ -388,11 +405,24 @@ export default class ExamplePlugin extends Plugin {
 		const leaves = workspace.getLeavesOfType(VIEW_TYPE_LINK_PANEL);
 		if (leaves.length > 0) {
 			workspace.revealLeaf(leaves[0]);
-		} else {
-			const leaf = workspace.getLeaf('split', 'vertical');
+		}
+		else {
+			const leaf = workspace.getLeaf('split', 'horizontal');
 			await leaf.setViewState({ type: VIEW_TYPE_LINK_PANEL, active: true });
 			workspace.revealLeaf(leaf);
 		}
+		// const metaLeaves = workspace.getLeavesOfType(VIEW_TYPE_METADATA_PANEL);
+		// const parentLeaf = metaLeaves[0] ?? workspace.getLeaf('split', 'horizontal');
+
+		// createLeafInParent adds it as a tab in the same tab group, not a new split
+		// const leaf = workspace.createLeafInParent(parentLeaf.parent, 1);
+		// await leaf.setViewState({ type: VIEW_TYPE_LINK_PANEL, active: true });
+		// workspace.revealLeaf(leaf);
+
+		// const tabGroup = leaf.parent as any;
+		// if (tabGroup?.setStacked) {
+		// 	tabGroup.setStacked(true);
+		// }
 	}
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	//
@@ -403,7 +433,8 @@ export default class ExamplePlugin extends Plugin {
 		if (leaves.length > 0) {
 			workspace.revealLeaf(leaves[0]);
 		} else {
-			const leaf = workspace.getLeaf('split', 'horizontal');
+			const leaf = workspace.getRightLeaf(false);
+			if (!leaf) return;
 			await leaf.setViewState({ type: VIEW_TYPE_METADATA_PANEL, active: true });
 			workspace.revealLeaf(leaf);
 		}
@@ -424,24 +455,24 @@ export default class ExamplePlugin extends Plugin {
 		// First I activate the ForceGraph View
 		// I should check if with this method both gets open or I can control them individually
 		let forceGraphLeaf: WorkspaceLeaf | null = null;
-		const forceGraphLeaves = workspace.getLeavesOfType(VIEW_TYPE_EXAMPLE)
+		const forceGraphLeaves = workspace.getLeavesOfType(VIEW_TYPE_FORCE_GRAPH)
 
 		if (forceGraphLeaves.length > 0) {
 			// It exist, so show it
 			forceGraphLeaf = forceGraphLeaves[0]
 		} else {
 			// Create it
-			const leaf = workspace.getRightLeaf(false);
+			const leaf = workspace.getLeaf(false);
 			if (!leaf) return; // or throw new Error("Could not get leaf")
 			forceGraphLeaf = leaf;
 			// forceGraphLeaf = workspace.getRightLeaf(false);
 			await forceGraphLeaf.setViewState({
-				type: VIEW_TYPE_EXAMPLE,
+				type: VIEW_TYPE_FORCE_GRAPH,
 				active: true
 			});
 		}
 
-		workspace.revealLeaf(forceGraphLeaf);
+		await workspace.revealLeaf(forceGraphLeaf);
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		// Activate the info view
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -454,9 +485,7 @@ export default class ExamplePlugin extends Plugin {
 		} else {
 			// workspace.setActiveLeaf(forceGraphLeaf, { focus: true });
 			//create it
-			const leaf = workspace.getLeftLeaf(
-				'split',
-				'vertical'
+			const leaf = workspace.getLeftLeaf(false
 			);
 			// This construct allows to remove the  blablaleaf is possibly null
 			// because I write if null then stop so then it's for sure WorkSpaceLeaf
@@ -481,14 +510,13 @@ export default class ExamplePlugin extends Plugin {
 		} else {
 			// workspace.setActiveLeaf(forceGraphLeaf, { focus: true });
 			//create it
-			const leaf = workspace.getLeftLeaf(
-				'split',
-				'vertical'
+			const leaf = workspace.getRightLeaf(false
 			);
 			// This construct allows to remove the  blablaleaf is possibly null
 			// because I write if null then stop so then it's for sure WorkSpaceLeaf
 			if (!leaf) return;
 			metadataPanelLeaf = leaf;
+			if (!metadataPanelLeaf) return;
 			await metadataPanelLeaf.setViewState({
 				type: VIEW_TYPE_METADATA_PANEL,
 				active: true
@@ -573,10 +601,10 @@ export default class ExamplePlugin extends Plugin {
 	// When Closing App release everything
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	async onunload() {
-		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_EXAMPLE);
+		this.app.workspace.detachLeavesOfType(VIEW_TYPE_FORCE_GRAPH);
 		this.app.workspace.detachLeavesOfType(VIEW_TYPE_INFO_PANEL);
-		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_METADATA_PANEL);
-		//this.app.workspace.detachLeavesOfType(VIEW_TYPE_LINK_PANEL);
+		this.app.workspace.detachLeavesOfType(VIEW_TYPE_METADATA_PANEL);
+		this.app.workspace.detachLeavesOfType(VIEW_TYPE_LINK_PANEL);
 		this.app.workspace.detachLeavesOfType(VIEW_TYPE_OSREPL);
 
 		if (this.graphState) {

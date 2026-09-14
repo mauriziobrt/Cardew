@@ -396,7 +396,7 @@ export class GraphState {
     setupCreativeConfig() {
         // TODO: function to enable creative mode, which causes the graph to be more static
         // creativeConfig;
-        this.graph?.d3VelocityDecay(1)
+        // this.graph?.d3VelocityDecay(1)
     }
     //Maybe here lifeDeathNode() if background if not call the other IDK
     createNode(e: MouseEvent) {

@@ -68,28 +68,36 @@ So what is needed:
 
 //===============================================================
 -->
-<h1 class="setting-title">Linked Nodes</h1>
-<div class="setting-item">
-	<section bind:this={nodeSort}>
-		{#if graphState.selectedNodeIndex !== null}
-			<!-- the issue is connecting to the links and on each editing make it work
+<!-- <h1 class="setting-title">Linked Nodes</h1> -->
+<div class="view-content">
+	<div class="metadata-container">
+		<div class="metadata-content">
+			<div class="metadata-properties">
+				<section bind:this={nodeSort}>
+					{#if graphState.selectedNodeIndex !== null}
+						<!-- the issue is connecting to the links and on each editing make it work
 		also on // the other end -->
-			{#each graphState.selectedNodeRawLinks as link (link)}
-				<PanelLink
-					links={link}
-					otherNode={link.source.id === graphState.selectedNode.id
-						? link.target
-						: link.source}
-					onDelete={handleDelete}
-					onEdit={(newTargetId) =>
-						graphState.editLink(link, newTargetId)}
-					bind:nodes={graphState.allNodeIds}
-					onClick={() => graphState.highlightLink(link)}
-					onLeave={() => graphState.resetColor()}
-				/>
-			{/each}
+						{#each graphState.selectedNodeRawLinks as link (link)}
+							{@const otherNode =
+								link.source.id === graphState.selectedNode.id
+									? link.target
+									: link.source}
+							<PanelLink
+								links={link}
+								otherNode={otherNode}
+								onDelete={handleDelete}
+								onEdit={(newTargetId) =>
+									graphState.editLink(link, newTargetId)}
+								bind:nodes={graphState.allNodeIds}
+								onClick={() => graphState.highlightLink(link)}
+								onLeave={() => graphState.resetColor()}
+								selectNode={(node) =>
+									graphState.selectNode(node)}
+								degree={graphState.degree[otherNode.id]}
+							/>
+						{/each}
 
-			<!-- {#each Object.entries(graphState.selectedNodeRawLinks) as [key, value]}
+						<!-- {#each Object.entries(graphState.selectedNodeRawLinks) as [key, value]}
 			<PanelLink
 				position={key}
 				// I can't bind to selectedNodeLinks for some reason
@@ -99,11 +107,18 @@ So what is needed:
 				onDelete={handleDelete}
 			/>
 		{/each} -->
-		{/if}
-	</section>
+					{/if}
+				</section>
+			</div>
+		</div>
+		<!-- <h1 class="setting-title">Connect Nodes</h1> -->
+
+		<Panelplus onAdd={handleAdd} nodeIds={graphState.allNodeIds} />
+	</div>
 </div>
-<h1 class="setting-title">Connect Nodes</h1>
 
-<Panelplus onAdd={handleAdd} nodeIds={graphState.allNodeIds} />
-
-
+<style>
+	.metadata-container {
+		--metadata-divider-width: 1px;
+	}
+</style>

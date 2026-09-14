@@ -1,11 +1,11 @@
 
 {
   "id": "force-graph-plugin",
-  "name": "Force Graph",
-  "version": "1.0.0",
+  "name": "Cornelius",
+  "version": "0.0.1",
   "minAppVersion": "0.15.0",
-  "description": "Visualize your vault as a force-directed graph",
-  "author": "Your Name",
-  "authorUrl": "https://yourwebsite.com",
-  "isDesktopOnly": false
+  "description": "An interactive force graph for creating scores and exploring networked data.",
+  "author": "Maurizio Berta",
+  "authorUrl": "https://mauriziobrt.github.io/",
+  "isDesktopOnly": true
 }
