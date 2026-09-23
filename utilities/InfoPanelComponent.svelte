@@ -35,6 +35,9 @@
 			graphState.config.current.creative.modeEnabled = true;
 		}
 	}
+	function centerGraph() {
+		graphState.graph?.centerAt(0,0);
+	}
 </script>
 
 <div class="info-panel">
@@ -88,6 +91,17 @@
 		</div>
 		<div class="setting-item-value">
 			<button style="cursor: pointer;" onclick={saveGraph}> Save</button>
+		</div>
+	</div>
+	<div class="setting-item">
+		<div class="setting-item-info">
+			<div class="setting-item-name">Center Graph</div>
+			<div class="setting-item-description">
+				Center Graph to Origin
+			</div>
+		</div>
+		<div class="setting-item-value">
+			<button style="cursor: pointer;" onclick={centerGraph}> Center</button>
 		</div>
 	</div>
 </div>

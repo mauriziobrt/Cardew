@@ -144,6 +144,9 @@
 			onRight: actions.navigateRight,
 			onSpace: actions.rhythm,
 			onBackspace: actions.kill,
+			onCtrlMouseDown: actions.createNode,
+			onCmd: actions.pencilCursor,
+			onCmdUp: actions.resetPencilCursor,
 			onMouseDown: actions.mouseDown,
 			onMouseDrag: actions.mouseDrag,
 			onMouseUp: actions.mouseUp,
@@ -152,11 +155,9 @@
 			onAltMouseDown: actions.rectangleSelectionStart,
 			onAltMouseUp: actions.clearSelection,
 			onAltMouseDrag: actions.rectangleSelectionEnd,
-			onDoubleClick: actions.createNode,
 			undo: actions.undo,
 			redo: actions.redo
 		});
-
 		cleanupOSCControls = registerOSCcontrols({
 			msgUp: actions.navigateUp,
 			msgLeft: actions.navigateLeft,

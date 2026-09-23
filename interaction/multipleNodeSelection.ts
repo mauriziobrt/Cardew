@@ -16,7 +16,8 @@ function positionSelection(
     endX: number,
     endY: number,
     graphData: any,
-    graph: graph
+    graph: graph,
+    colorScale: d3.ScaleOrdinal<string, string>
 ): void {
     const minX = Math.min(startX, endX)
     const maxX = Math.max(startX, endX)
@@ -37,7 +38,8 @@ function positionSelection(
     // analysis (also musicological maybe include mean centroid etc..)
     // console.log(graph.nodeColor())
     graph.nodeColor(n =>
-        selectedNodes.some(s => s.id === n.id) ? 'red' : 'black');
+        selectedNodes.some(s => s.id === n.id) ? 'yellow' : colorScale(n.openacces));
+    console.log([...selectedNodes]);
     // this.graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.colorScale(n.openacces));
 }
 //–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -56,7 +58,7 @@ function drawRectangle(
 
     ctx.save()
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.52)'
-    ctx.fillStyle = 'rgba(75, 2, 2, 0.43)'
+    ctx.fillStyle = 'rgba(118, 117, 117, 0.43)'
     ctx.lineWidth = 2;// / globalScale
 
     ctx.fillRect(x, y, w, h)
@@ -73,8 +75,9 @@ export function rectangleMultiSelect(
     endY: number,
     ctx: CanvasRenderingContext2D,
     graphData: any,
-    graph: any
+    graph: any,
+    colorScale: d3.ScaleOrdinal<string, string>
 ): void {
     drawRectangle(startX, startY, endX, endY, ctx);
-    positionSelection(startX, startY, endX, endY, graphData, graph)
+    positionSelection(startX, startY, endX, endY, graphData, graph, colorScale)
 }

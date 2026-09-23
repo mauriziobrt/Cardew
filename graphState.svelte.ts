@@ -49,18 +49,6 @@ export class GraphState {
         this.oscManager = oscManager;
         this.config = config;
         // Initialize OSC
-        // this.oscManager.onMessage((address, args) => {
-        // console.log('Received OSC:', address, args);
-        // if (address) {
-        //     switch (address) {
-        //         case '/select':
-        //             const id = args[0]
-        //             this.navigate("up");
-        //             // window.selectNodeById(id);
-        //             break;
-        //     }
-        // }
-        // });
     };
     // Here I store the Graph to access it's functions
     theGraph(graph: Graph) {
@@ -81,7 +69,7 @@ export class GraphState {
         // Update Colors
         this.colorScale = this.createColorScale();
         this.graph.nodeColor((node: { openacces: string; }) => this.colorScale(node.openacces));
-
+        // this.graph.nodeColor((n: Node) => n.highlighted ? 'red' : this.colorScale(n.openacces));
         // console.log("LENGTH", data["nodes"]);
         this.numberElements = data["nodes"].length;
         // Calculate node degrees
@@ -243,33 +231,6 @@ export class GraphState {
         this.graphData.links.push({ source: sourceId, target: normalizedTarget });
         this.updateGraphData();
     }
-    // addLink(targetId: string | number) {
-    //     if (!this.graphData || !this.selectedNode) return;
-    //     //to add a link I need to get the link ID  and a targetId that has to be a node existing in the graph
-    //     const sourceId = this.selectedNode.id;
-
-    //     // I remove if they are the same maybe here I can throw an error later
-    //     if (sourceId === targetId) return;
-    //     // if the link already exist then return I don't need to create duplicates
-    //     // const exists = this.graphData.links.some(
-    //     //     link =>
-    //     //         (link.source === sourceId && link.target === targetId) ||
-    //     //         (link.source === targetId && link.target === sourceId)
-    //     // );
-    //     const exists = this.graphData.links.some(link => {
-    //         const s = link.source.id ?? link.source;
-    //         const t = link.target.id ?? link.target;
-    //         return (s === sourceId && t === targetId) || (s === targetId && t === sourceId);
-    //     });
-    //     if (exists) return;
-    //     // here I push the new link but I have to check if targetId exists, when is this created?
-    //     this.graphData.links.push({
-    //         source: sourceId,
-    //         target: targetId
-    //     });
-
-    //     this.updateGraphData();
-    // }
 
     removeLink(link: Link) {
         if (!this.graphData) return;
@@ -283,14 +244,17 @@ export class GraphState {
     }
 
     highlightLink(link: Link) {
-        if (!this.graphData) return;
+        if (!this.graph) return;
         this.graph.nodeColor(n =>
-            n.id === link.source.id || n.id === link.target.id ? 'red' : 'gray'
+            n.id === link.source.id || n.id === link.target.id ? 'red' : this.colorScale(n.openacces)
         );
     }
 
     resetColor() {
-        // this.graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.colorScale(n.openacces));
+        if (!this.graph) return;
+        this.graph.nodeColor((node) =>
+            this.colorScale(node.openacces)
+        );
     }
     //====================================================================================
     // Data Selection
@@ -301,41 +265,31 @@ export class GraphState {
     }
     // Function that decides the behaviour of the graph when a node is selected
     selectNode(node: Node) {
-        if (!this.graph || !this.graphData || node.id === null) return;
-        console.log(node)
-        // console.log("UPDATED!")
+        if (!this.graph || !this.graphData) return;
         const prevId = this.previousSelectedId;
         this.selectedNode = node;
-        this.previousSelectedId = node.id;
-        this.selectedNodeIndex = this.graphData.nodes.indexOf(node);
-        // console.log("Selected this", this.selectedNode)
-        // this.graph.nodeColor((node) => this.colorScale(node.openacces));
-        if (this.multiSelect) {
-            // if it's not there yet then add - don't create duplicates
-            if (!this.selectedNodes.includes(this.selectedNode)) {
-                this.selectedNodes.push(this.selectedNode);
+        if (this.selectedNode.id) {
+            this.previousSelectedId = node.id;
+            this.selectedNodeIndex = this.graphData.nodes.indexOf(node);
+            // this.graph.nodeColor((node) => this.colorScale(node.openacces));
+            if (this.multiSelect) {
+                // if it's not there yet then add - don't create duplicates
+                if (!this.selectedNodes.includes(this.selectedNode)) {
+                    this.selectedNodes.push(this.selectedNode);
+                }
+                console.log([...this.selectedNodes]);
+                this.graph.nodeColor(n => this.selectedNodes.some(s => s.id === n.id) ? 'red' : this.colorScale(n.openacces));
+            } else {
+                this.graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.colorScale(n.openacces));
+                this.graph.centerAt(this.selectedNode.x, this.selectedNode.y, 300);
+                // this should be GUI composed
+                this.oscManager.sendMessage('/control', [
+                    node.id, node.openacces, node.citations,
+                    this.degree[node.id], 1000, node.year, node.x, node.y, 2, 55, 800
+                ]);
+
             }
-            console.log([...this.selectedNodes]);
-        }
-        // this.graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : 'black');
-
-        // this.graph.nodeColor(n =>
-        //     this.selectedNodes.some(s => s.id === n.id) ? 'red' : this.colorScale(n.openacces));
-        // this.graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.colorScale(n.openacces));
-        // if (prevId !== null && prevId !== node.id) {
-        //     const prevNode = this.graphData.nodes.find(n 0> navigateInDirection.id === prevId);
-        //     if (prevNode) {
-        //         this.graph.nodeColor(prevNode, this.colorScale(this.colorScale(prevNode.openacces)));
-        //     }
-        // }
-        // console.log("PLEASE CHANGE COLOR!")
-
-        // console.log(this.selectedNodeLinks)
-
-        this.graph.centerAt(this.selectedNode.x, this.selectedNode.y, 300);
-        // this.oscManager.sendMessage('/control', [node.id, node.openacces, node.citations, 55, 1000, node.year, node.x, node.y, 1, 55, 800]);
-        // this.lastOscMessage = [node.id, node.openacces, node.citations, 55, 1000, node.year, node.x, node.y, 1, 55, 800];
-        // [node["id"], node["openacces"], cit, degree, currentWeightTime, node["year"], node["x"], node["y"], mapping, maxDegree, maxCit]
+        };
     }
     selectionStart(e: MouseEvent) {
         // Selection start is triggered on Mouse Down.
@@ -359,7 +313,8 @@ export class GraphState {
                 this.selectionEndMouse.x, this.selectionEndMouse.y,
                 ctx,
                 this.graphData,
-                this.graph
+                this.graph,
+                this.colorScale
             )
         }
     }
@@ -378,17 +333,15 @@ export class GraphState {
     }
     // Rhythmic interaction mode
     rhythm() {
-        if (!this.selectedNode || !this.graphData) return;
-        //console.log("Start rhythm");
-        // const connectedLinks = this.graphData.links
-        //     .filter(link => link.source.id === this.selectedNode.id || link.target.id === this.selectedNode.id);
-
-        // const connectedNodes = connectedLinks
-        //     .map(link => link.source.id === this.selectedNode.id ? link.target : link.source);
-
+        if (!this.selectedNode || !this.graphData || !this.graph) return;
         //TODO: APPLY stats of current cluster
-        //console.log(connectedNodes);
-        highlightNeighborsGradually(this.selectedNode, this.graphData, this.oscManager, this.graph, this.degree);
+        highlightNeighborsGradually(this.selectedNode, this.graphData, this.oscManager, this.graph, this.colorScale);
+    }
+    // Transition interaction mode
+    transition() {
+        if (!this.selectedNodes || !this.graphData) return;
+        console.log(this.selectedNodes);
+        //for any combination of nodes find a path that traverse them
     }
     //=======================================================================================
     // Creative Mode Components
@@ -421,6 +374,7 @@ export class GraphState {
         if (!this.graphData) return [];
         return this.graphData
     }
+
     killNode() {
         // Function that calls removeNode which deletes the selected node
         // Should also delete the selectedNodes
@@ -442,19 +396,36 @@ export class GraphState {
                 target: link.target.id ?? link.target
             }));
 
-
         // Also clean up multi-select if the deleted node was part of it
         this.selectedNodes = this.selectedNodes.filter(n => n.id !== deletedId);
 
         this.selectedNode = null; // fixes bug #3 from earlier too
         this.selectedNodeIndex = null;
         this.updateGraphData();
-
-
     }
     //=======================================================================================
     // Utilities
     //=======================================================================================
+    pencilCursor() {
+        const pencilCursorCSS =
+            `url("data:image/svg+xml;utf8,` +
+            encodeURIComponent(`
+    <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
+      <path d='M2 22l1.5-5.5L16 4l4 4L7.5 20.5z' fill='#fff' stroke='#000' stroke-width='1.5'/>
+      <path d='M14.5 5.5l4 4' stroke='#000' stroke-width='1.5'/>
+    </svg>
+  `) +
+            `") 2 22, crosshair`;
+
+        const canvas = document.querySelector('canvas')
+        canvas.style.cursor = pencilCursorCSS;
+    }
+
+    resetPencilCursor() {
+        const canvas = document.querySelector('canvas')
+        canvas.style.cursor = '';
+    }
+
     public createColorScale() {
         if (!this.graphData) return;
         const nodes = this.graphData.nodes;
@@ -493,6 +464,7 @@ export class GraphState {
         this.selectedNode = null;
         this.selectedNodeIndex = null;
         clearRhythmAnimations();
+        this.resetColor();
         // highlightedPath = [];
         // clearActiveAnimations();
         // clearTransitionAnimations();

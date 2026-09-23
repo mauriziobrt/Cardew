@@ -1,25 +1,8 @@
 <script lang="ts">
-	import Sortable from "sortablejs";
-	import { onMount } from "svelte";
 	import Panel from "./Panel.svelte";
-	import Panelplus from "./Panelplus.svelte";
 	import type { GraphState } from "graphState.svelte";
 	import MetadataPlus from "./MetadataPlus.svelte";
-	// import PanelNodes from "./PanelNodes.svelte";
-
-	let foo: HTMLElement;
-
-	onMount(async function () {
-		// it is needed for each group
-		Sortable.create(foo, {
-			group: {
-				name: "foo",
-				put: true,
-				// 				pull: false,
-			},
-			animation: 200,
-		});
-	});
+	import MetadataMenu from "./MetadataMenu.svelte";
 
 	interface Props {
 		graphState: GraphState;
@@ -35,10 +18,8 @@
 		"vy",
 		"index",
 		"__indexColor",
-		"vx",
-		"vy",
-		"fx",
-		"fy",
+		// "fx",
+		// "fy",
 		"__initialDragPos",
 		"__dragged",
 	];
@@ -69,6 +50,14 @@
 		graphState.selectedNode[metaName.trim()] = metaValue;
 	}
 
+	function handleLoad(metaName) {}
+
+	function saveClass(metaName) {}
+
+	function handleReset(metaName) {
+		//Function to clear the metadata of an object
+	}
+
 	function handleDelete(metaName) {
 		if (!graphState.selectedNode) return;
 		// console.log(graphState.selectedNode[metaName]);
@@ -91,11 +80,11 @@
 	<div class="metadata-container">
 		<div class="metadata-content">
 			<div class="metadata-properties">
+				<MetadataMenu></MetadataMenu>
 				<!-- {#each Object.entries(graphState.selectedNode ?? {}) as [key]}
 		<Panel name={key} bind:dict={graphState.selectedNode} /> -->
 				<!-- <Panel name={key} bind:dict={graphState.selectedNode} /> -->
 				<!-- {/each} -->
-
 				{#if graphState.selectedNodeIndex !== null}
 					{@const node =
 						graphState.graphData.nodes[
@@ -119,7 +108,7 @@
 </div>
 
 <style>
-.metadata-container{
-	--metadata-divider-width: 1px;
-}
+	.metadata-container {
+		--metadata-divider-width: 1px;
+	}
 </style>

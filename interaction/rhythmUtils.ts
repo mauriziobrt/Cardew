@@ -20,7 +20,9 @@ export function highlightNeighborsGradually(
     graphData: any,
     osc: any,
     graph: any,
-    degree: Record<number, number>
+    colorScale: d3.ScaleOrdinal<string, string>
+
+    // degree: Record<number, number>
     //   degree: Record<number, number>,
     //   allNodes: Node[],
     //   allLinks: Link[]
@@ -53,9 +55,7 @@ export function highlightNeighborsGradually(
 
         const timeoutId = setTimeout(() => {
             neighbor.highlighted = true;
-            // graph.nodeColor((n: Node) => n.highlighted ? 'red' : graph.colorScale(n.openacces));
-
-            graph.nodeColor((n: Node) => n.highlighted ? 'red' : 'gray');
+            graph.nodeColor((n: Node) => n.highlighted ? 'red' : colorScale(n.openacces));
             osc.sendMessage('/rhythm', [
                 neighbor.id, neighbor.openacces, neighbor.citations,
                 55, 1000, neighbor.year, neighbor.x, neighbor.y, 1, 55, 800

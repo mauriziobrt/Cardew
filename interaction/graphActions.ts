@@ -8,6 +8,8 @@ export function createGraphActions(graphState: GraphState) {
     navigateRight: () => graphState.navigate('right'),
     rhythm: () => graphState.rhythm(),
     kill: () => graphState.killNode(),
+    pencilCursor: () => graphState.pencilCursor(),
+    resetPencilCursor: () => graphState.resetPencilCursor(),
     mouseDown: () => null,
     mouseUp: () => null,
     mouseDrag: () => null,

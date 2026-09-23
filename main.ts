@@ -170,6 +170,10 @@ export class InfoPanelView extends ItemView {
 		return 'Graph Info Panel';
 	}
 
+	getIcon() {
+		return "settings"; // lucide icon id shown in the tab
+	}
+
 	async onOpen() {
 		//Here it mounts the Svelte component before I created a generic component of the same type
 		//Now I assign it to the actual component, using the new mount syntax
@@ -346,7 +350,7 @@ export default class ExamplePlugin extends Plugin {
 			);
 
 			this.addRibbonIcon(
-				'circle',
+				'info',
 				'Open Metadata View',
 				() => this.activateMetadataView()
 			);
@@ -410,6 +414,10 @@ export default class ExamplePlugin extends Plugin {
 			const leaf = workspace.getLeaf('split', 'horizontal');
 			await leaf.setViewState({ type: VIEW_TYPE_LINK_PANEL, active: true });
 			workspace.revealLeaf(leaf);
+			const tabGroup = leaf.parent as any;
+			if (tabGroup?.setStacked) {
+				tabGroup.setStacked(true);
+			}
 		}
 		// const metaLeaves = workspace.getLeavesOfType(VIEW_TYPE_METADATA_PANEL);
 		// const parentLeaf = metaLeaves[0] ?? workspace.getLeaf('split', 'horizontal');
@@ -419,10 +427,7 @@ export default class ExamplePlugin extends Plugin {
 		// await leaf.setViewState({ type: VIEW_TYPE_LINK_PANEL, active: true });
 		// workspace.revealLeaf(leaf);
 
-		// const tabGroup = leaf.parent as any;
-		// if (tabGroup?.setStacked) {
-		// 	tabGroup.setStacked(true);
-		// }
+
 	}
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	//

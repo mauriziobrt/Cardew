@@ -1,4 +1,3 @@
-
 // to implement: cmd+i or i opens inspector
 
 import type { OSCManager } from "osc/osc";
@@ -11,15 +10,17 @@ export function registerControls(handlers: {
     onRight: () => void;
     onSpace: () => void;
     onBackspace: () => void;
+    onCmd: () => void;
+    onCmdUp: () => void;
     onMouseDown: (e: MouseEvent) => void;
     onMouseUp: (e: MouseEvent) => void;
     onMouseDrag: (e: MouseEvent) => void;
+    onCtrlMouseDown?: (e: MouseEvent) => void;
     onCmdMouseDown?: (e: MouseEvent) => void;
     onCmdMouseUp?: (e: MouseEvent) => void;
     onAltMouseDown?: (e: MouseEvent) => void;
     onAltMouseUp?: (e: MouseEvent) => void;
     onAltMouseDrag?: (e: MouseEvent) => void;
-    onDoubleClick: (e: MouseEvent) => void;
     undo: () => void;
     redo: () => void;
 }) {
@@ -31,6 +32,8 @@ export function registerControls(handlers: {
         if (e.key === 'd' || e.key === 'ArrowRight') handlers.onRight();
         if (e.key === ' ') handlers.onSpace?.();
         if (e.key === 'Backspace') handlers.onBackspace?.();
+        if (e.key === 'Control') handlers.onCmd?.();
+        // if (e.key === 'MetaLeft') handlers.onCmdUp?.();
         // Uncomment to get key name
         // else console.log(e.key)
         if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
@@ -41,6 +44,11 @@ export function registerControls(handlers: {
             handlers.redo();
         }
     }
+
+    function handleKeyup(e: KeyboardEvent) {
+        if (e.key === 'Control') handlers.onCmdUp?.();
+    }
+
 
     function handleDoubleClick(e: MouseEvent) {
         // console.log(e);
@@ -60,6 +68,11 @@ export function registerControls(handlers: {
             // e.stopPropagation();
             handlers.onCmdMouseDown?.(e)
         };
+        if (e.ctrlKey && e.button === 0) {
+            e.stopPropagation();
+            handlers.onCtrlMouseDown?.(e)
+        };
+
     }
     function handleMouseUp(e: MouseEvent) {
         // console.log("maronn");
@@ -83,6 +96,7 @@ export function registerControls(handlers: {
     canvas.addEventListener('mousemove', handleMouseMove, true);
     canvas.tabIndex = 0;
     canvas.addEventListener('keydown', handleKeydown);
+    canvas.addEventListener('keyup', handleKeyup);
 
     return () => {
         canvas.removeEventListener("dblclick", handleDoubleClick);
@@ -90,6 +104,7 @@ export function registerControls(handlers: {
         canvas.removeEventListener('mouseup', handleMouseUp, true);
         canvas.removeEventListener('mousemove', handleMouseMove, true);
         canvas.removeEventListener('keydown', handleKeydown);
+        canvas.removeEventListener('keyup', handleKeyup);
     };
 }
 

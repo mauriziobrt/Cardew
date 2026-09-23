@@ -90,7 +90,7 @@ So what is needed:
 									graphState.editLink(link, newTargetId)}
 								bind:nodes={graphState.allNodeIds}
 								onClick={() => graphState.highlightLink(link)}
-								onLeave={() => graphState.resetColor()}
+								onLeave={() => graphState.selectNode(graphState.selectedNode)}
 								selectNode={(node) =>
 									graphState.selectNode(node)}
 								degree={graphState.degree[otherNode.id]}
