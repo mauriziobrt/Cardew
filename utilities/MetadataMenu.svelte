@@ -1,20 +1,41 @@
 <script lang="ts">
 	import { Menu, Notice } from "obsidian";
-	let { name = "None" } = $props();
+	let {
+		className = "None",
+		currentClass = "None",
+		fields = <Array<TemplateStringsArray>>[],
+		onEditClass,
+	} = $props();
+
+	function editClass(name: string) {
+		if (!name) return;
+		onEditClass(name);
+	}
+
 	function openMenu(event: MouseEvent) {
 		const menu = new Menu();
-		const formats = ["PDF", "PNG", "SVG", "Markdown"];
+		//This should be passed from graphState or somewhere I could hold all of the saved classes
+		// const formats = ["Bibliometric", "Note", "Control"];
 		menu.addItem((item) => {
 			item.setTitle("Select Class").setIcon("download");
 
 			const submenu = item.setSubmenu();
 
 			//this should be iteratively filled depending on the available classes
-			for (const format of formats) {
-				submenu.addItem((sub) =>
-					sub
-						.setTitle(`As ${format}`)
-						.onClick(() => new Notice(`Exported ${format}`)),
+			for (const format of fields) {
+				submenu.addItem(
+					(sub: {
+						setTitle: (arg0: string) => {
+							(): any;
+							new (): any;
+							onClick: { (arg0: () => void): any; new (): any };
+						};
+					}) =>
+						sub.setTitle(format).onClick(() => {
+							new Notice(`Set class ${format}`);
+							className = format;
+							editClass(className);
+						}),
 				);
 			}
 		});
@@ -27,7 +48,7 @@
 				.setIcon("documents")
 				.onClick(() => {
 					new Notice("Copied");
-					name = "Copy";
+					className = "Copy";
 				}),
 		);
 
@@ -37,7 +58,7 @@
 				.setIcon("paste")
 				.onClick(() => {
 					new Notice("Pasted");
-					name = "Paste";
+					className = "Paste";
 				}),
 		);
 		menu.addSeparator();
@@ -48,7 +69,7 @@
 				.setIcon("paste")
 				.onClick(() => {
 					new Notice("Pasted");
-					name = "Paste";
+					className = "Paste";
 				}),
 		);
 
@@ -58,7 +79,7 @@
 				.setIcon("paste")
 				.onClick(() => {
 					new Notice("Pasted");
-					name = "Paste";
+					className = "Paste";
 				}),
 		);
 
@@ -70,7 +91,7 @@
 				.setIcon("paste")
 				.onClick(() => {
 					new Notice("Pasted");
-					name = "Paste";
+					className = "Paste";
 				}),
 		);
 
@@ -81,10 +102,14 @@
 <div class="metadata-property">
 	<div class="metadata-property-key">
 		<span class="metadata-property-icon"></span>
-		<span>Class</span>
+		<span style="padding: var(--metadata-input-padding);">Class</span>
 	</div>
 	<div class="metadata-property-value">
-		{name}
+		{#if currentClass !== null}
+			{currentClass}
+		{:else}
+			"None"
+		{/if}
 	</div>
 	<button on:click={openMenu}>Edit</button>
 </div>

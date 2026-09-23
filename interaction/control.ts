@@ -52,7 +52,7 @@ export function registerControls(handlers: {
 
     function handleDoubleClick(e: MouseEvent) {
         // console.log(e);
-        handlers.onDoubleClick(e);
+        // handlers.onDoubleClick(e);
     }
 
     function handleMouseDown(e: MouseEvent) {
@@ -90,7 +90,8 @@ export function registerControls(handlers: {
 
     const canvas = document.querySelector('canvas')
 
-    canvas.addEventListener("dblclick", handleDoubleClick);
+    if (!canvas) return;
+    // canvas.addEventListener("dblclick", handleDoubleClick);
     canvas.addEventListener('mousedown', handleMouseDown, true);
     canvas.addEventListener('mouseup', handleMouseUp, true);
     canvas.addEventListener('mousemove', handleMouseMove, true);
@@ -99,7 +100,7 @@ export function registerControls(handlers: {
     canvas.addEventListener('keyup', handleKeyup);
 
     return () => {
-        canvas.removeEventListener("dblclick", handleDoubleClick);
+        // canvas.removeEventListener("dblclick", handleDoubleClick);
         canvas.removeEventListener('mousedown', handleMouseDown, true);
         canvas.removeEventListener('mouseup', handleMouseUp, true);
         canvas.removeEventListener('mousemove', handleMouseMove, true);

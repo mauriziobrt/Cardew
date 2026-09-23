@@ -31,6 +31,21 @@ export class GraphState {
     globalScale = $state<number>(0);
     multiSelect = $state<boolean>(false);
     nodeIdCounter = $state<number>(0);
+    nodeClasses = $state<Record<string, any>>({
+        "bibliometrics": {
+            "id": "",
+            "user": "",
+            "description": "",
+            "year": "",
+            "openacces": "",
+            "citations": 0,
+            "subject areas": [],
+            "scival topics cluster": [],
+            "scival topics": []
+        },
+        "notes": {
+        }
+    });
     //====================================================================================
     // Declare class properties
     //====================================================================================
@@ -81,7 +96,7 @@ export class GraphState {
         });
     }
     updateGraphData() {
-        if (!this.graphData) return [];
+        if (!this.graphData || !this.graph) return [];
         this.graph.graphData({ nodes: this.graphData.nodes, links: this.graphData.links });
         this.updateDegree()
     };
@@ -92,6 +107,7 @@ export class GraphState {
     }
 
     updateDegree() {
+        if (!this.graphData) return;
         // Calculate node degrees
         this.degree = {};
 
@@ -153,6 +169,68 @@ export class GraphState {
         this.selectedNodeIndex = null;
         this.updateGraphData();
     }
+
+    //================================================================
+    //Classes
+    //================================================================
+
+    applyNodeClass(className: string | number) {
+        if (!this.selectedNode || !this.nodeClasses[className]) return;
+        this.pushUndo();
+
+        const template = this.nodeClasses[className];
+        const reservedKeys = new Set([
+            "id",
+            "name",
+            "x",
+            "y",
+            "vx",
+            "vy",
+            "index",
+            "__indexColor",
+            "vx",
+            "vy",
+            "fx",
+            "fy",
+            "__initialDragPos",
+            "__dragged",
+        ]); // Add any other immutable system keys here
+
+        // Helper to check for empty values, including empty arrays
+        const isEmpty = (val: any) =>
+            val === undefined ||
+            val === null ||
+            val === '' ||
+            (Array.isArray(val) && val.length === 0);
+
+        // Step 1: Remove empty non-reserved keys from selectedNode
+        for (const key of Object.keys(this.selectedNode)) {
+            if (!reservedKeys.has(key) && isEmpty(this.selectedNode[key])) {
+                delete this.selectedNode[key];
+            }
+        }
+
+        // Step 2: Assign template values for missing keys
+        for (const key of Object.keys(template)) {
+            if (reservedKeys.has(key)) continue;
+
+            if (!(key in this.selectedNode)) {
+                this.selectedNode[key] = template[key];
+            }
+        }
+
+        this.selectedNode.className = className;
+        this.updateGraphData();
+    }
+    // saveNodeAsClass(className: string, overwrite: boolean, fileLoader: FileLoader, filePath: string) {
+    //     if (!this.selectedNode || !this.graphData) return [];
+    //     // const fields = { ...this.selectedNode };
+    //     // delete RESERVED/RESERVEDEXTRA fields.className. 
+    //     // If !overwrite && this.nodeClasses[className] exists
+    //     // return early (or confirm()). 
+    //     // this.nodeClasses[className] = fields; 
+    //     // await fileLoader.saveNodeClasses(filePath, this.nodeClasses);
+    // }
 
     //====================================================================================
     // Link Editing
@@ -292,11 +370,13 @@ export class GraphState {
         };
     }
     selectionStart(e: MouseEvent) {
+        if (!this.graph) return;ƒ
         // Selection start is triggered on Mouse Down.
         const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
         this.selectionStartMouse = { x, y }
     }
     selectionEnd(e: MouseEvent) {
+        if (!this.graph) return;
         // Selection end is linked with Mouse Drag
         const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
         this.selectionEndMouse = { x, y }  // just update state
@@ -418,11 +498,13 @@ export class GraphState {
             `") 2 22, crosshair`;
 
         const canvas = document.querySelector('canvas')
+        if (!canvas) return;
         canvas.style.cursor = pencilCursorCSS;
     }
 
     resetPencilCursor() {
         const canvas = document.querySelector('canvas')
+        if (!canvas) return;
         canvas.style.cursor = '';
     }
 
@@ -445,10 +527,11 @@ export class GraphState {
             ); // fallback to 'closed' color
     }
 
-    removeMetadata(metaName) {
+    removeMetadata(metaName: any) {
         if (!this.graphData) return;
         this.pushUndo();
         // here I have to pass the exact instance of link: {source: ...; target: ...}
+        if (!this.selectedNode) return;
         console.log(this.selectedNode[metaName]);
         delete this.selectedNode[metaName];
 

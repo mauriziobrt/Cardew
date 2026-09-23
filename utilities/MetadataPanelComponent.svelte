@@ -41,7 +41,7 @@
 		"__dragged",
 	];
 
-	function handleAdd(metaName, metaValue) {
+	function handleAdd(metaName: string, metaValue: any) {
 		if (!graphState.selectedNode || !metaName?.trim()) return;
 		if (RESERVED.includes(metaName)) {
 			console.warn(`"${metaName}" is a reserved field`);
@@ -50,15 +50,18 @@
 		graphState.selectedNode[metaName.trim()] = metaValue;
 	}
 
-	function handleLoad(metaName) {}
+	function handleApply(metaName: string) {
+		graphState.applyNodeClass(metaName);
+		// console.log(metaName)
+	}
 
-	function saveClass(metaName) {}
+	function saveClass(metaName: string) {}
 
-	function handleReset(metaName) {
+	function handleReset(metaName: string) {
 		//Function to clear the metadata of an object
 	}
 
-	function handleDelete(metaName) {
+	function handleDelete(metaName: string) {
 		if (!graphState.selectedNode) return;
 		// console.log(graphState.selectedNode[metaName]);
 		if (RESERVEDEXTRA.includes(metaName)) {
@@ -75,31 +78,34 @@
 	}
 </script>
 
-<!-- <h1 class="setting-title">Metadata</h1> -->
 <div class="view-content">
 	<div class="metadata-container">
 		<div class="metadata-content">
 			<div class="metadata-properties">
-				<MetadataMenu></MetadataMenu>
-				<!-- {#each Object.entries(graphState.selectedNode ?? {}) as [key]}
-		<Panel name={key} bind:dict={graphState.selectedNode} /> -->
-				<!-- <Panel name={key} bind:dict={graphState.selectedNode} /> -->
-				<!-- {/each} -->
-				{#if graphState.selectedNodeIndex !== null}
-					{@const node =
-						graphState.graphData.nodes[
-							graphState.selectedNodeIndex
-						]}
-					{#each Object.entries(node).filter(([key]) => !RESERVED.includes(key)) as [key, value]}
-						<!-- {#each Object.entries(graphState.graphData.nodes[graphState.selectedNodeIndex]) as [key, value]} -->
-						<Panel
-							name={key}
-							dict={graphState.graphData.nodes[
+				{#if graphState.nodeClasses !== null}
+					<MetadataMenu
+						fields={Object.keys(graphState.nodeClasses)}
+						onEditClass={handleApply}
+					></MetadataMenu>
+					<span style="margin:2px"></span>
+					{#if graphState.selectedNodeIndex !== null && graphState.graphData !== null}
+						{@const node =
+							graphState.graphData.nodes[
 								graphState.selectedNodeIndex
 							]}
-							onDeleteMetadata={handleDelete}
-						/>
-					{/each}
+						{#if graphState.selectedNodeIndex !== null}
+							{#each Object.entries(node).filter(([key]) => !RESERVED.includes(key)) as [key, value]}
+								<!-- {#each Object.entries(graphState.graphData.nodes[graphState.selectedNodeIndex]) as [key, value]} -->
+								<Panel
+									name={key}
+									dict={graphState.graphData.nodes[
+										graphState.selectedNodeIndex
+									]}
+									onDeleteMetadata={handleDelete}
+								/>
+							{/each}
+						{/if}
+					{/if}
 				{/if}
 			</div>
 		</div>

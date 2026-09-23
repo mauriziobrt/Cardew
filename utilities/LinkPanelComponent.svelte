@@ -111,6 +111,8 @@ So what is needed:
 				</section>
 			</div>
 		</div>
+
+		<span style="margin: 0.1px"></span>
 		<!-- <h1 class="setting-title">Connect Nodes</h1> -->
 
 		<Panelplus onAdd={handleAdd} nodeIds={graphState.allNodeIds} />
