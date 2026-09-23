@@ -1,11 +1,16 @@
 <script lang="ts">
 	import { Menu, Notice } from "obsidian";
 	let {
-		className = "None",
+		className = <String>"None",
 		currentClass = "None",
 		fields = <Array<TemplateStringsArray>>[],
 		onEditClass,
+		saveClass
 	} = $props();
+
+	$effect(() => {
+    className = currentClass?.className ?? "empty";
+});
 
 	function editClass(name: string) {
 		if (!name) return;
@@ -66,10 +71,10 @@
 		menu.addItem((item) =>
 			item
 				.setTitle("Save to new class")
-				.setIcon("paste")
+				.setIcon("save")
 				.onClick(() => {
-					new Notice("Pasted");
-					className = "Paste";
+					new Notice("Save to new class");
+					saveClass()
 				}),
 		);
 
@@ -105,11 +110,7 @@
 		<span style="padding: var(--metadata-input-padding);">Class</span>
 	</div>
 	<div class="metadata-property-value">
-		{#if currentClass !== null}
-			{currentClass}
-		{:else}
-			"None"
-		{/if}
+		{className}
 	</div>
-	<button on:click={openMenu}>Edit</button>
+	<button onclick={openMenu}>Edit</button>
 </div>

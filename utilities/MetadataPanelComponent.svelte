@@ -3,9 +3,12 @@
 	import type { GraphState } from "graphState.svelte";
 	import MetadataPlus from "./MetadataPlus.svelte";
 	import MetadataMenu from "./MetadataMenu.svelte";
+	import { ExampleModal } from "./NamingComponent";
+    import { Notice, App } from "obsidian";
 
 	interface Props {
 		graphState: GraphState;
+		app: App;
 	}
 
 	// Props are defined in main.ts
@@ -55,7 +58,12 @@
 		// console.log(metaName)
 	}
 
-	function saveClass(metaName: string) {}
+	function saveClass() {
+		new ExampleModal(app, (result) => {
+			new Notice(`Saved new class: ${result}!`);
+			graphState.saveNodeAsClass(result, false);
+		}).open();
+	}
 
 	function handleReset(metaName: string) {
 		//Function to clear the metadata of an object
@@ -84,8 +92,10 @@
 			<div class="metadata-properties">
 				{#if graphState.nodeClasses !== null}
 					<MetadataMenu
+						currentClass={graphState.selectedNode}
 						fields={Object.keys(graphState.nodeClasses)}
 						onEditClass={handleApply}
+						saveClass={saveClass}
 					></MetadataMenu>
 					<span style="margin:2px"></span>
 					{#if graphState.selectedNodeIndex !== null && graphState.graphData !== null}
@@ -93,7 +103,7 @@
 							graphState.graphData.nodes[
 								graphState.selectedNodeIndex
 							]}
-						{#if graphState.selectedNodeIndex !== null}
+						{#if node}
 							{#each Object.entries(node).filter(([key]) => !RESERVED.includes(key)) as [key, value]}
 								<!-- {#each Object.entries(graphState.graphData.nodes[graphState.selectedNodeIndex]) as [key, value]} -->
 								<Panel

@@ -133,7 +133,8 @@ export class MetadataView extends ItemView {
 			target: this.contentEl,
 			props: {
 				//Here I should define the props, the runes I am passing to the component
-				graphState: this.plugin.graphState
+				graphState: this.plugin.graphState,
+				app: this.app 
 			}
 		});
 	}
