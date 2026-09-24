@@ -12,6 +12,8 @@ export function registerControls(handlers: {
     onBackspace: () => void;
     onCmd: () => void;
     onCmdUp: () => void;
+    onAlt: () => void;
+    onAltUp: () => void;
     onMouseDown: (e: MouseEvent) => void;
     onMouseUp: (e: MouseEvent) => void;
     onMouseDrag: (e: MouseEvent) => void;
@@ -33,6 +35,7 @@ export function registerControls(handlers: {
         if (e.key === ' ') handlers.onSpace?.();
         if (e.key === 'Backspace') handlers.onBackspace?.();
         if (e.key === 'Control') handlers.onCmd?.();
+        if (e.key === 'Alt') handlers.onAlt?.();
         // if (e.key === 'MetaLeft') handlers.onCmdUp?.();
         // Uncomment to get key name
         // else console.log(e.key)
@@ -47,6 +50,7 @@ export function registerControls(handlers: {
 
     function handleKeyup(e: KeyboardEvent) {
         if (e.key === 'Control') handlers.onCmdUp?.();
+        if (e.key === 'Alt') handlers.onAltUp?.();
     }
 
 

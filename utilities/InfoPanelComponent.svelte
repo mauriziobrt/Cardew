@@ -36,7 +36,7 @@
 		}
 	}
 	function centerGraph() {
-		graphState.graph?.centerAt(0,0);
+		graphState.graph?.centerAt(0, 0);
 	}
 </script>
 
@@ -96,13 +96,25 @@
 	<div class="setting-item">
 		<div class="setting-item-info">
 			<div class="setting-item-name">Center Graph</div>
+			<div class="setting-item-description">Center Graph to Origin</div>
+		</div>
+		<div class="setting-item-value">
+			<button style="cursor: pointer;" onclick={centerGraph}>
+				Center</button
+			>
+		</div>
+	</div>
+	<div class="setting-item">
+		<div class="setting-item-info">
+			<div class="setting-item-name">Center at Node</div>
 			<div class="setting-item-description">
-				Center Graph to Origin
+				Center position at Selected Node
 			</div>
 		</div>
 		<div class="setting-item-value">
-			<button style="cursor: pointer;" onclick={centerGraph}> Center</button>
+			<div class:is-enabled={creativeEnabled} class="checkbox-container">
+				<input type="checkbox" onchange={enableCreative} />
+			</div>
 		</div>
 	</div>
 </div>
-

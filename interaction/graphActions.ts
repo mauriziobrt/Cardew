@@ -10,6 +10,8 @@ export function createGraphActions(graphState: GraphState) {
     kill: () => graphState.killNode(),
     pencilCursor: () => graphState.pencilCursor(),
     resetPencilCursor: () => graphState.resetPencilCursor(),
+    crossCursor: () => graphState.crossCursor(),
+    resetCrossCursor: () => graphState.resetCrossCursor(),
     mouseDown: () => null,
     mouseUp: () => null,
     mouseDrag: () => null,
@@ -19,7 +21,7 @@ export function createGraphActions(graphState: GraphState) {
     rectangleSelectionEnd: (e: MouseEvent) => graphState.selectionEnd(e),
     clearSelection: (e: MouseEvent) => graphState.clearSelection(e),
     createNode: (e: MouseEvent) => graphState.createNode(e),
-    undo:() => graphState.undo(),
-    redo:() => graphState.redo()
+    undo: () => graphState.undo(),
+    redo: () => graphState.redo()
   };
 }

@@ -4,6 +4,7 @@
 	import { registerControls, registerOSCcontrols } from "interaction/control";
 	import { createGraphActions } from "./interaction/graphActions";
 	import ForceGraph from "force-graph";
+	import { showNodeMenu } from "utilities/NodeMenu";
 	interface Props {
 		graphState: GraphState;
 	}
@@ -53,7 +54,10 @@
 				},
 			)
 			// Add function that opens a contextual menu on right click
-			.onNodeRightClick(() => {})
+			.onNodeRightClick((node: any, event: MouseEvent) => {
+				graphState.selectNode(node);
+				showNodeMenu(node, event, graphState);
+			})
 			.onNodeClick((node: Node) => {
 				graphState.selectNode(node);
 			});
@@ -147,6 +151,8 @@
 			onCtrlMouseDown: actions.createNode,
 			onCmd: actions.pencilCursor,
 			onCmdUp: actions.resetPencilCursor,
+			onAlt: actions.crossCursor,
+			onAltUp: actions.resetCrossCursor,
 			onMouseDown: actions.mouseDown,
 			onMouseDrag: actions.mouseDrag,
 			onMouseUp: actions.mouseUp,
@@ -156,15 +162,18 @@
 			onAltMouseUp: actions.clearSelection,
 			onAltMouseDrag: actions.rectangleSelectionEnd,
 			undo: actions.undo,
-			redo: actions.redo
+			redo: actions.redo,
 		});
-		cleanupOSCControls = registerOSCcontrols({
-			msgUp: actions.navigateUp,
-			msgLeft: actions.navigateLeft,
-			msgDown: actions.navigateDown,
-			msgRight: actions.navigateRight,
-			msgSpace: actions.rhythm
-		},graphState.oscManager);
+		cleanupOSCControls = registerOSCcontrols(
+			{
+				msgUp: actions.navigateUp,
+				msgLeft: actions.navigateLeft,
+				msgDown: actions.navigateDown,
+				msgRight: actions.navigateRight,
+				msgSpace: actions.rhythm,
+			},
+			graphState.oscManager,
+		);
 
 		// Handle resize
 		resizeObserver = new ResizeObserver(() => {
@@ -180,7 +189,8 @@
 		} else {
 			// now it is stuck
 		}
-	});3
+	});
+	3;
 	onDestroy(() => {
 		cleanupControls?.();
 		cleanupOSCControls?.();

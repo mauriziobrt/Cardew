@@ -7,9 +7,13 @@ import type { OSCManager } from 'osc/osc';
 import type { Config } from 'config.svelte';
 import type { GraphData } from 'force-graph';
 import type ForceGraph from 'force-graph';
-//import type { Stats } from 'stats.svelte';
+import { CursorState } from 'graph/cursorState';
+import { MetadataState } from 'graph/metadataState';
 //=======================================================================================
 // Main Graph Class most operations appear here
+
+// TYPE NODE DEFINITION IS WRONG IT REFERS TO ANOTHER TYPE THAT IS NOT WHAT I REFER TO
+// AS NODE
 //=======================================================================================
 export class GraphState {
     //====================================================================================
@@ -17,8 +21,10 @@ export class GraphState {
     //====================================================================================
     oscManager: OSCManager;
     config: Config;
+    cursor = new CursorState;
     // selectedNode = $state<Node | null>(null);
     selectedNode = $state(null) as Node | null;
+    metadataState = new MetadataState(() => this.selectedNode); 
     selectedNodes = $state<Array<Node>>([]);
     selectedNodeIndex = $state<number | null>(null);
     graphData = $state<GraphData | null>(null);
@@ -66,6 +72,7 @@ export class GraphState {
         "__initialDragPos",
         "__dragged",
     ]);
+    copyMetatada = $state<Record<string, any>>({});
     //====================================================================================
     // Declare class properties
     //====================================================================================
@@ -192,6 +199,53 @@ export class GraphState {
         this.selectedNodeIndex = null;
         this.updateGraphData();
     }
+    //================================================================
+    //Metadata
+    //================================================================
+    // To be merged with applyNodeClass methods
+
+    retrieveNodeCleanMetadata() {
+        if (!this.selectedNode) return;
+        //Check ReservedKeys and remove
+        // Helper to check for empty values, including empty arrays
+        const isEmpty = (val: any) =>
+            val === undefined ||
+            val === null ||
+            val === '' ||
+            (Array.isArray(val) && val.filter((item) => item !== '' && item !== null && item !== undefined).length === 0); //fix this now I have array with length 1
+        // but the value contained is "" so [""] and then I get 1
+
+        // Remove empty non-reserved keys from selectedNode
+        // I need to make a copy though
+        const localNode: Node = { ...this.selectedNode };
+        for (const key of Object.keys(this.selectedNode)) {
+            if (!this.reservedKeys.has(key) && isEmpty(localNode[key])) {
+                delete localNode[key];
+            }
+        }
+        //Save this somewhere no? maybe 
+        this.copyMetatada = localNode;
+    }
+
+    applyMetadata() {
+        if (!this.selectedNode) return;
+        this.pushUndo();
+        const isEmpty = (val: any) =>
+            val === undefined ||
+            val === null ||
+            val === '' ||
+            (Array.isArray(val) && val.filter((item) => item !== '' && item !== null && item !== undefined).length === 0);
+        for (const key of Object.keys(this.selectedNode)) {
+            if (!this.reservedKeys.has(key) && isEmpty(this.selectedNode[key])) {
+                delete this.selectedNode[key];
+            }
+        }
+        for (const key of Object.keys(this.copyMetatada)) {
+            if (this.reservedKeys.has(key)) continue;
+            this.selectedNode[key] = this.copyMetatada[key];
+        }
+        this.updateGraphData();
+    }
 
     //================================================================
     //Classes
@@ -229,6 +283,7 @@ export class GraphState {
         this.selectedNode.className = className;
         this.updateGraphData();
     }
+
     saveNodeAsClass(className: string, overwrite: boolean) {
         // if overwrite on I can saveToExistingClas
         if (!this.selectedNode || !this.graphData) return [];
@@ -251,6 +306,7 @@ export class GraphState {
         // await fileLoader.saveNodeClasses(filePath, this.nodeClasses);
     }
 
+    //
     //====================================================================================
     // Link Editing
     //====================================================================================
@@ -378,7 +434,7 @@ export class GraphState {
                 this.graph.nodeColor(n => this.selectedNodes.some(s => s.id === n.id) ? 'red' : this.colorScale(n.openacces));
             } else {
                 this.graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.colorScale(n.openacces));
-                this.graph.centerAt(this.selectedNode.x, this.selectedNode.y, 300);
+                // this.graph.centerAt(this.selectedNode.x, this.selectedNode.y, 300);
                 // this should be GUI composed
                 this.oscManager.sendMessage('/control', [
                     node.id, node.openacces, node.citations,
@@ -503,29 +559,12 @@ export class GraphState {
         this.updateGraphData();
     }
     //=======================================================================================
-    // Utilities
+    // Cursor Utilities
     //=======================================================================================
-    pencilCursor() {
-        const pencilCursorCSS =
-            `url("data:image/svg+xml;utf8,` +
-            encodeURIComponent(`
-    <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
-      <path d='M2 22l1.5-5.5L16 4l4 4L7.5 20.5z' fill='#fff' stroke='#000' stroke-width='1.5'/>
-      <path d='M14.5 5.5l4 4' stroke='#000' stroke-width='1.5'/>
-    </svg>
-  `) +
-            `") 2 22, crosshair`;
-
-        const canvas = document.querySelector('canvas')
-        if (!canvas) return;
-        canvas.style.cursor = pencilCursorCSS;
-    }
-
-    resetPencilCursor() {
-        const canvas = document.querySelector('canvas')
-        if (!canvas) return;
-        canvas.style.cursor = '';
-    }
+    pencilCursor() { this.cursor.pencilCursor(); };
+    resetPencilCursor() { this.cursor.resetCursor(); };
+    crossCursor() { this.cursor.crossCursor(); };
+    resetCrossCursor() { this.cursor.resetCursor(); };
 
     public createColorScale() {
         if (!this.graphData) return;
