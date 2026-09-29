@@ -5,10 +5,12 @@ import { rectangleMultiSelect } from 'interaction/multipleNodeSelection';
 import * as d3 from "d3";
 import type { OSCManager } from 'osc/osc';
 import type { Config } from 'config.svelte';
-import type { GraphData } from 'force-graph';
+import type { GraphData, LinkObject, NodeObject } from 'force-graph';
 import type ForceGraph from 'force-graph';
 import { CursorState } from 'graph/cursorState';
-import { MetadataState } from 'graph/metadataState';
+import { MetadataState } from 'graph/metadataState.svelte';
+import { SelectionState } from 'graph/selectionState.svelte';
+import { Notice } from 'obsidian';
 //=======================================================================================
 // Main Graph Class most operations appear here
 
@@ -22,11 +24,9 @@ export class GraphState {
     oscManager: OSCManager;
     config: Config;
     cursor = new CursorState;
-    // selectedNode = $state<Node | null>(null);
-    selectedNode = $state(null) as Node | null;
-    metadataState = new MetadataState(() => this.selectedNode); 
+    selectionState = new SelectionState(() => this.colorScale, () => this.config);
+    metadataState = new MetadataState(() => this.selectionState.selectedNodes[0]);
     selectedNodes = $state<Array<Node>>([]);
-    selectedNodeIndex = $state<number | null>(null);
     graphData = $state<GraphData | null>(null);
     graph = $state<ForceGraph | null>(null);
     lastOscMessage = $state<any[] | null>(null);
@@ -83,6 +83,7 @@ export class GraphState {
     private position: { x: number, y: number } | null = null;
     private selectionStartMouse: { x: number, y: number } | null = null;
     private selectionEndMouse: { x: number, y: number } | null = null
+    nodeColor: any;
     //====================================================================================
     // Constructor
     //====================================================================================
@@ -178,8 +179,9 @@ export class GraphState {
         }));
 
         this.graphData = previous;
-        this.selectedNode = null;
-        this.selectedNodeIndex = null;
+        this.selectionState.selectedNodes[0] = {};
+        // this.selectionState.selectedNodeIndex = null;
+        this.resetColor();
         this.updateGraphData();
     }
 
@@ -195,129 +197,59 @@ export class GraphState {
         }));
 
         this.graphData = next;
-        this.selectedNode = null;
-        this.selectedNodeIndex = null;
+        this.selectionState.selectedNodes[0] = {};
+        // this.selectionState.selectedNodeIndex = null;
+        this.resetColor();
         this.updateGraphData();
     }
     //================================================================
-    //Metadata
+    //Metadata and MetadataClasses
     //================================================================
     // To be merged with applyNodeClass methods
 
     retrieveNodeCleanMetadata() {
-        if (!this.selectedNode) return;
-        //Check ReservedKeys and remove
-        // Helper to check for empty values, including empty arrays
-        const isEmpty = (val: any) =>
-            val === undefined ||
-            val === null ||
-            val === '' ||
-            (Array.isArray(val) && val.filter((item) => item !== '' && item !== null && item !== undefined).length === 0); //fix this now I have array with length 1
-        // but the value contained is "" so [""] and then I get 1
-
-        // Remove empty non-reserved keys from selectedNode
-        // I need to make a copy though
-        const localNode: Node = { ...this.selectedNode };
-        for (const key of Object.keys(this.selectedNode)) {
-            if (!this.reservedKeys.has(key) && isEmpty(localNode[key])) {
-                delete localNode[key];
-            }
+        if (!this.selectionState.selectedNodes[0]) return;
+        if (this.selectionState.selectedNodes.length > 1) {
+            new Notice("Only one element can be copied");
+            return
         }
-        //Save this somewhere no? maybe 
-        this.copyMetatada = localNode;
+        this.metadataState.retrieveNodeCleanMetadata(this.selectionState.selectedNodes[0])
     }
 
     applyMetadata() {
-        if (!this.selectedNode) return;
+        if (!this.selectionState.selectedNodes[0]) return;
         this.pushUndo();
-        const isEmpty = (val: any) =>
-            val === undefined ||
-            val === null ||
-            val === '' ||
-            (Array.isArray(val) && val.filter((item) => item !== '' && item !== null && item !== undefined).length === 0);
-        for (const key of Object.keys(this.selectedNode)) {
-            if (!this.reservedKeys.has(key) && isEmpty(this.selectedNode[key])) {
-                delete this.selectedNode[key];
-            }
-        }
-        for (const key of Object.keys(this.copyMetatada)) {
-            if (this.reservedKeys.has(key)) continue;
-            this.selectedNode[key] = this.copyMetatada[key];
+        for (const n of this.selectionState.selectedNodes) {
+            this.metadataState.applyMetadata(n);
         }
         this.updateGraphData();
     }
 
-    //================================================================
-    //Classes
-    //================================================================
-
     applyNodeClass(className: string | number) {
-        if (!this.selectedNode || !this.nodeClasses[className]) return;
+        if (!this.selectionState.selectedNodes[0] || !this.nodeClasses[className]) return;
         this.pushUndo();
-
-        const template = this.nodeClasses[className];
-        // Add any other immutable system keys here
-
-        // Helper to check for empty values, including empty arrays
-        const isEmpty = (val: any) =>
-            val === undefined ||
-            val === null ||
-            val === '' ||
-            (Array.isArray(val) && val.length === 0);
-
-        // Step 1: Remove empty non-reserved keys from selectedNode
-        for (const key of Object.keys(this.selectedNode)) {
-            if (!this.reservedKeys.has(key) && isEmpty(this.selectedNode[key])) {
-                delete this.selectedNode[key];
-            }
-        }
-
-        // Step 2: Assign template values for missing keys
-        for (const key of Object.keys(template)) {
-            if (this.reservedKeys.has(key)) continue;
-
-            if (!(key in this.selectedNode)) {
-                this.selectedNode[key] = template[key];
-            }
-        }
-        this.selectedNode.className = className;
+        this.metadataState.applyNodeClass(this.selectionState.selectedNodes[0], className, this.nodeClasses[className]);
         this.updateGraphData();
     }
 
     saveNodeAsClass(className: string, overwrite: boolean) {
-        // if overwrite on I can saveToExistingClas
-        if (!this.selectedNode || !this.graphData) return [];
-        const fields = { ...this.selectedNode };
-        for (const reservedKey of this.reservedKeys) {
-            delete fields[reservedKey];
-        }
-        //make all fields empty
-        for (const key of Object.keys(fields)) {
-            // here depending on the type I should empty them
-            fields[key] = null;
-        }
-        // console.log("New class",className);
+        // if overwrite on I can saveToExistingClas|| !this.graphData
+        if (!this.selectionState.selectedNodes[0]) return [];
+        const fields = this.metadataState.getEmptyFields(this.selectionState.selectedNodes[0]);
         this.nodeClasses[className] = fields;
-
-        // delete RESERVED/RESERVEDEXTRA fields.className. 
-        // If !overwrite && this.nodeClasses[className] exists
-        // return early (or confirm()). 
-        // this.nodeClasses[className] = fields; 
-        // await fileLoader.saveNodeClasses(filePath, this.nodeClasses);
     }
 
-    //
     //====================================================================================
     // Link Editing
     //====================================================================================
 
     get selectedNodeLinks() {
-        if (!this.selectedNode || !this.graphData) return [];
+        if (!this.selectionState.selectedNodes[0] || !this.graphData) return [];
         // So first I create a set to avoid duplicates that filters through the link and get the full link where either it is the source or the target
         const onlyIDs = new Set(this.graphData.links.filter(
             link =>
-                link.source.id === this.selectedNode.id ||
-                link.target.id === this.selectedNode.id
+                link.source.id === this.selectionState.selectedNodes[0].id ||
+                link.target.id === this.selectionState.selectedNodes[0].id
         )
             .flatMap(link => [link.source.id, link.target.id])); //flatmap flattens it but I'm still not sure what it does actually
 
@@ -325,26 +257,26 @@ export class GraphState {
         // way.
         // I return as array because it was returning a set, so this set -> array allows to have an array with duplicates
         // It is also displaying the selected link ID, I should remove that
-        onlyIDs.delete(this.selectedNode.id)
+        onlyIDs.delete(this.selectionState.selectedNodes[0].id)
         // And now I have the clean array
         // I should get two things the raw links and the flatmap
         return Array.from(onlyIDs)
     }
 
     get selectedNodeRawLinks() {
-        if (!this.selectedNode || !this.graphData) return [];
+        if (!this.selectionState.selectedNodes[0] || !this.graphData) return [];
         return this.graphData.links.filter(
             link =>
-                link.source.id === this.selectedNode.id ||
-                link.target.id === this.selectedNode.id
+                link.source.id === this.selectionState.selectedNodes[0].id ||
+                link.target.id === this.selectionState.selectedNodes[0].id
         )
     }
 
-    editLink(link: Link, newTargetId) {
-        if (!this.graphData || !this.selectedNode) return;
-        if (newTargetId === this.selectedNode.id) return;
+    editLink(link: LinkObject, newTargetId: string) {
+        if (!this.graphData || !this.selectionState.selectedNodes[0]) return;
+        if (newTargetId === this.selectionState.selectedNodes[0].id) return;
         this.pushUndo();
-        if (link.source.id === this.selectedNode.id || link.source === this.selectedNode.id) {
+        if (link.source.id === this.selectionState.selectedNode.id || link.source === this.selectionState.selectedNodes[0].id) {
             link.target = newTargetId;
         } else {
             link.source = newTargetId;
@@ -353,9 +285,9 @@ export class GraphState {
     }
 
     addLink(targetId: string | number) {
-        if (!this.graphData || !this.selectedNode) return;
+        if (!this.graphData || !this.selectionState.selectedNodes[0]) return;
         //to add a link I need to get the link ID  and a targetId that has to be a node existing in the graph
-        const sourceId = this.selectedNode.id;
+        const sourceId = this.selectionState.selectedNodes[0].id;
         // Normalize both to the same type — match whatever type your node.id actually is
         const normalizedTarget = typeof sourceId === 'number' ? Number(targetId) : String(targetId);
 
@@ -385,21 +317,20 @@ export class GraphState {
         this.updateGraphData();
     }
 
-    removeLink(link: Link) {
+    removeLink(link: LinkObject) {
         if (!this.graphData) return;
         this.pushUndo();
         // here I have to pass the exact instance of link: {source: ...; target: ...}
         this.graphData.links = this.graphData.links.filter(
             l => l !== link
         );
-
         this.updateGraphData();
     }
 
-    highlightLink(link: Link) {
+    highlightLink(link: LinkObject) {
         if (!this.graph) return;
-        this.graph.nodeColor(n =>
-            n.id === link.source.id || n.id === link.target.id ? 'red' : this.colorScale(n.openacces)
+        this.graph.nodeColor(node =>
+            node.id === link.source.id || node.id === link.target.id ? 'red' : this.colorScale(node.openacces)
         );
     }
 
@@ -412,58 +343,41 @@ export class GraphState {
     //====================================================================================
     // Data Selection
     //====================================================================================
+
     toggleMultiselect(toggle: boolean) {
         this.multiSelect = toggle;
-        console.log(this.multiSelect)
+        // console.log(this.multiSelect)
     }
     // Function that decides the behaviour of the graph when a node is selected
-    selectNode(node: Node) {
+    selectNode(node: NodeObject) {
         if (!this.graph || !this.graphData) return;
-        const prevId = this.previousSelectedId;
-        this.selectedNode = node;
-        if (this.selectedNode.id) {
-            this.previousSelectedId = node.id;
-            this.selectedNodeIndex = this.graphData.nodes.indexOf(node);
-            // this.graph.nodeColor((node) => this.colorScale(node.openacces));
-            if (this.multiSelect) {
-                // if it's not there yet then add - don't create duplicates
-                if (!this.selectedNodes.includes(this.selectedNode)) {
-                    this.selectedNodes.push(this.selectedNode);
-                }
-                console.log([...this.selectedNodes]);
-                this.graph.nodeColor(n => this.selectedNodes.some(s => s.id === n.id) ? 'red' : this.colorScale(n.openacces));
-            } else {
-                this.graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.colorScale(n.openacces));
-                // this.graph.centerAt(this.selectedNode.x, this.selectedNode.y, 300);
-                // this should be GUI composed
-                this.oscManager.sendMessage('/control', [
-                    node.id, node.openacces, node.citations,
-                    this.degree[node.id], 1000, node.year, node.x, node.y, 2, 55, 800
-                ]);
-
-            }
-        };
+        this.selectionState.selectNode(node, this.graph, this.graphData.nodes);
     }
+
     selectionStart(e: MouseEvent) {
-        if (!this.graph) return; ƒ
+        if (!this.graph) return;
+        // this.selectionState.selectionStart(e, this.graph);
         // Selection start is triggered on Mouse Down.
         const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
         this.selectionStartMouse = { x, y }
     }
     selectionEnd(e: MouseEvent) {
         if (!this.graph) return;
+        // this.selectionState.selectionEnd(e, this.graph);
+
         // Selection end is linked with Mouse Drag
         const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
         this.selectionEndMouse = { x, y }  // just update state
     }
     drawOverlay(ctx: CanvasRenderingContext2D, globalScale: number) {
+        // this.selectionState.drawOverlay(ctx, globalScale, this.graphData, this.graph);
         // Function to draw on top of the canvas
         this.ctx = ctx;
         // globalScale is the zoom value but not necessary at the moment
         this.globalScale = globalScale;
         // draws the rectangle for the selection.
         if (this.selectionStartMouse && this.selectionEndMouse) {
-            rectangleMultiSelect(
+            this.selectionState.selectedNodes = rectangleMultiSelect(
                 this.selectionStartMouse.x, this.selectionStartMouse.y,
                 this.selectionEndMouse.x, this.selectionEndMouse.y,
                 ctx,
@@ -478,24 +392,25 @@ export class GraphState {
     //====================================================================================
     // Function that determines where to move when wasd or arrows are moved
     navigate(direction: Direction) {
-        if (!this.selectedNode || !this.graphData) return;
+        if (!this.selectionState.selectedNodes[0] || !this.graphData) return;
         // TODO Direction should be closer connected node also, add toggle to choose
-        const nextNode = navigateInDirection(this.selectedNode, direction, this.graphData, true);
+        const nextNode = navigateInDirection(this.selectionState.selectedNodes[0], direction, this.graphData, true);
         if (nextNode) {
             // Always call this.selectNode so everything stays the same
             this.selectNode(nextNode);
+            console.log("SELECTED", nextNode);
         }
     }
     // Rhythmic interaction mode
     rhythm() {
-        if (!this.selectedNode || !this.graphData || !this.graph) return;
+        if (!this.selectionState.selectedNodes[0] || !this.graphData || !this.graph) return;
         //TODO: APPLY stats of current cluster
-        highlightNeighborsGradually(this.selectedNode, this.graphData, this.oscManager, this.graph, this.colorScale);
+        highlightNeighborsGradually(this.selectionState.selectedNodes[0], this.graphData, this.oscManager, this.graph, this.colorScale);
     }
     // Transition interaction mode
     transition() {
-        if (!this.selectedNodes || !this.graphData) return;
-        console.log(this.selectedNodes);
+        if (!this.selectionState.selectedNodes || !this.graphData) return;
+        console.log(this.selectionState.selectedNodes);
         //for any combination of nodes find a path that traverse them
     }
     //=======================================================================================
@@ -511,17 +426,12 @@ export class GraphState {
         // Create a new node at position
         if (this.config.current.creative.modeEnabled) {
             this.pushUndo();
-            if (!this.graph) return [];
-            if (!this.graphData) return [];
+            if (!this.graph || !this.graphData) return [];
             const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
             this.position = { x, y }
-            // Basic metadata created here, but can be edited in the information view (TODO)
+            // Basic metadata created here, but can be edited in the information view
             createNewNode(this.graphData, this.graph, this.position.x, this.position.y);
-            // let coords = this.graph.screen2GraphCoords(e.layerX, e.layerY);
-            // let nodeId = this.nodeIdCounter++;
-            // this.graphData.nodes.push({ id: nodeId, x: coords.x, y: coords.y });
             this.updateGraphData();
-            console.log($state.snapshot(this.graphAll)); // plain object, accurate snapshot
         }
     }
 
@@ -533,29 +443,28 @@ export class GraphState {
     killNode() {
         // Function that calls removeNode which deletes the selected node
         // Should also delete the selectedNodes
-        if (!this.config.current.creative.modeEnabled || !this.selectedNode || !this.graphData) return;
+        if (!this.config.current.creative.modeEnabled || !this.selectionState.selectedNodes || !this.graphData) return;
         this.pushUndo();
         // TODO use selectedNodes instead of selected node
-        const deletedId = this.selectedNode.id;
-        removeNode(this.selectedNode, this.graphData);
-        // Also drop any link referencing the deleted node,
-        // handling both raw ids and force-graph-resolved node objects
-        this.graphData.links = this.graphData.links
-            .filter(link => {
-                const s = link.source.id ?? link.source;
-                const t = link.target.id ?? link.target;
-                return s !== deletedId && t !== deletedId;
-            })
-            .map(link => ({
-                source: link.source.id ?? link.source,
-                target: link.target.id ?? link.target
-            }));
-
-        // Also clean up multi-select if the deleted node was part of it
-        this.selectedNodes = this.selectedNodes.filter(n => n.id !== deletedId);
-
-        this.selectedNode = null; // fixes bug #3 from earlier too
-        this.selectedNodeIndex = null;
+        for (const el of this.selectionState.selectedNodes) {
+            new Notice(`Deleting ${el.id}`);
+            const deletedId = el.id;
+            removeNode(el, this.graphData);
+            // // Also drop any link referencing the deleted node,
+            // // handling both raw ids and force-graph-resolved node objects
+            this.graphData.links = this.graphData.links
+                .filter(link => {
+                    const s = link.source.id ?? link.source;
+                    const t = link.target.id ?? link.target;
+                    return s !== deletedId && t !== deletedId;
+                })
+                .map(link => ({
+                    source: link.source.id ?? link.source,
+                    target: link.target.id ?? link.target
+                }));
+            this.selectionState.selectedNodes = this.selectionState.selectedNodes.filter(n => n.id !== deletedId);
+        }
+        this.resetColor();
         this.updateGraphData();
     }
     //=======================================================================================
@@ -582,16 +491,16 @@ export class GraphState {
                     COLORS[color as keyof typeof COLORS] || COLORS.closed
                     // OPENACCESS[color] || "#84848466"
                 ),
-            ); // fallback to 'closed' color
+            );
     }
 
     removeMetadata(metaName: any) {
         if (!this.graphData) return;
         this.pushUndo();
         // here I have to pass the exact instance of link: {source: ...; target: ...}
-        if (!this.selectedNode) return;
-        console.log(this.selectedNode[metaName]);
-        delete this.selectedNode[metaName];
+        if (!this.selectionState.selectedNodes[0]) return;
+        console.log(this.selectionState.selectedNodes[0][metaName]);
+        delete this.selectionState.selectedNodes[0][metaName];
 
         this.updateGraphData();
     }
@@ -601,9 +510,7 @@ export class GraphState {
     setupBackgroundClick() {
         // Add event listener to background clicks
         // Reset selections
-        this.selectedNodes = [];
-        this.selectedNode = null;
-        this.selectedNodeIndex = null;
+        this.selectionState.selectedNodes = [];
         clearRhythmAnimations();
         this.resetColor();
         // highlightedPath = [];
@@ -621,7 +528,7 @@ export class GraphState {
     }
     // Main Destructor function
     close() {
-        this.selectedNode = null;
+        this.selectionState.selectedNodes[0] = {};
         this.graphData = null;
         this.graph = null;
         // this.oscManager = null;
@@ -630,14 +537,3 @@ export class GraphState {
     }
 }
 export const createGraphState = (oscManager: OSCManager, config: Config) => new GraphState(oscManager, config);
-//Dead code
-//=======================================================================================
-// Open Access Colors
-//=======================================================================================
-// const OPENACCESS = {
-//     gold: "#fff260a7",
-//     green: "#cdfec5a6",
-//     diamond: "#1eeff6a1",
-//     closed: "#d4d4d466",
-//     hybrid: "#cf6acc7e",
-// };

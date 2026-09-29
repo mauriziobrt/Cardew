@@ -1,3 +1,5 @@
+import type { NodeObject } from "force-graph";
+
 interface Node {
     id: number;
     group: number;
@@ -110,10 +112,10 @@ function findClosestNodeInDirection(
 }
 
 export function navigateInDirection(
-    currentNode: Node,
+    currentNode: NodeObject,
     direction: Direction,
     graphData: GraphData,
     freeMode: any
-): Node | null {
+): NodeObject | null {
     return findClosestNodeInDirection(currentNode.id, direction, graphData, freeMode);
 }

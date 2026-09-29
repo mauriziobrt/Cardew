@@ -1,6 +1,27 @@
+import type { NodeObject } from 'force-graph';
+
 export class MetadataState {
-    selectedNode: Node | undefined;
-    // copyMetatada = $state<Record<string, any>>({});
+    // selectedNode: Node | undefined;
+    copyMetatada = <Record<string, any>>({});
+    // nodeClasses = $state<Record<string, any>>({
+    //     "bibliometrics": {
+    //         "id": "",
+    //         "user": "",
+    //         "description": "",
+    //         "year": "",
+    //         "openacces": "",
+    //         "citations": 0,
+    //         "subject areas": [],
+    //         "scival topics cluster": [],
+    //         "scival topics": []
+    //     },
+    //     "notes": {
+    //     },
+    //     "granulator": {
+    //         "grainSize": 0,
+    //     }
+    // });
+
     private reservedKeys = new Set([
         "id",
         "name",
@@ -18,16 +39,17 @@ export class MetadataState {
         "__dragged",
     ]);
 
-    constructor(private getSelectedNode: () => Node | null) {
-        this.selectedNode = this.getSelectedNode; 
-     }
+    constructor(private getSelectedNode: () => NodeObject | null) {
+        // this.getSelectedNode;
+    }
+    // get selectedNode() { return this.getSelectedNode; }
 
     //================================================================
     // Functions
     //================================================================
 
-    retrieveNodeCleanMetadata() {
-        if (!this.selectedNode) return;
+    retrieveNodeCleanMetadata(selectedNode: NodeObject) {
+        if (!selectedNode) return;
         //Check ReservedKeys and remove
         // Helper to check for empty values, including empty arrays
         const isEmpty = (val: any) =>
@@ -39,8 +61,8 @@ export class MetadataState {
 
         // Remove empty non-reserved keys from selectedNode
         // I need to make a copy though
-        const localNode: Node = { ...this.selectedNode };
-        for (const key of Object.keys(this.selectedNode)) {
+        const localNode: NodeObject = { ...selectedNode };
+        for (const key of Object.keys(selectedNode)) {
             if (!this.reservedKeys.has(key) && isEmpty(localNode[key])) {
                 delete localNode[key];
             }
@@ -49,31 +71,30 @@ export class MetadataState {
         this.copyMetatada = localNode;
     }
 
-    applyMetadata() {
-        if (!this.selectedNode) return;
-        // this.pushUndo();
+    applyMetadata(selectedNode: NodeObject) {
+        if (!selectedNode) return;
+        console.log("SELECTED", selectedNode)
+        console.log(this.copyMetatada)
         const isEmpty = (val: any) =>
             val === undefined ||
             val === null ||
             val === '' ||
             (Array.isArray(val) && val.filter((item) => item !== '' && item !== null && item !== undefined).length === 0);
-        for (const key of Object.keys(this.selectedNode)) {
-            if (!this.reservedKeys.has(key) && isEmpty(this.selectedNode[key])) {
-                delete this.selectedNode[key];
+        for (const key of Object.keys(selectedNode)) {
+            if (!this.reservedKeys.has(key) && isEmpty(selectedNode[key])) {
+                delete selectedNode[key];
             }
         }
         for (const key of Object.keys(this.copyMetatada)) {
             if (this.reservedKeys.has(key)) continue;
-            this.selectedNode[key] = this.copyMetatada[key];
+            selectedNode[key] = this.copyMetatada[key];
         }
-        // this.updateGraphData();
     }
 
-    applyNodeClass(className: string | number) {
-        if (!this.selectedNode || !this.nodeClasses[className]) return;
-        // this.pushUndo();
-
-        const template = this.nodeClasses[className];
+    applyNodeClass(selectedNode: NodeObject, className: string | number, template: Record<string, any>) {
+        if (!selectedNode) return;
+        // console.log("This is the node!!", selectedNode)
+        // const template = this.nodeClasses[className];
         // Add any other immutable system keys here
 
         // Helper to check for empty values, including empty arrays
@@ -83,29 +104,29 @@ export class MetadataState {
             val === '' ||
             (Array.isArray(val) && val.length === 0);
 
-        // Step 1: Remove empty non-reserved keys from selectedNode
-        for (const key of Object.keys(this.selectedNode)) {
-            if (!this.reservedKeys.has(key) && isEmpty(this.selectedNode[key])) {
-                delete this.selectedNode[key];
+        // Remove empty non-reserved keys from selectedNode
+        for (const key of Object.keys(selectedNode)) {
+            if (!this.reservedKeys.has(key) && isEmpty(selectedNode[key])) {
+                delete selectedNode[key];
             }
         }
 
-        // Step 2: Assign template values for missing keys
+        // Assign template values for missing keys
         for (const key of Object.keys(template)) {
             if (this.reservedKeys.has(key)) continue;
 
-            if (!(key in this.selectedNode)) {
-                this.selectedNode[key] = template[key];
+            if (!(key in selectedNode)) {
+                selectedNode[key] = template[key];
             }
         }
-        this.selectedNode.className = className;
-        // this.updateGraphData();
+        selectedNode.className = className;
+        // console.log("This is the node!!", selectedNode)
     }
 
-    saveNodeAsClass(className: string, overwrite: boolean) {
+    getEmptyFields(selectedNode: NodeObject) {
         // if overwrite on I can saveToExistingClas
-        if (!this.selectedNode || !this.graphData) return [];
-        const fields = { ...this.selectedNode };
+        if (!selectedNode) return [];
+        const fields = { ...selectedNode };
         for (const reservedKey of this.reservedKeys) {
             delete fields[reservedKey];
         }
@@ -115,8 +136,9 @@ export class MetadataState {
             fields[key] = null;
         }
         // console.log("New class",className);
-        this.nodeClasses[className] = fields;
-
+        // console.log(fields);
+        // nodeClasses[className] = fields;
+        return fields;
         // delete RESERVED/RESERVEDEXTRA fields.className. 
         // If !overwrite && this.nodeClasses[className] exists
         // return early (or confirm()). 

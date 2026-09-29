@@ -26,9 +26,9 @@
 	});
 
 	//Handlers
-	function handleChange(event) {
-		console.log(event.detail);
-	}
+	// function handleChange(event) {
+	// 	console.log(event.detail);
+	// }
 
 	function handleAdd(targetId) {
 		graphState.addLink(targetId);
@@ -74,12 +74,12 @@ So what is needed:
 		<div class="metadata-content">
 			<div class="metadata-properties">
 				<section bind:this={nodeSort}>
-					{#if graphState.selectedNodeIndex !== null}
+					{#if graphState.selectionState.selectedNodeIndex !== null}
 						<!-- the issue is connecting to the links and on each editing make it work
 		also on // the other end -->
 						{#each graphState.selectedNodeRawLinks as link (link)}
 							{@const otherNode =
-								link.source.id === graphState.selectedNode.id
+								link.source.id === graphState.selectionState.selectedNodes[0].id
 									? link.target
 									: link.source}
 							<PanelLink
@@ -90,7 +90,7 @@ So what is needed:
 									graphState.editLink(link, newTargetId)}
 								bind:nodes={graphState.allNodeIds}
 								onClick={() => graphState.highlightLink(link)}
-								onLeave={() => graphState.selectNode(graphState.selectedNode)}
+								onLeave={() => graphState.selectNode(graphState.selectionState.selectedNodes[0])}
 								selectNode={(node) =>
 									graphState.selectNode(node)}
 								degree={graphState.degree[otherNode.id]}

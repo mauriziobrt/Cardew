@@ -3,7 +3,7 @@
 	import type { GraphState } from "./graphState.svelte";
 	import { registerControls, registerOSCcontrols } from "interaction/control";
 	import { createGraphActions } from "./interaction/graphActions";
-	import ForceGraph from "force-graph";
+	import ForceGraph, { type NodeObject } from "force-graph";
 	import { showNodeMenu } from "utilities/NodeMenu";
 	interface Props {
 		graphState: GraphState;
@@ -54,11 +54,15 @@
 				},
 			)
 			// Add function that opens a contextual menu on right click
-			.onNodeRightClick((node: any, event: MouseEvent) => {
+			.onBackgroundRightClick((node: NodeObject, event: MouseEvent) => {
+				// graphState.selectNode(node);
+				showNodeMenu(node, event, graphState);
+			})
+			.onNodeRightClick((node: NodeObject, event: MouseEvent) => {
 				graphState.selectNode(node);
 				showNodeMenu(node, event, graphState);
 			})
-			.onNodeClick((node: Node) => {
+			.onNodeClick((node: NodeObject) => {
 				graphState.selectNode(node);
 			});
 

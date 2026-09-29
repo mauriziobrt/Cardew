@@ -1,4 +1,4 @@
-import type { GraphData } from "force-graph";
+import type { GraphData, NodeObject } from "force-graph";
 import type { Config } from "config.svelte";
 import type { GraphState } from "../graphState.svelte";
 // Create nodes based on some key + click, it works if creative mode is enabled. 
@@ -24,7 +24,7 @@ export function createNewNode(
 
 export function removeNode(
     //which one is the selected node?
-    node: Node,
+    node: NodeObject,
     graphData: any,
 ): void {
     const link = graphData.link;

@@ -4,6 +4,9 @@
 // then they stay selected until I do a background click
 // multiple nodes could also be selected when clicking and pressing the shift key
 
+import type { GraphData } from "force-graph"
+import type { GraphState } from "graphState.svelte"
+
 // ISSUE selected nodes should be the same as
 //=======================================================================================
 // INTERNAL FUNCTIONS
@@ -15,10 +18,10 @@ function positionSelection(
     startY: number,
     endX: number,
     endY: number,
-    graphData: any,
-    graph: graph,
+    graphData: GraphData,
+    graph: GraphState,
     colorScale: d3.ScaleOrdinal<string, string>
-): void {
+): any[] {
     const minX = Math.min(startX, endX)
     const maxX = Math.max(startX, endX)
     const minY = Math.min(startY, endY)
@@ -39,7 +42,10 @@ function positionSelection(
     // console.log(graph.nodeColor())
     graph.nodeColor(n =>
         selectedNodes.some(s => s.id === n.id) ? 'yellow' : colorScale(n.openacces));
-    console.log([...selectedNodes]);
+    // console.log("Selected many nodes:", [...selectedNodes]);
+    graph.selectedNodes = [...selectedNodes]
+    // console.log("TEST", [...selectedNodes])
+    return [...selectedNodes]
     // this.graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.colorScale(n.openacces));
 }
 //–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -77,7 +83,7 @@ export function rectangleMultiSelect(
     graphData: any,
     graph: any,
     colorScale: d3.ScaleOrdinal<string, string>
-): void {
+): any[] {
     drawRectangle(startX, startY, endX, endY, ctx);
-    positionSelection(startX, startY, endX, endY, graphData, graph, colorScale)
+    return positionSelection(startX, startY, endX, endY, graphData, graph, colorScale)
 }

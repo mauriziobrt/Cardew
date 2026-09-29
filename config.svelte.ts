@@ -26,6 +26,9 @@ export interface PluginConfig {
     creative: {
         modeEnabled: boolean
     };
+    centerAtNode: {
+        modeEnabled: boolean
+    };
 }
 
 export const DEFAULT_CONFIG: PluginConfig = {
@@ -53,7 +56,10 @@ export const DEFAULT_CONFIG: PluginConfig = {
         hybrid: "#cf6acc7e"
     },
     creative: {
-        modeEnabled: false
+        modeEnabled: true
+    },
+    centerAtNode: {
+        modeEnabled: true
     }
 };
 

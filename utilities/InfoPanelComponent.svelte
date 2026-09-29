@@ -13,6 +13,7 @@
 	let { graphState }: Props = $props();
 
 	let creativeEnabled = $state(true);
+	let centerAtNode = $state(true);
 	var fs = require("fs");
 	let snapGraph;
 
@@ -33,6 +34,19 @@
 		} else {
 			creativeEnabled = true;
 			graphState.config.current.creative.modeEnabled = true;
+		}
+	}
+
+	function enableCenterAtNode() {
+		if (centerAtNode) {
+			centerAtNode = false;
+			//no it should just change a variable at graphState level.
+			graphState.config.current.centerAtNode.modeEnabled = false;
+			// this.graph.centerAt(this.selectedNode.x, this.selectedNode.y, 300);
+		} else {
+			centerAtNode = true;
+			graphState.config.current.centerAtNode.modeEnabled = true;
+			// this.graph.centerAt(this.selectedNode.x, this.selectedNode.y, 300);
 		}
 	}
 	function centerGraph() {
@@ -112,8 +126,8 @@
 			</div>
 		</div>
 		<div class="setting-item-value">
-			<div class:is-enabled={creativeEnabled} class="checkbox-container">
-				<input type="checkbox" onchange={enableCreative} />
+			<div class:is-enabled={centerAtNode} class="checkbox-container">
+				<input type="checkbox" onchange={enableCenterAtNode} />
 			</div>
 		</div>
 	</div>

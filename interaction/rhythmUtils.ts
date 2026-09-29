@@ -1,3 +1,5 @@
+import type { NodeObject } from "force-graph";
+
 let activeTimeouts: ReturnType<typeof setTimeout>[] = [];
 
 // Find weight between nodes
@@ -16,7 +18,7 @@ export function clearRhythmAnimations() {
 }
 
 export function highlightNeighborsGradually(
-    node: Node,
+    node: NodeObject,
     graphData: any,
     osc: any,
     graph: any,
