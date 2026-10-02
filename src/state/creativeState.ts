@@ -1,4 +1,4 @@
-import type { Config } from 'config.svelte';
+import type { Config } from 'src/config.svelte';
 
 //Not working yet, unsure, this is already compartmentalized
 

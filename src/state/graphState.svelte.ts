@@ -4,7 +4,7 @@ import { createNewNode, removeNode, creativeConfig } from 'src/interaction/creat
 import { rectangleMultiSelect } from 'src/interaction/multipleNodeSelection';
 import * as d3 from "d3";
 import type { OSCManager } from 'src/osc/osc';
-import type { Config } from 'config.svelte';
+import type { Config } from 'src/config.svelte';
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
 import type ForceGraph from 'force-graph';
 import { CursorState } from './cursorState';

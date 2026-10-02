@@ -11,7 +11,7 @@ import * as path from 'path';
 import FileListModal from './components/FileListModal.svelte';
 import { FileLoader } from './io/FileLoader'
 import { OSCManager } from 'src/osc/osc';
-import { Config, DEFAULT_CONFIG } from 'config.svelte';
+import { Config, DEFAULT_CONFIG } from 'src/config.svelte';
 import { ForceGraphSettingTab } from './ui/SettingsTab';
 import { OSReplView, VIEW_TYPE_OSREPL } from './osrepl/OSReplView';
 import { createOSReplState, OSReplState } from './osrepl/osreplState.svelte';

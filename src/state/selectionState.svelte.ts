@@ -1,7 +1,7 @@
 import type ForceGraph from "force-graph";
 import type { GraphData, LinkObject, NodeObject } from "force-graph";
 import { rectangleMultiSelect } from "src/interaction/multipleNodeSelection";
-import type { Config } from "config.svelte";
+import type { Config } from "src/config.svelte";
 import type { OSCManager } from "src/osc/osc";
 
 export class SelectionState {
