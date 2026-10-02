@@ -1,7 +1,8 @@
 import type ForceGraph from "force-graph";
 import type { GraphData, LinkObject, NodeObject } from "force-graph";
-import { rectangleMultiSelect } from "interaction/multipleNodeSelection";
+import { rectangleMultiSelect } from "src/interaction/multipleNodeSelection";
 import type { Config } from "config.svelte";
+import type { OSCManager } from "src/osc/osc";
 
 export class SelectionState {
     // selectedNode = $state(null) as NodeObject | null;
@@ -14,7 +15,9 @@ export class SelectionState {
 
     constructor(
         private getColorScale: () => d3.ScaleOrdinal<string, string>,
-        private getConfig: () => Config
+        private getConfig: () => Config,
+        private getOsc: () => OSCManager,
+        private getDegree: () => Record<number, number> | null
     ) {
         // this.getSelectedNode;
     }
@@ -53,6 +56,10 @@ export class SelectionState {
                 //     node.id, node.openacces, node.citations,
                 //     this.degree[node.id], 1000, node.year, node.x, node.y, 2, 55, 800
                 // ]);
+                this.getOsc().sendMessage('/control', [
+                    node.id, node.openacces, node.citations,
+                    this.getDegree()[node.id], 1000, node.year, node.x, node.y, 2, 55, 800
+                ]);
             }
             graph.nodeColor(n => this.selectedNodes.some(s => s.id === n.id) ? 'red' : this.getColorScale()(n.openacces));
 

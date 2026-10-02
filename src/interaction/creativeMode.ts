@@ -1,6 +1,6 @@
 import type { GraphData, NodeObject } from "force-graph";
 import type { Config } from "config.svelte";
-import type { GraphState } from "../graphState.svelte";
+import type { GraphState } from "../state/graphState.svelte";
 // Create nodes based on some key + click, it works if creative mode is enabled. 
 // when background click if there are combos of actions then create a new node. also should be callable from osc.
 // TODO: callable from osc

@@ -1,15 +1,15 @@
-import { navigateInDirection } from './interaction/navigationUtils';
-import { highlightNeighborsGradually, clearRhythmAnimations } from "./interaction/rhythmUtils"
-import { createNewNode, removeNode, creativeConfig } from 'interaction/creativeMode';
-import { rectangleMultiSelect } from 'interaction/multipleNodeSelection';
+import { navigateInDirection } from 'src/interaction/navigationUtils';
+import { highlightNeighborsGradually, clearRhythmAnimations } from "src/interaction/rhythmUtils"
+import { createNewNode, removeNode, creativeConfig } from 'src/interaction/creativeMode';
+import { rectangleMultiSelect } from 'src/interaction/multipleNodeSelection';
 import * as d3 from "d3";
-import type { OSCManager } from 'osc/osc';
+import type { OSCManager } from 'src/osc/osc';
 import type { Config } from 'config.svelte';
 import type { GraphData, LinkObject, NodeObject } from 'force-graph';
 import type ForceGraph from 'force-graph';
-import { CursorState } from 'graph/cursorState';
-import { MetadataState } from 'graph/metadataState.svelte';
-import { SelectionState } from 'graph/selectionState.svelte';
+import { CursorState } from './cursorState';
+import { MetadataState } from './metadataState.svelte';
+import { SelectionState } from './selectionState.svelte';
 import { Notice } from 'obsidian';
 //=======================================================================================
 // Main Graph Class most operations appear here
@@ -24,9 +24,9 @@ export class GraphState {
     oscManager: OSCManager;
     config: Config;
     cursor = new CursorState;
-    selectionState = new SelectionState(() => this.colorScale, () => this.config);
+    selectionState = new SelectionState(() => this.colorScale, () => this.config, () => this.oscManager, () => this.degree);
     metadataState = new MetadataState(() => this.selectionState.selectedNodes[0]);
-    selectedNodes = $state<Array<Node>>([]);
+    selectedNodes = $state<Array<NodeObject>>([]);
     graphData = $state<GraphData | null>(null);
     graph = $state<ForceGraph | null>(null);
     lastOscMessage = $state<any[] | null>(null);
@@ -359,6 +359,7 @@ export class GraphState {
         // this.selectionState.selectionStart(e, this.graph);
         // Selection start is triggered on Mouse Down.
         const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
+
         this.selectionStartMouse = { x, y }
     }
     selectionEnd(e: MouseEvent) {
@@ -367,6 +368,7 @@ export class GraphState {
 
         // Selection end is linked with Mouse Drag
         const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
+        // console.log(e.layerX, e.layerY)
         this.selectionEndMouse = { x, y }  // just update state
     }
     drawOverlay(ctx: CanvasRenderingContext2D, globalScale: number) {
@@ -390,6 +392,58 @@ export class GraphState {
     //====================================================================================
     // Interaction Modes
     //====================================================================================
+    // hoverAtPos(ox: number, oy: number) {
+    //     // console.log(ox.value, oy.value);
+    //     const screenX = ox / 1000 * this.graph.width();
+    //     const screenY = oy / 1000 * this.graph.height();
+    //     const { x, y } = this.graph.screen2GraphCoords(screenX, screenY);
+
+    //     const nodes = this.graph.graphData().nodes;
+    //     const node = nodes.find(n => {
+    //         const dx = n.x - x;
+    //         const dy = n.y - y;
+    //         return Math.sqrt(dx * dx + dy * dy) < this.degree[n.id];
+    //     });
+    //     if (node) { console.log("EL NODINO LOCALINO", node, x, y); this.selectNode(node); };
+    // }
+
+    //CLAUDE GENERATED FUNCTION
+    hoverAtPos(ox: number, oy: number) {
+        // Max sends 0..1000; clamp in case of overshoot
+        const nx = Math.min(Math.max(ox / 1000, 0), 1);
+        const ny = Math.min(Math.max(oy / 1000, 0), 1);
+
+        // Use CSS-pixel dimensions, not canvas.width (which includes devicePixelRatio)
+        const screenX = nx * this.graph.width();
+        const screenY = ny * this.graph.height();
+        const { x, y } = this.graph.screen2GraphCoords(screenX, screenY);
+
+        const zoom = this.graph.zoom();          // graph units -> screen px
+        const minRadius = 12 / zoom;             // at least ~12px on screen
+
+        let closest: any = null;
+        let closestDist = Infinity;
+
+        for (const n of this.graph.graphData().nodes as any[]) {
+            if (n.x == null || n.y == null) continue;
+
+            const dx = n.x - x;
+            const dy = n.y - y;
+            const dist = Math.hypot(dx, dy);
+
+            const radius = Math.max(this.degree[n.id] ?? 0, minRadius);
+            if (dist < radius && dist < closestDist) {
+                closest = n;
+                closestDist = dist;
+            }
+        }
+
+        if (closest && closest !== this.selectionState.selectedNodes[0]) {   // avoid re-selecting each message
+            this.selectionState.selectedNodes[0] = closest;
+            this.selectNode(closest);
+        }
+    }
+ 
     // Function that determines where to move when wasd or arrows are moved
     navigate(direction: Direction) {
         if (!this.selectionState.selectedNodes[0] || !this.graphData) return;
@@ -398,7 +452,7 @@ export class GraphState {
         if (nextNode) {
             // Always call this.selectNode so everything stays the same
             this.selectNode(nextNode);
-            console.log("SELECTED", nextNode);
+            // console.log("SELECTED", nextNode);
         }
     }
     // Rhythmic interaction mode

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { GraphState } from "../graphState.svelte";
+	import type { GraphState } from "../../state/graphState.svelte";
 	// import {
 	// 	createTable,
 	// 	getCoreRowModel,

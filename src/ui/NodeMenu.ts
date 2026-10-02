@@ -1,5 +1,5 @@
 // NodeMenu.ts
-import type { GraphState } from "graphState.svelte";
+import type { GraphState } from "src/graphState.svelte";
 import { Menu, Notice } from "obsidian";
 
 export function showNodeMenu(node: any, event: MouseEvent, graphState: GraphState) {

@@ -2,7 +2,7 @@
 // Mirrors the graphState pattern — instantiated once in the plugin, passed as prop.
 
 import { exec } from 'child_process';
-import type { OSCManager } from 'osc/osc'; // reuse your existing OSCManager
+import type { OSCManager } from 'src/osc/osc'; // reuse your existing OSCManager
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 

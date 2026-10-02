@@ -6,8 +6,8 @@ import { ItemView, WorkspaceLeaf } from 'obsidian';
 import { spawn } from 'child_process';
 import { mount, unmount } from 'svelte';
 import type { Component } from 'svelte';
-import type ExamplePlugin from './main';       // your existing plugin class
-import OSReplComponent from './osrepl/OSReplComponent.svelte';
+import type ExamplePlugin from '../../main';       // your existing plugin class
+import OSReplComponent from './OSReplComponent.svelte';
 
 export const VIEW_TYPE_OSREPL = 'osrepl-view';
 

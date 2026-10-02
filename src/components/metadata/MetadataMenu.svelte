@@ -5,12 +5,12 @@
 		currentClass = "None",
 		fields = <Array<TemplateStringsArray>>[],
 		onEditClass,
-		saveClass
+		saveClass,
 	} = $props();
 
 	$effect(() => {
-    className = currentClass?.className ?? "empty";
-});
+		className = currentClass?.className ?? "empty";
+	});
 
 	function editClass(name: string) {
 		if (!name) return;
@@ -74,7 +74,7 @@
 				.setIcon("save")
 				.onClick(() => {
 					new Notice("Save to new class");
-					saveClass()
+					saveClass();
 				}),
 		);
 

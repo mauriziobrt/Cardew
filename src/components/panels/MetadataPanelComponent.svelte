@@ -1,11 +1,10 @@
 <script lang="ts">
 	import Panel from "./Panel.svelte";
-	import type { GraphState } from "graphState.svelte";
-	import MetadataPlus from "./MetadataPlus.svelte";
-	import MetadataMenu from "./MetadataMenu.svelte";
-	import { ExampleModal } from "./NamingComponent";
-	import { Notice, App } from "obsidian";
-	import type { FieldDef } from "./metadataTypes";
+	import type { GraphState } from "src/state/graphState.svelte";
+	import MetadataPlus from "../metadata/MetadataPlus.svelte";
+	import MetadataMenu from "../metadata/MetadataMenu.svelte";
+	import { ExampleModal } from "../../ui/NamingComponent";
+    import { Notice, App } from "obsidian";
 
 	interface Props {
 		graphState: GraphState;
@@ -14,14 +13,6 @@
 
 	// Props are defined in main.ts
 	let { graphState }: Props = $props();
-
-	// svelte-ignore state_referenced_locally
-	const meta = graphState.metadataState; // adjust to however you expose it
-
-	$effect(() => {
-		const n = graphState.selectionState.selectedNodes[0];
-		if (n) meta.ensureTypes(n);
-	});
 
 	const RESERVED = [
 		"x",
@@ -53,27 +44,14 @@
 		"__dragged",
 	];
 
-	function handleAdd(metaName: string, metaValue: any, def?: FieldDef) {
-		const node = graphState.selectionState.selectedNodes[0];
-		if (!node || !metaName?.trim()) return;
-		const key = metaName.trim();
-		if (RESERVED.includes(key)) {
-			console.warn(`"${key}" is a reserved field`);
+	function handleAdd(metaName: string, metaValue: any) {
+		if (!graphState.selectionState.selectedNodes[0] || !metaName?.trim()) return;
+		if (RESERVED.includes(metaName)) {
+			console.warn(`"${metaName}" is a reserved field`);
 			return;
 		}
-		if (def) meta.setType(key, def);
-		meta.setValue(node, key, metaValue);
+		graphState.selectionState.selectedNodes[0][metaName.trim()] = metaValue;
 	}
-
-	// function handleAdd(metaName: string, metaValue: any) {
-	// 	if (!graphState.selectionState.selectedNodes[0] || !metaName?.trim())
-	// 		return;
-	// 	if (RESERVED.includes(metaName)) {
-	// 		console.warn(`"${metaName}" is a reserved field`);
-	// 		return;
-	// 	}
-	// 	graphState.selectionState.selectedNodes[0][metaName.trim()] = metaValue;
-	// }
 
 	function handleApply(metaName: string) {
 		graphState.applyNodeClass(metaName);
@@ -85,7 +63,7 @@
 			new Notice(`Saved new class: ${result}!`);
 			graphState.saveNodeAsClass(result, false);
 		}).open();
-	};
+	}
 
 	function handleReset(metaName: string) {
 		//Function to clear the metadata of an object
@@ -114,11 +92,10 @@
 			<div class="metadata-properties">
 				{#if graphState.nodeClasses !== null}
 					<MetadataMenu
-						currentClass={graphState.selectionState
-							.selectedNodes[0]}
+						currentClass={graphState.selectionState.selectedNodes[0]}
 						fields={Object.keys(graphState.nodeClasses)}
 						onEditClass={handleApply}
-						{saveClass}
+						saveClass={saveClass}
 					></MetadataMenu>
 					<span style="margin:2px"></span>
 					{#if graphState.selectionState.selectedNodeIndex !== null && graphState.graphData !== null}
@@ -131,21 +108,11 @@
 								<!-- {#each Object.entries(graphState.graphData.nodes[graphState.selectedNodeIndex]) as [key, value]} -->
 								<Panel
 									name={key}
-									dict={node}
-									def={meta.getDef(key, value)}
-									onChangeType={(d) => meta.setType(key, d)}
-									onChangeValue={(v) =>
-										meta.setValue(node, key, v)}
-									onDeleteMetadata={handleDelete}
-								/>
-								<!-- <Panel
-									name={key}
 									dict={graphState.graphData.nodes[
-										graphState.selectionState
-											.selectedNodeIndex
+										graphState.selectionState.selectedNodeIndex
 									]}
 									onDeleteMetadata={handleDelete}
-								/> -->
+								/>
 							{/each}
 						{/if}
 					{/if}

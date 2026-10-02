@@ -1,19 +1,19 @@
 import { Plugin, ItemView, WorkspaceLeaf, Modal, App, Notice } from 'obsidian';
 import type { Component } from 'svelte';
-import ForceGraphComponent from './ForceGraphComponent.svelte';
-import InfoPanelComponent from './utilities/InfoPanelComponent.svelte';
-import MetadataPanelComponent from 'utilities/MetadataPanelComponent.svelte';
-import LinkPanelComponent from 'utilities/LinkPanelComponent.svelte';
+import ForceGraphComponent from './components/ForceGraphComponent.svelte';
+import InfoPanelComponent from './components/panels/InfoPanelComponent.svelte';
+import MetadataPanelComponent from './components/panels/MetadataPanelComponent.svelte';
+import LinkPanelComponent from './components/panels/LinkPanelComponent.svelte';
 import { mount, unmount } from 'svelte';
-import { createGraphState, GraphState } from './graphState.svelte';
+import { createGraphState, GraphState  } from './state/graphState.svelte';
 import * as fs from 'fs';
 import * as path from 'path';
-import FileListModal from './modals/FileListModal.svelte';
-import { FileLoader } from './modals/FileLoader'
-import { OSCManager } from 'osc/osc';
-import { Config, DEFAULT_CONFIG } from './config.svelte';
-import { ForceGraphSettingTab } from './utilities/SettingsTab';
-import { OSReplView, VIEW_TYPE_OSREPL } from './OSReplView';
+import FileListModal from './components/FileListModal.svelte';
+import { FileLoader } from './io/FileLoader'
+import { OSCManager } from 'src/osc/osc';
+import { Config, DEFAULT_CONFIG } from 'config.svelte';
+import { ForceGraphSettingTab } from './ui/SettingsTab';
+import { OSReplView, VIEW_TYPE_OSREPL } from './osrepl/OSReplView';
 import { createOSReplState, OSReplState } from './osrepl/osreplState.svelte';
 
 //================================================================================================

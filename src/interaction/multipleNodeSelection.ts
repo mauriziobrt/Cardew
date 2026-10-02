@@ -5,7 +5,7 @@
 // multiple nodes could also be selected when clicking and pressing the shift key
 
 import type { GraphData } from "force-graph"
-import type { GraphState } from "graphState.svelte"
+import type { GraphState } from "src/state/graphState.svelte"
 
 // ISSUE selected nodes should be the same as
 //=======================================================================================

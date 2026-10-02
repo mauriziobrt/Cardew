@@ -1,4 +1,4 @@
-import type { GraphState } from '../graphState.svelte';
+import type { GraphState } from '../state/graphState.svelte';
 
 export function createGraphActions(graphState: GraphState) {
   return {
@@ -7,6 +7,7 @@ export function createGraphActions(graphState: GraphState) {
     navigateDown: () => graphState.navigate('down'),
     navigateRight: () => graphState.navigate('right'),
     rhythm: () => graphState.rhythm(),
+    hover: (x, y) => graphState.hoverAtPos(x, y),
     kill: () => graphState.killNode(),
     pencilCursor: () => graphState.pencilCursor(),
     resetPencilCursor: () => graphState.resetPencilCursor(),

@@ -3,7 +3,7 @@
 	import { onMount } from "svelte";
 	import PanelLink from "./PanelLink.svelte";
 	import Panelplus from "./Panelplus.svelte";
-	import type { GraphState } from "graphState.svelte";
+	import type { GraphState } from "src/state/graphState.svelte";
 
 	interface Props {
 		graphState: GraphState;

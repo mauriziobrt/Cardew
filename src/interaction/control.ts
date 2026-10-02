@@ -1,6 +1,6 @@
 // to implement: cmd+i or i opens inspector
 
-import type { OSCManager } from "osc/osc";
+import type { OSCManager } from "src/osc/osc";
 
 // cmd+e creation/presentation mode
 export function registerControls(handlers: {
@@ -119,10 +119,11 @@ export function registerOSCcontrols(handlers: {
     msgDown: () => void;
     msgRight: () => void;
     msgSpace: () => void;
+    msgPos: (x: number, y: number) => void;
 }, oscManager: OSCManager) {
     console.log(oscManager);
     oscManager.onMessage((address, args) => {
-        console.log('Received OSC:', address, args);
+        // console.log('Received OSC:', address, args);
         if (address) {
             switch (address) {
                 case '/up':
@@ -138,6 +139,10 @@ export function registerOSCcontrols(handlers: {
                     break;
                 case '/right':
                     handlers.msgRight();
+                    break;
+                case '/pos':
+                    // console.log("POST", args[0].value);
+                    handlers.msgPos(args[0].value, args[1].value);
                     break;
             }
         }

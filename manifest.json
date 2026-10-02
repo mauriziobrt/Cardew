@@ -4,7 +4,7 @@
   "name": "Cornelius",
   "version": "0.0.1",
   "minAppVersion": "0.15.0",
-  "description": "An interactive force graph for creating scores and exploring networked data.",
+  "description": "An interactive force graph for creating rhizomatic music scores and exploring networked data.",
   "author": "Maurizio Berta",
   "authorUrl": "https://mauriziobrt.github.io/",
   "isDesktopOnly": true

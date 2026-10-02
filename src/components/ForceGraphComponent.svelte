@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount, onDestroy } from "svelte";
-	import type { GraphState } from "./graphState.svelte";
-	import { registerControls, registerOSCcontrols } from "interaction/control";
-	import { createGraphActions } from "./interaction/graphActions";
+	import type { GraphState } from "../state/graphState.svelte";
+	import { registerControls, registerOSCcontrols } from "src/interaction/control";
+	import { createGraphActions } from "../interaction/graphActions";
 	import ForceGraph, { type NodeObject } from "force-graph";
-	import { showNodeMenu } from "utilities/NodeMenu";
+	import { showNodeMenu } from "src/ui/NodeMenu";
 	interface Props {
 		graphState: GraphState;
 	}
@@ -31,8 +31,17 @@
 			.nodeRelSize(cfg.nodeSize)
 			.d3AlphaDecay(cfg.alphaDecay)
 			.d3VelocityDecay(cfg.velocityDecay)
-			// .nodeCanvasObject((node, ctx) => nodePaint(node, ctx))
+			.nodeCanvasObject((node, ctx: CanvasRenderingContext2D) =>
+				nodePaint(node, ctx),
+			)
 			// .nodePointerAreaPaint(nodePaint)
+			.nodePointerAreaPaint(({ id, x, y }, color, ctx) => {
+				const r = 3 + Math.sqrt(graphState.degree[id] || 1) * 2;
+				ctx.fillStyle = color;
+				ctx.beginPath();
+				ctx.arc(x, y, r, 0, 2 * Math.PI);
+				ctx.fill();
+			})
 			.cooldownTicks(Infinity)
 			.cooldownTime(Infinity)
 			.linkWidth(
@@ -72,9 +81,12 @@
 			graphState.updateData(graphState.graphData);
 		}
 
-		function nodePaint({ id, openacces, x, y }, ctx) {
+		function nodePaint(
+			{ id, openacces, x, y },
+			ctx: CanvasRenderingContext2D,
+			overrideColor?: string,
+		) {
 			// ctx.fillStyle = "black";
-
 			const shapesByOpenAccess = {
 				open: (x, y, r, ctx) => {
 					ctx.beginPath();
@@ -136,8 +148,16 @@
 			const fn =
 				shapesByOpenAccess[openacces] ?? shapesByOpenAccess.unknown;
 
-			ctx.fillStyle = graphState.colorScale(openacces);
+			const isSelected = graphState.selectionState.selectedNodes.some(
+				(s) => s.id === id,
+			);
+
+			const color = isSelected ? "red" : graphState.colorScale(openacces);
+
+			ctx.save();
+			ctx.fillStyle = overrideColor ?? color;
 			fn(x, y, radius, ctx);
+			ctx.restore();
 		}
 
 		//so i have to get the osc maybe inhereting from graphstate and say that on message /up: actions.navigateUp.
@@ -175,6 +195,7 @@
 				msgDown: actions.navigateDown,
 				msgRight: actions.navigateRight,
 				msgSpace: actions.rhythm,
+				msgPos: actions.hover
 			},
 			graphState.oscManager,
 		);

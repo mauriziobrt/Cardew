@@ -1,4 +1,4 @@
-import { GraphState } from '../graphState.svelte';
+import { GraphState } from '../state/graphState.svelte';
 import * as fs from 'fs/promises';
 
 export class FileLoader {

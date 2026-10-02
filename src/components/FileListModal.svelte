@@ -3,7 +3,7 @@
 	import * as fs from "fs";
 	import * as path from "path";
 	import type { FileInfo } from "../main";
-	import type { GraphState } from "../graphState.svelte";
+	import type { GraphState } from "../state/graphState.svelte";
 
 	interface Props {
 		dirPath: string;

@@ -1,5 +1,5 @@
 <script>
-	import TriStateToggle from "./TriStateToggle.svelte";
+	// import TriStateToggle from "./TriStateToggle.svelte";
 	import { setIcon } from "obsidian";
 	import { onMount } from "svelte";
 
