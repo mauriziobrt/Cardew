@@ -1,4 +1,5 @@
 import { navigateInDirection } from 'src/interaction/navigationUtils';
+import type { Direction } from 'src/interaction/navigationUtils';
 import { highlightNeighborsGradually, clearRhythmAnimations } from "src/interaction/rhythmUtils"
 import { createNewNode, removeNode, creativeConfig } from 'src/interaction/creativeMode';
 import { rectangleMultiSelect } from 'src/interaction/multipleNodeSelection';
@@ -11,6 +12,7 @@ import { CursorState } from './cursorState';
 import { MetadataState } from './metadataState.svelte';
 import { SelectionState } from './selectionState.svelte';
 import { Notice } from 'obsidian';
+
 //=======================================================================================
 // Main Graph Class most operations appear here
 
@@ -24,7 +26,8 @@ export class GraphState {
     oscManager: OSCManager;
     config: Config;
     cursor = new CursorState;
-    selectionState = new SelectionState(() => this.colorScale, () => this.config, () => this.oscManager, () => this.degree);
+    oscConfig = $state<Record<string, string[]>>({});
+    selectionState = new SelectionState(() => this.colorScale, () => this.config, () => this.oscManager, () => this.oscConfig, () => this.degree);
     metadataState = new MetadataState(() => this.selectionState.selectedNodes[0]);
     selectedNodes = $state<Array<NodeObject>>([]);
     graphData = $state<GraphData | null>(null);
@@ -77,7 +80,7 @@ export class GraphState {
     // Declare class properties
     //====================================================================================
     private colorScale!: d3.ScaleOrdinal<string, string>;
-    private previousSelectedId: string | null = null;
+    // private previousSelectedId: string | null = null;
     // Positional Properties
     //––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
     private position: { x: number, y: number } | null = null;
@@ -94,7 +97,7 @@ export class GraphState {
         // Initialize OSC
     };
     // Here I store the Graph to access it's functions
-    theGraph(graph: Graph) {
+    theGraph(graph: ForceGraph) {
         this.graph = graph;
     }
     //====================================================================================
@@ -154,6 +157,8 @@ export class GraphState {
     private redoStack: GraphData[] = [];
     private maxHistory = 50; // avoid unbounded memory growth
 
+    // hasEdits = $state(false);
+
     snapshot(): GraphData {
         // Use $state.snapshot to strip Svelte proxies, then deep clone
         return structuredClone($state.snapshot(this.graphData));
@@ -165,6 +170,7 @@ export class GraphState {
         if (this.undoStack.length > this.maxHistory) this.undoStack.shift();
         // Any new action invalidates the redo stack
         this.redoStack = [];
+        this.config.current.hasEdits = true;
     }
 
     undo() {
@@ -172,6 +178,7 @@ export class GraphState {
         const current = this.snapshot();
         const previous = this.undoStack.pop()!;
         this.redoStack.push(current);
+        this.config.current.hasEdits = true;
 
         previous.links = previous.links.map(link => ({
             source: link.source.id ?? link.source,
@@ -195,7 +202,6 @@ export class GraphState {
             source: link.source.id ?? link.source,
             target: link.target.id ?? link.target
         }));
-
         this.graphData = next;
         this.selectionState.selectedNodes[0] = {};
         // this.selectionState.selectedNodeIndex = null;
@@ -207,6 +213,15 @@ export class GraphState {
     //================================================================
     // To be merged with applyNodeClass methods
 
+    retrieveNodeClass() {
+        if (!this.selectionState.selectedNodes[0]) return;
+        if (this.selectionState.selectedNodes.length > 1) {
+            new Notice("Only one element can be copied");
+            return
+        }
+        this.metadataState.retrieveNodeClass(this.selectionState.selectedNodes[0])
+    }
+
     retrieveNodeCleanMetadata() {
         if (!this.selectionState.selectedNodes[0]) return;
         if (this.selectionState.selectedNodes.length > 1) {
@@ -214,6 +229,14 @@ export class GraphState {
             return
         }
         this.metadataState.retrieveNodeCleanMetadata(this.selectionState.selectedNodes[0])
+    }
+
+    applyRetrievedNodeClass() {
+        if (!this.selectionState.selectedNodes[0]) return;
+        for (const n of this.selectionState.selectedNodes) {
+            this.metadataState.applyRetrievedNodeClass(n, this.nodeClasses)
+        }
+        this.updateGraphData();
     }
 
     applyMetadata() {
@@ -344,10 +367,27 @@ export class GraphState {
     // Data Selection
     //====================================================================================
 
+
+    getNodeAtID(id: string): NodeObject {
+        return this.graph.graphData().nodes.find((n) => n.id === id);
+    }
+
     toggleMultiselect(toggle: boolean) {
         this.multiSelect = toggle;
         // console.log(this.multiSelect)
     }
+
+    selectAll() {
+        if (!this.graph || !this.graphData) return;
+        this.selectionState.toggleMultiselect(true);
+        // get all the nodes of the graph
+        console.log("ALL", this.graphData.nodes)
+        // this.graphData.nodes;
+        this.graphData.nodes.map((singleNode) => this.selectionState.selectNode(singleNode, this.graph, this.graphData.nodes));
+        // this.selectionState.selectNode(this.graphData.nodes, this.graph, this.graphData.nodes);
+        this.selectionState.toggleMultiselect(false);
+    }
+
     // Function that decides the behaviour of the graph when a node is selected
     selectNode(node: NodeObject) {
         if (!this.graph || !this.graphData) return;
@@ -443,7 +483,7 @@ export class GraphState {
             this.selectNode(closest);
         }
     }
- 
+
     // Function that determines where to move when wasd or arrows are moved
     navigate(direction: Direction) {
         if (!this.selectionState.selectedNodes[0] || !this.graphData) return;
@@ -484,7 +524,7 @@ export class GraphState {
             const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
             this.position = { x, y }
             // Basic metadata created here, but can be edited in the information view
-            createNewNode(this.graphData, this.graph, this.position.x, this.position.y);
+            createNewNode(this.graphData, this.position.x, this.position.y, this.config.current.newName);
             this.updateGraphData();
         }
     }
@@ -553,7 +593,7 @@ export class GraphState {
         this.pushUndo();
         // here I have to pass the exact instance of link: {source: ...; target: ...}
         if (!this.selectionState.selectedNodes[0]) return;
-        console.log(this.selectionState.selectedNodes[0][metaName]);
+        // console.log(this.selectionState.selectedNodes[0][metaName]);
         delete this.selectionState.selectedNodes[0][metaName];
 
         this.updateGraphData();
@@ -587,7 +627,7 @@ export class GraphState {
         this.graph = null;
         // this.oscManager = null;
         // this.colorScale = null;
-        this.previousSelectedId = null;
+        // this.previousSelectedId = null;
     }
 }
 export const createGraphState = (oscManager: OSCManager, config: Config) => new GraphState(oscManager, config);

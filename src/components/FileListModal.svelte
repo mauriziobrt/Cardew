@@ -80,7 +80,7 @@
 			navigateToDirectory(file.path);
 		} else {
 			// console.log(file.path);
-			var obj;
+			let obj;
 			fs.readFile(file.path, "utf8", (err, data) => {
 				if (err) {
 					console.error(err);

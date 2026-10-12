@@ -4,12 +4,17 @@
         "user": "",
         "description": "",
         "year": "",
-        "openAccess": "",
+        "openacces": "",
         "citations": 0,
         "subject areas": [],
         "scival topics cluster": [],
         "scival topics": []
     },
     "notes": {
+        "pitch": 0,
+        "velocity": 0
+    },
+    "granulator": {
+        "grainSize": 0
     }
 }

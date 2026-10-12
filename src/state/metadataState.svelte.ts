@@ -1,8 +1,10 @@
 import type { NodeObject } from 'force-graph';
+import { Notice } from 'obsidian';
 
 export class MetadataState {
     // selectedNode: Node | undefined;
     copyMetatada = <Record<string, any>>({});
+    copyClass: string = "";
     // nodeClasses = $state<Record<string, any>>({
     //     "bibliometrics": {
     //         "id": "",
@@ -48,6 +50,15 @@ export class MetadataState {
     // Functions
     //================================================================
 
+    retrieveNodeClass(selectedNode: NodeObject) {
+        if (!selectedNode) return;
+        if (!selectedNode.className) {
+            new Notice("Element doesn't have a class yet");
+            return
+        }
+        this.copyClass = selectedNode.className;
+    }
+
     retrieveNodeCleanMetadata(selectedNode: NodeObject) {
         if (!selectedNode) return;
         //Check ReservedKeys and remove
@@ -89,6 +100,11 @@ export class MetadataState {
             if (this.reservedKeys.has(key)) continue;
             selectedNode[key] = this.copyMetatada[key];
         }
+    }
+
+    applyRetrievedNodeClass(selectedNode: NodeObject, template: Record<string, any>){
+        if (!this.copyClass) return;
+        this.applyNodeClass(selectedNode, this.copyClass, template[this.copyClass])
     }
 
     applyNodeClass(selectedNode: NodeObject, className: string | number, template: Record<string, any>) {

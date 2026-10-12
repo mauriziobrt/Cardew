@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { onMount, onDestroy } from "svelte";
 	import type { GraphState } from "../state/graphState.svelte";
-	import { registerControls, registerOSCcontrols } from "src/interaction/control";
+	import {
+		registerControls,
+		registerOSCcontrols,
+	} from "src/interaction/control";
 	import { createGraphActions } from "../interaction/graphActions";
 	import ForceGraph, { type NodeObject } from "force-graph";
 	import { showNodeMenu } from "src/ui/NodeMenu";
@@ -22,6 +25,7 @@
 
 		graph = new ForceGraph()(container)
 			.graphData({ nodes: [], links: [] })
+			.dagMode("radialout")
 			.nodeId("id")
 			.nodeLabel("user")
 			.nodeVal(
@@ -42,17 +46,17 @@
 				ctx.arc(x, y, r, 0, 2 * Math.PI);
 				ctx.fill();
 			})
-			.cooldownTicks(Infinity)
-			.cooldownTime(Infinity)
+			.cooldownTicks(1000)
+			.cooldownTime(10000)
 			.linkWidth(
 				(node: { weight: number }) => node.weight / cfg.linkWidth,
 			)
-			.linkDirectionalParticleWidth(2)
+			// .linkDirectionalParticleWidth(2)
 			.width(container.clientWidth)
 			.height(container.clientHeight)
 			.backgroundColor("rgba(0, 0, 0, 0)")
 			.linkColor(() => linkStaticColor)
-			.linkCurvature(0.2)
+			// .linkCurvature(0.2)
 			.onEngineStop(() => console.log("Physics stopped"))
 			.onBackgroundClick(() => {
 				graphState.setupBackgroundClick();
@@ -185,6 +189,7 @@
 			onAltMouseDown: actions.rectangleSelectionStart,
 			onAltMouseUp: actions.clearSelection,
 			onAltMouseDrag: actions.rectangleSelectionEnd,
+			onCmdA: actions.selectAll,
 			undo: actions.undo,
 			redo: actions.redo,
 		});
@@ -195,7 +200,7 @@
 				msgDown: actions.navigateDown,
 				msgRight: actions.navigateRight,
 				msgSpace: actions.rhythm,
-				msgPos: actions.hover
+				msgPos: actions.hover,
 			},
 			graphState.oscManager,
 		);
@@ -215,11 +220,12 @@
 			// now it is stuck
 		}
 	});
-	3;
+
 	onDestroy(() => {
 		cleanupControls?.();
 		cleanupOSCControls?.();
 		resizeObserver.disconnect();
+		// clearTimeout(timeoutId);
 		graph?.pauseAnimation?.(); // stops the internal RAF loop
 		if (graph) graph = null;
 	});

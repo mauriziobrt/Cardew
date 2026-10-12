@@ -1,24 +1,20 @@
-import type { NodeObject } from "force-graph";
+import type { GraphData, NodeObject, LinkObject } from "force-graph";
 
-interface Node {
-    id: number;
-    group: number;
-    x?: number;
-    y?: number;
-    z?: number;
-}
 
-interface Link {
-    source: number | Node;
-    target: number | Node;
-}
+// interface Node {
+//     id: number;
+//     group: number;
+//     x?: number;
+//     y?: number;
+//     z?: number;
+// }
 
-interface GraphData {
-    nodes: Node[];
-    links: Link[];
-}
+// interface Link {
+//     source: number | Node;
+//     target: number | Node;
+// }
 
-type Direction = 'up' | 'down' | 'left' | 'right';
+export type Direction = 'up' | 'down' | 'left' | 'right';
 
 function findClosestNodeInDirection(
     currentNodeId: number,
@@ -26,7 +22,7 @@ function findClosestNodeInDirection(
     graphData: GraphData,
     freeMode: any
     // currentNode: Node
-): Node | null {
+): NodeObject | null {
     // Find closest node in the given direction
     // based on x, y coordinates
     // console.log("NODES", graphData.nodes)
@@ -56,7 +52,7 @@ function findClosestNodeInDirection(
     const currentX = currentNode.x ?? 0;
     const currentY = currentNode.y ?? 0;
 
-    function isInDirection(angle, targetDirection) {
+    function isInDirection(angle: number, targetDirection: string) {
         // Normalize angle to range [0, 2π)
         const a = (angle + 2 * Math.PI) % (2 * Math.PI);
 

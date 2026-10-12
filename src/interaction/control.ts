@@ -23,6 +23,7 @@ export function registerControls(handlers: {
     onAltMouseDown?: (e: MouseEvent) => void;
     onAltMouseUp?: (e: MouseEvent) => void;
     onAltMouseDrag?: (e: MouseEvent) => void;
+    onCmdA: () => void;
     undo: () => void;
     redo: () => void;
 }) {
@@ -39,6 +40,10 @@ export function registerControls(handlers: {
         // if (e.key === 'MetaLeft') handlers.onCmdUp?.();
         // Uncomment to get key name
         // else console.log(e.key)
+        if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+            e.preventDefault();
+            handlers.onCmdA();
+        }
         if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
             e.preventDefault();
             handlers.undo();

@@ -75,21 +75,7 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="metadata-property-value">
-		<!-- id:
-		<input
-			type="text"
-			class="metadata-input-text"
-			list="node-ids-{position}"
-			bind:value={inputValue}
-			onchange={commitEdit}
-		/>
-		<datalist id="node-ids-{name}">
-			{#each nodes.slice(0, 20) as id}
-				<option value={id}></option>
-			{/each}
-		</datalist> -->
 		weight:
 		<input
 			class="metadata-input-number"

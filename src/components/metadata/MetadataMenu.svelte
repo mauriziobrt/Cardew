@@ -6,6 +6,7 @@
 		fields = <Array<TemplateStringsArray>>[],
 		onEditClass,
 		saveClass,
+		// editOSC,
 	} = $props();
 
 	$effect(() => {
@@ -87,6 +88,19 @@
 					className = "Paste";
 				}),
 		);
+
+		// menu.addSeparator();
+
+		// menu.addItem((item) =>
+		// 	item
+		// 		.setTitle("Edit OSC")
+		// 		.setIcon("documents")
+		// 		.onClick(() => {
+		// 			editOSC()
+		// 			// new Notice("Copied");
+		// 			// className = "Copy";
+		// 		}),
+		// );
 
 		menu.addSeparator();
 

@@ -1,4 +1,4 @@
-import type { GraphData, NodeObject } from "force-graph";
+import type { NodeObject } from "force-graph";
 import type { Config } from "src/config.svelte";
 import type { GraphState } from "../state/graphState.svelte";
 // Create nodes based on some key + click, it works if creative mode is enabled. 
@@ -12,14 +12,16 @@ import type { GraphState } from "../state/graphState.svelte";
 let nodeIdCounter = 0;
 export function createNewNode(
     graphData: any,
-    graph: any,
     x: number,
-    y: number
+    y: number,
+    name: string
 ): void {
     // let coords = graph.screen2GraphCoords(MouseEvent.clientX, MouseEvent.clientY);
     let nodeId = nodeIdCounter++;
-    graphData.nodes.push({ id: nodeId, x: x, y: y, name: 'node_' + nodeId });
-    console.log(graphData.nodes);
+    let id = name + nodeId;
+    console.log("NEW NODE", name)
+    graphData.nodes.push({ id: id, x: x, y: y, name: id });
+    console.log([...graphData.nodes]);
 }
 
 export function removeNode(
@@ -28,7 +30,7 @@ export function removeNode(
     graphData: any,
 ): void {
     const link = graphData.link;
-    graphData.links.filter(link => link.source === node || link.target === node).forEach(link => removeLink(link, graphData));
+    graphData.links.filter((link: { source: NodeObject; target: NodeObject; }) => link.source === node || link.target === node).forEach((link: any) => removeLink(link, graphData));
     graphData.nodes.splice(graphData.nodes.indexOf(node), 1);
 };
 
@@ -45,7 +47,7 @@ export function creativeConfig(
     config: Config,
     graphState: GraphState
 ): void {
-    config.update({ graph: { nodeSize: 1 } });
+    // config.update({ graph: { nodeSize: 1 } });
     config.updateGraph({ alphaDecay: 0 });
     config.updateGraph({ nodeSize: 0.1 });
     graphState.graph?.nodeSize(100);

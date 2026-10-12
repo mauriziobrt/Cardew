@@ -22,6 +22,7 @@ export function createGraphActions(graphState: GraphState) {
     rectangleSelectionEnd: (e: MouseEvent) => graphState.selectionEnd(e),
     clearSelection: (e: MouseEvent) => graphState.clearSelection(e),
     createNode: (e: MouseEvent) => graphState.createNode(e),
+    selectAll: () => graphState.selectAll(),
     undo: () => graphState.undo(),
     redo: () => graphState.redo()
   };

@@ -1,5 +1,5 @@
 // NodeMenu.ts
-import type { GraphState } from "src/graphState.svelte";
+import type { GraphState } from "src/state/graphState.svelte";
 import { Menu, Notice } from "obsidian";
 
 export function showNodeMenu(node: any, event: MouseEvent, graphState: GraphState) {
@@ -22,5 +22,21 @@ export function showNodeMenu(node: any, event: MouseEvent, graphState: GraphStat
             ),
     );
     menu.addSeparator();
+    menu.addItem((item) =>
+        item.setTitle("Copy Class").setIcon("documents")
+            .onClick(() => {
+                new Notice("Copied")
+                graphState.retrieveNodeClass();
+            }
+            ),
+    );
+    menu.addItem((item) =>
+        item.setTitle("Paste Class").setIcon("paste")
+            .onClick(() => {
+                new Notice("Pasted")
+                graphState.applyRetrievedNodeClass();
+            }
+            ),
+    );
     menu.showAtMouseEvent(event);
 }

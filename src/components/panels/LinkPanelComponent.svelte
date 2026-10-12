@@ -96,17 +96,6 @@ So what is needed:
 								degree={graphState.degree[otherNode.id]}
 							/>
 						{/each}
-
-						<!-- {#each Object.entries(graphState.selectedNodeRawLinks) as [key, value]}
-			<PanelLink
-				position={key}
-				// I can't bind to selectedNodeLinks for some reason
-				links={value}
-				// here instead of passing all the nodes I should only pass the array
-				// bind:nodes={graphState.graphData.nodes}
-				onDelete={handleDelete}
-			/>
-		{/each} -->
 					{/if}
 				</section>
 			</div>

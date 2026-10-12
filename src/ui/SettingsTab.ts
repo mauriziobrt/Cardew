@@ -77,6 +77,23 @@ export class ForceGraphSettingTab extends PluginSettingTab {
         containerEl.createEl('h2', { text: 'Graph Settings' });
 
         new Setting(containerEl)
+            .setName('Graph Mode')
+            .setDesc('Choose the graph visualization mode')
+            .addDropdown(dropdown => dropdown
+                .addOption('td', 'Top Down')
+                .addOption('bu', 'Bottom Up')
+                .addOption('lr', 'Left Radial')
+                .addOption('rl', 'Right Radial')
+                .addOption('radialout', 'Radial Out')
+                .addOption('radialin', 'Radial In')
+                .addOption('null', 'Null')
+                .setValue(this.plugin.config.current.dagMode)
+                .onChange(async (value: 'td' | 'bu' | 'lr' | 'rl' | 'radialout' | 'radialin' | 'null') => {
+                    await this.plugin.config.save(this.plugin);
+                    this.plugin.graphState.graph?.dagMode(value);
+                }));
+
+        new Setting(containerEl)
             .setName('Node Size')
             .setDesc('Relative size of nodes in the graph')
             .addSlider(slider => slider
@@ -176,7 +193,7 @@ export class ForceGraphSettingTab extends PluginSettingTab {
                         }
                     }));
         });
-
+        // Creative Mode
 
         // Creative Mode
         containerEl.createEl('h2', { text: 'Creative Mode' });
@@ -194,6 +211,18 @@ export class ForceGraphSettingTab extends PluginSettingTab {
                         }
                     });
                     await this.plugin.config.save(this.plugin);
+                }));
+
+        new Setting(containerEl)
+            .setName('New Node Name')
+            .setDesc('Decide how a new node should be named')
+            .addText(text => text
+                .setPlaceholder('Peppino')
+                .setValue(this.plugin.config.current.newName)
+                .onChange(async (value) => {
+                    this.plugin.config.update
+                        this.plugin.config.current.newName = value;
+                        await this.plugin.config.save(this.plugin);
                 }));
         // Creative Mode
         containerEl.createEl('h2', { text: 'Reset' });

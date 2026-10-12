@@ -4,7 +4,7 @@
 	import MetadataPlus from "../metadata/MetadataPlus.svelte";
 	import MetadataMenu from "../metadata/MetadataMenu.svelte";
 	import { ExampleModal } from "../../ui/NamingComponent";
-    import { Notice, App } from "obsidian";
+	import { Notice, App } from "obsidian";
 
 	interface Props {
 		graphState: GraphState;
@@ -45,7 +45,8 @@
 	];
 
 	function handleAdd(metaName: string, metaValue: any) {
-		if (!graphState.selectionState.selectedNodes[0] || !metaName?.trim()) return;
+		if (!graphState.selectionState.selectedNodes[0] || !metaName?.trim())
+			return;
 		if (RESERVED.includes(metaName)) {
 			console.warn(`"${metaName}" is a reserved field`);
 			return;
@@ -63,7 +64,11 @@
 			new Notice(`Saved new class: ${result}!`);
 			graphState.saveNodeAsClass(result, false);
 		}).open();
-	}
+	};
+
+	// const editOSCMetadata = () => {
+	// 	new OSCMetadataModal(this.app).open();
+	// };
 
 	function handleReset(metaName: string) {
 		//Function to clear the metadata of an object
@@ -92,10 +97,12 @@
 			<div class="metadata-properties">
 				{#if graphState.nodeClasses !== null}
 					<MetadataMenu
-						currentClass={graphState.selectionState.selectedNodes[0]}
+						currentClass={graphState.selectionState
+							.selectedNodes[0]}
 						fields={Object.keys(graphState.nodeClasses)}
 						onEditClass={handleApply}
-						saveClass={saveClass}
+						{saveClass}
+						// editOSC={editOSCMetadata}
 					></MetadataMenu>
 					<span style="margin:2px"></span>
 					{#if graphState.selectionState.selectedNodeIndex !== null && graphState.graphData !== null}
@@ -103,13 +110,14 @@
 							graphState.graphData.nodes[
 								graphState.selectionState.selectedNodeIndex
 							]}
+
 						{#if node}
-							{#each Object.entries(node).filter(([key]) => !RESERVED.includes(key)) as [key, value]}
-								<!-- {#each Object.entries(graphState.graphData.nodes[graphState.selectedNodeIndex]) as [key, value]} -->
+							{#each Object.entries(node).filter(([key]) => !RESERVED.includes(key)) as [key, value] (key)}
 								<Panel
 									name={key}
 									dict={graphState.graphData.nodes[
-										graphState.selectionState.selectedNodeIndex
+										graphState.selectionState
+											.selectedNodeIndex
 									]}
 									onDeleteMetadata={handleDelete}
 								/>

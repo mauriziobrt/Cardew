@@ -1,5 +1,6 @@
 // config.ts
 export interface PluginConfig {
+    dagMode: string;
     osc: {
         localPort: number;
         remoteAddress: string;
@@ -29,6 +30,8 @@ export interface PluginConfig {
     centerAtNode: {
         modeEnabled: boolean
     };
+    newName: string;
+    hasEdits: boolean;
 }
 
 export const DEFAULT_CONFIG: PluginConfig = {
@@ -60,12 +63,15 @@ export const DEFAULT_CONFIG: PluginConfig = {
     },
     centerAtNode: {
         modeEnabled: true
-    }
+    },
+    newName: "gennarino_",
+    dagMode: "",
+    hasEdits: false
 };
 
 // Reactive config class
 export class Config {
-    private config = <PluginConfig>(structuredClone(DEFAULT_CONFIG));
+    config = <PluginConfig>(structuredClone(DEFAULT_CONFIG));
     private listeners: Set<(config: PluginConfig) => void> = new Set();
 
     get current(): PluginConfig {

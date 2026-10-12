@@ -17,11 +17,20 @@ export class SelectionState {
         private getColorScale: () => d3.ScaleOrdinal<string, string>,
         private getConfig: () => Config,
         private getOsc: () => OSCManager,
-        private getDegree: () => Record<number, number> | null
+        private getOscConfig: () => Record<string, string[]>,
+        private getDegree: () => Record<number, number>
     ) {
         // this.getSelectedNode;
     }
 
+    private resolveParam(node: any, key: string) {
+        switch (key) {
+            case 'degree': return this.getDegree()[node.id] ?? 0;
+            case 'x': return node.x ?? 0;
+            case 'y': return node.y ?? 0;
+            default: return node[key] ?? 0;
+        }
+    }
     //====================================================================================
     // Data Selection
     //====================================================================================
@@ -29,7 +38,6 @@ export class SelectionState {
         this.multiSelect = toggle;
         // console.log(this.multiSelect)
     }
-
 
     // Function that decides the behaviour of the graph when a node is selected
     selectNode(node: NodeObject, graph: ForceGraph, nodes: NodeObject[]) {
@@ -56,10 +64,21 @@ export class SelectionState {
                 //     node.id, node.openacces, node.citations,
                 //     this.degree[node.id], 1000, node.year, node.x, node.y, 2, 55, 800
                 // ]);
-                this.getOsc().sendMessage('/control', [
-                    node.id, node.openacces, node.citations,
-                    this.getDegree()[node.id], 1000, node.year, node.x, node.y, 2, 55, 800
-                ]);
+                // qua comunque cambia perchè faccio le configurazioni io quindi ha senso vedere come faccio le config.
+                // allora facciamo quelle va intanto.
+                // console.log(this.getOscConfig());
+                if (!node.className) return;
+                
+                const currentClass = [node.className];
+                const oscConfig = this.getOscConfig()[currentClass[0]];
+                // console.log(oscConfig);
+                const values = (oscConfig ?? []).map((k) => this.resolveParam(node, k));
+                const oscMsg = currentClass.concat(values)
+                this.getOsc().sendMessage('/control', oscMsg);
+                // this.getOsc().sendMessage('/control', [
+                //     node.id, node.openacces, node.citations,
+                //     this.getDegree()[node.id], 1000, node.year, node.x, node.y, 2, 55, 800
+                // ]);
             }
             graph.nodeColor(n => this.selectedNodes.some(s => s.id === n.id) ? 'red' : this.getColorScale()(n.openacces));
 
