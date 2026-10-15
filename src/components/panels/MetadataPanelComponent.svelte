@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Panel from "./Panel.svelte";
 	import type { GraphState } from "src/state/graphState.svelte";
-	import MetadataPlus from "../metadata/MetadataPlus.svelte";
+	import MetadataPlus from "./PanelMetadataPlus.svelte";
 	import MetadataMenu from "../metadata/MetadataMenu.svelte";
 	import { ExampleModal } from "../../ui/NamingComponent";
 	import { Notice, App } from "obsidian";
@@ -52,11 +52,19 @@
 			return;
 		}
 		graphState.selectionState.selectedNodes[0][metaName.trim()] = metaValue;
+		graphState.updateGraphData();
 	}
 
 	function handleApply(metaName: string) {
 		graphState.applyNodeClass(metaName);
 		// console.log(metaName)
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === "Enter") {
+			graphState.createColorScale();
+			graphState.updateGraphData();
+		}
 	}
 
 	const saveClass = () => {
@@ -72,6 +80,8 @@
 
 	function handleReset(metaName: string) {
 		//Function to clear the metadata of an object
+		if (!graphState.selectionState.selectedNodes[0]) return;
+		// for each class, set the value to null (depending on)
 	}
 
 	function handleDelete(metaName: string) {
@@ -120,6 +130,9 @@
 											.selectedNodeIndex
 									]}
 									onDeleteMetadata={handleDelete}
+									onKeydown={handleKeydown}
+									allProperties={graphState.allProperties}
+									allPropertyValues={graphState.allValuesAtProperty(key)}
 								/>
 							{/each}
 						{/if}
@@ -127,7 +140,7 @@
 				{/if}
 			</div>
 		</div>
-		<MetadataPlus onAdd={handleAdd} />
+		<MetadataPlus onAdd={handleAdd} allProperties={graphState.allProperties} />
 	</div>
 </div>
 

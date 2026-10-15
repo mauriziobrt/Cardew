@@ -27,8 +27,6 @@ export class GraphState {
     config: Config;
     cursor = new CursorState;
     oscConfig = $state<Record<string, string[]>>({});
-    selectionState = new SelectionState(() => this.colorScale, () => this.config, () => this.oscManager, () => this.oscConfig, () => this.degree);
-    metadataState = new MetadataState(() => this.selectionState.selectedNodes[0]);
     selectedNodes = $state<Array<NodeObject>>([]);
     graphData = $state<GraphData | null>(null);
     graph = $state<ForceGraph | null>(null);
@@ -76,6 +74,11 @@ export class GraphState {
         "__dragged",
     ]);
     copyMetatada = $state<Record<string, any>>({});
+    //====================================================================================
+    //States
+    //====================================================================================
+    selectionState = new SelectionState(() => this.colorScale, () => this.config, () => this.oscManager, () => this.oscConfig, () => this.degree);
+    metadataState = new MetadataState(() => this.selectionState.selectedNodes[0]);
     //====================================================================================
     // Declare class properties
     //====================================================================================
@@ -135,9 +138,27 @@ export class GraphState {
         this.updateDegree()
     };
 
+    // this should just run on startup, write somewhere and then change when an edit happens
     get allNodeIds() {
         if (!this.graphData) return [];
         return this.graphData.nodes.map(n => n.id)
+    }
+
+    // this should just run on startup, write somewhere and then change when an edit happens
+    get allProperties() {
+        return [...new Set(this.graphData.nodes.flatMap(n => Object.keys(n)))]
+            .filter(k => !this.reservedKeys.has(k));
+    }
+
+    // this should just run on startup, write somewhere and then change when an edit happens
+    allValuesAtProperty(property: string): string[] {
+        if (!this.graphData) return [];
+        // console.log(property)
+        return [...new Set(
+            this.graphData.nodes
+                .map((n: any) => n[property])
+                .filter((v): v is string => typeof v === "string")
+        )];
     }
 
     updateDegree() {
@@ -429,6 +450,7 @@ export class GraphState {
             )
         }
     }
+
     //====================================================================================
     // Interaction Modes
     //====================================================================================
@@ -445,6 +467,68 @@ export class GraphState {
     //         return Math.sqrt(dx * dx + dy * dy) < this.degree[n.id];
     //     });
     //     if (node) { console.log("EL NODINO LOCALINO", node, x, y); this.selectNode(node); };
+    // }
+
+    private targets = new Map<string, { x?: number; y?: number }>();
+    private rafId: number | null = null;
+    private readonly smoothing = 0.15; // 0-1, lower = smoother
+
+    moveNode(id: string, dimension: string, value: number) {
+        const node = this.getNodeAtID(id);
+        if (!node) return;
+
+        const t = this.targets.get(id) ?? {};
+        if (dimension === "x") t.x = value;
+        else if (dimension === "y") t.y = value;
+        else return;
+        this.targets.set(id, t);
+
+        // pin at current position so interpolation starts from where it is
+        if (node.fx == null) node.fx = node.x;
+        if (node.fy == null) node.fy = node.y;
+
+        if (this.rafId === null) this.rafId = requestAnimationFrame(this.step);
+    }
+
+    private step = () => {
+        let active = false;
+
+        for (const [id, t] of this.targets) {
+            const n = this.getNodeAtID(id);
+            if (!n) { this.targets.delete(id); continue; }
+
+            if (t.x !== undefined) {
+                n.fx += (t.x - n.fx) * this.smoothing;
+                if (Math.abs(t.x - n.fx) < 0.1) { n.fx = t.x; delete t.x; }
+                else active = true;
+            }
+            if (t.y !== undefined) {
+                n.fy += (t.y - n.fy) * this.smoothing;
+                if (Math.abs(t.y - n.fy) < 0.1) { n.fy = t.y; delete t.y; }
+                else active = true;
+            }
+            if (t.x === undefined && t.y === undefined) this.targets.delete(id);
+        }
+
+        this.graph.d3ReheatSimulation(); // replace `graph` with your ForceGraph instance, so it redraws
+
+        this.rafId = active ? requestAnimationFrame(this.step) : null;
+    };
+    // moveNode(id: string, dimension: string, value: number) {
+    //     const movingNode = this.getNodeAtID(id);
+    //     console.log("MOVING", dimension)
+    //     switch (dimension) {
+    //         case "x":
+    //             console.log("dimension is x");
+    //             //add an interpolation here
+    //             movingNode.fx = value;
+    //             break;
+    //         case "y":
+    //             console.log("dimension is y");
+    //             movingNode.fy = value;
+    //             break;
+    //     }
+    //     this.graph.d3ReheatSimulation(); // replace `graph` with your ForceGraph instance
     // }
 
     //CLAUDE GENERATED FUNCTION
@@ -487,7 +571,7 @@ export class GraphState {
     // Function that determines where to move when wasd or arrows are moved
     navigate(direction: Direction) {
         if (!this.selectionState.selectedNodes[0] || !this.graphData) return;
-        // TODO Direction should be closer connected node also, add toggle to choose
+        // TODO Direction add toggle to choose connected vs closer or external control
         const nextNode = navigateInDirection(this.selectionState.selectedNodes[0], direction, this.graphData, true);
         if (nextNode) {
             // Always call this.selectNode so everything stays the same
@@ -499,7 +583,7 @@ export class GraphState {
     rhythm() {
         if (!this.selectionState.selectedNodes[0] || !this.graphData || !this.graph) return;
         //TODO: APPLY stats of current cluster
-        highlightNeighborsGradually(this.selectionState.selectedNodes[0], this.graphData, this.oscManager, this.graph, this.colorScale);
+        highlightNeighborsGradually(this.selectionState.selectedNodes[0], this.graph, this.graphData.nodes, this.graphData.links, this.selectionState);
     }
     // Transition interaction mode
     transition() {
@@ -524,8 +608,9 @@ export class GraphState {
             const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
             this.position = { x, y }
             // Basic metadata created here, but can be edited in the information view
-            createNewNode(this.graphData, this.position.x, this.position.y, this.config.current.newName);
+            const newNodeID = createNewNode(this.graphData, this.position.x, this.position.y, this.config.current.newName);
             this.updateGraphData();
+            this.selectNode(this.getNodeAtID(newNodeID));
         }
     }
 
@@ -571,21 +656,25 @@ export class GraphState {
 
     public createColorScale() {
         if (!this.graphData) return;
-        const nodes = this.graphData.nodes;
-        const userValues = [
-            ...new Set(nodes.map((node) => node.openacces)),
-        ];
+        // const nodes = this.graphData.nodes;
+        // //change here so new colorscale can get created with different configs, maybe just for each class a specific color? idk
+        // const userValues = [
+        //     ...new Set(nodes.map((node) => node.openacces)),
+        // ];
+        // console.log(userValues);
         const COLORS = this.config.current.colors;
+        const statuses = Object.keys(COLORS);
         // Map custom colors to the domain values
         return d3
             .scaleOrdinal()
-            .domain(userValues)
+            .domain(statuses)
             .range(
-                userValues.map((color) =>
+                statuses.map((color) =>
                     COLORS[color as keyof typeof COLORS] || COLORS.closed
                     // OPENACCESS[color] || "#84848466"
                 ),
-            );
+            )
+            .unknown(COLORS.closed);
     }
 
     removeMetadata(metaName: any) {

@@ -15,13 +15,21 @@ export function createNewNode(
     x: number,
     y: number,
     name: string
-): void {
+): string {
     // let coords = graph.screen2GraphCoords(MouseEvent.clientX, MouseEvent.clientY);
+    let existingIds = new Set(graphData.nodes.map((n: any) => n.id));
     let nodeId = nodeIdCounter++;
     let id = name + nodeId;
-    console.log("NEW NODE", name)
-    graphData.nodes.push({ id: id, x: x, y: y, name: id });
-    console.log([...graphData.nodes]);
+    do {
+        id = name + nodeIdCounter++;
+    } while (existingIds.has(id));
+
+    graphData.nodes.push({ id, x, y, name: id });
+    return id;
+    // console.log("NEW NODE", name)
+    // graphData.nodes.push({ id: id, x: x, y: y, name: id });
+    // console.log([...graphData.nodes]);
+    // return (id);
 }
 
 export function removeNode(

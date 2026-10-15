@@ -26,7 +26,8 @@ export function registerControls(handlers: {
     onCmdA: () => void;
     undo: () => void;
     redo: () => void;
-}) {
+}, root: HTMLElement) {
+
     let dragging = false;
     function handleKeydown(e: KeyboardEvent) {
         if (e.key === 'w' || e.key === 'ArrowUp') handlers.onUp();
@@ -97,9 +98,15 @@ export function registerControls(handlers: {
         if (dragging && e.altKey) handlers.onAltMouseDrag?.(e);
     }
 
-    const canvas = document.querySelector('canvas')
+    // const canvas = document.querySelector('canvas')
 
-    if (!canvas) return;
+    // if (!canvas) return;
+    const canvas = root.querySelector('canvas');
+    if (!canvas) {
+        console.warn('registerControls: no canvas found');
+        return () => { };
+    }
+
     // canvas.addEventListener("dblclick", handleDoubleClick);
     canvas.addEventListener('mousedown', handleMouseDown, true);
     canvas.addEventListener('mouseup', handleMouseUp, true);
@@ -125,6 +132,7 @@ export function registerOSCcontrols(handlers: {
     msgRight: () => void;
     msgSpace: () => void;
     msgPos: (x: number, y: number) => void;
+    msgMove: (id: string, dimension: string, value: number) => void;
 }, oscManager: OSCManager) {
     console.log(oscManager);
     oscManager.onMessage((address, args) => {
@@ -148,6 +156,11 @@ export function registerOSCcontrols(handlers: {
                 case '/pos':
                     // console.log("POST", args[0].value);
                     handlers.msgPos(args[0].value, args[1].value);
+                    break;
+                case '/move':
+                    // Dimension & Position \move {dimension} {position}
+                    console.log("POST", args[0], args[1], args[2].value);
+                    handlers.msgMove(args[0], args[1], args[2].value);
                     break;
             }
         }

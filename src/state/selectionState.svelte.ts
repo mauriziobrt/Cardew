@@ -51,7 +51,7 @@ export class SelectionState {
                 if (!this.selectedNodes.includes(node)) {
                     this.selectedNodes.push(node);
                 }
-                console.log("Selected multiple nodes: ", [...this.selectedNodes]);
+                // console.log("Selected multiple nodes: ", [...this.selectedNodes]);
             } else {
                 // graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.getColorScale()(n.openacces));
                 this.selectedNodes = [node];

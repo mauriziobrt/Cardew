@@ -1,10 +1,11 @@
-import type { NodeObject } from "force-graph";
+import type { LinkObject, NodeObject } from "force-graph";
+import type { SelectionState } from "src/state/selectionState.svelte";
 
 let activeTimeouts: ReturnType<typeof setTimeout>[] = [];
 
 // Find weight between nodes
-function getWeightBetweenNodesWithDefault(data, sourceId, targetId) {
-    const link = data.links.find(link =>
+function getWeightBetweenNodesWithDefault(links: LinkObject[], sourceId, targetId) {
+    const link = links.find(link =>
         (link.source.id === sourceId && link.target.id === targetId) ||
         (link.source.id === targetId && link.target.id === sourceId)
     );
@@ -19,11 +20,11 @@ export function clearRhythmAnimations() {
 
 export function highlightNeighborsGradually(
     node: NodeObject,
-    graphData: any,
-    osc: any,
     graph: any,
-    colorScale: d3.ScaleOrdinal<string, string>
-
+    nodes: NodeObject[],
+    links: LinkObject[],
+    selectionState: SelectionState
+    //instead of passing everything I should just pass what is needed
     // degree: Record<number, number>
     //   degree: Record<number, number>,
     //   allNodes: Node[],
@@ -32,7 +33,7 @@ export function highlightNeighborsGradually(
     clearRhythmAnimations();
 
     // List of all Connected Links obtained from the Graph Data Links
-    const connectedLinks = graphData.links
+    const connectedLinks = links
         .filter(link => link.source.id === node.id || link.target.id === node.id);
 
     // List of all Connected Nodes obtained from the Connected Links
@@ -42,12 +43,11 @@ export function highlightNeighborsGradually(
     // Max Weight among all connected links
     const tmpMaxWeight = Math.max(...connectedLinks.map(link => link.weight));
 
-    graphData.nodes.forEach(n => n.highlighted = false);
+    nodes.forEach(n => n.highlighted = false);
     node.highlighted = true;
 
     connectedNodes.forEach((neighbor) => {
-        const normalizedWeight = getWeightBetweenNodesWithDefault(graphData, node.id, neighbor.id) / tmpMaxWeight;
-
+        const normalizedWeight = getWeightBetweenNodesWithDefault(links, node.id, neighbor.id) / tmpMaxWeight;
         const minDelay = 50;    // ms — highest weight fires first
         const maxDelay = 3000;  // ms — lowest weight fires last
 
@@ -56,12 +56,9 @@ export function highlightNeighborsGradually(
         // console.log({ neighbor: neighbor.id, normalizedWeight, delayMs: delay });
 
         const timeoutId = setTimeout(() => {
-            neighbor.highlighted = true;
-            graph.nodeColor((n: Node) => n.highlighted ? 'red' : colorScale(n.openacces));
-            osc.sendMessage('/rhythm', [
-                neighbor.id, neighbor.openacces, neighbor.citations,
-                55, 1000, neighbor.year, neighbor.x, neighbor.y, 1, 55, 800
-            ]);
+            selectionState.toggleMultiselect(true);
+            selectionState.selectNode(neighbor, graph, nodes);
+            selectionState.toggleMultiselect(false);
         }, delay);
 
         activeTimeouts.push(timeoutId);

@@ -7,8 +7,8 @@ import MetadataPanelComponent from './components/panels/MetadataPanelComponent.s
 import LinkPanelComponent from './components/panels/LinkPanelComponent.svelte';
 import { mount, unmount } from 'svelte';
 import { createGraphState, GraphState } from './state/graphState.svelte';
-import * as fs from 'fs';
-import * as path from 'path';
+// import * as fs from 'fs';
+// import * as path from 'path';
 import FileListModal from './components/FileListModal.svelte';
 import OSCMetadataPanelComponentSvelte from './components/panels/OSCMetadataPanelComponent.svelte';
 import { FileLoader } from './io/FileLoader'
@@ -22,45 +22,45 @@ import { createOSReplState, OSReplState } from './osrepl/osreplState.svelte';
 // File Explorer
 //================================================================================================
 
-export interface FileInfo {
-	name: string;
-	path: string;
-	size: number;
-	modified: Date;
-	isDirectory: boolean;  // Added this
-}
+// export interface FileInfo {
+// 	name: string;
+// 	path: string;
+// 	size: number;
+// 	modified: Date;
+// 	isDirectory: boolean;  // Added this
+// }
 
-class FileExplorerModal extends Modal {
-	component: FileListModal | undefined;
-	plugin: ExamplePlugin;
-	dirPath: string;
+// class FileExplorerModal extends Modal {
+// 	component: FileListModal | undefined;
+// 	plugin: ExamplePlugin;
+// 	dirPath: string;
 
-	constructor(app: App, plugin: ExamplePlugin, dirPath: string,) {
-		super(app);
-		this.plugin = plugin;
-		this.dirPath = dirPath;
-	}
+// 	constructor(app: App, plugin: ExamplePlugin, dirPath: string,) {
+// 		super(app);
+// 		this.plugin = plugin;
+// 		this.dirPath = dirPath;
+// 	}
 
-	async onOpen() {
-		const { contentEl } = this;
+// 	async onOpen() {
+// 		const { contentEl } = this;
 
-		this.component = mount(FileListModal, {
-			target: this.contentEl,
-			props: {
-				dirPath: this.dirPath,
-				graphState: this.plugin.graphState,
-				onClose: () => this.close()
-			}
-		});
-	}
+// 		this.component = mount(FileListModal, {
+// 			target: this.contentEl,
+// 			props: {
+// 				dirPath: this.dirPath,
+// 				graphState: this.plugin.graphState,
+// 				onClose: () => this.close()
+// 			}
+// 		});
+// 	}
 
-	onClose() {
-		if (this.component) {
-			unmount(this.component);
-			// this.component.$destroy();
-		}
-	}
-}
+// 	onClose() {
+// 		if (this.component) {
+// 			unmount(this.component);
+// 			// this.component.$destroy();
+// 		}
+// 	}
+// }
 
 //================================================================================================
 // OSC Configuration
@@ -439,11 +439,11 @@ export default class ExamplePlugin extends Plugin {
 				(leaf) => new LinkView(leaf, this)
 			);
 
-			this.addRibbonIcon(
-				'folder-search',
-				'Load Graph',
-				() => new FileExplorerModal(this.app, this, '/Users/maurizioberta/Documents/Development/graph-sonification/public/data').open()
-			);
+			// this.addRibbonIcon(
+			// 	'folder-search',
+			// 	'Load Graph',
+			// 	() => new FileExplorerModal(this.app, this, '/Users/maurizioberta/Documents/Development/graph-sonification/public/data').open()
+			// );
 
 			this.addRibbonIcon(
 				'folder-pen',
@@ -502,13 +502,13 @@ export default class ExamplePlugin extends Plugin {
 
 			this.addSettingTab(new ForceGraphSettingTab(this.app, this));
 
-			this.addCommand({
-				id: 'browse-external-files',
-				name: 'Browse external files',
-				callback: () => {
-					new FileExplorerModal(this.app, this, '/Users/maurizioberta/Documents/Development/graph-sonification/public/data').open();
-				}
-			});
+			// this.addCommand({
+			// 	id: 'browse-external-files',
+			// 	name: 'Browse external files',
+			// 	callback: () => {
+			// 		new FileExplorerModal(this.app, this, '/Users/maurizioberta/Documents/Development/graph-sonification/public/data').open();
+			// 	}
+			// });
 
 			this.addCommand({
 				id: 'config-metadata-osc',
@@ -520,7 +520,7 @@ export default class ExamplePlugin extends Plugin {
 
 			this.app.workspace.onLayoutReady(() => {
 				this.activateBothViews();
-				this.activateMetadataView();
+				// this.activateMetadataView();
 				this.activateLinkView();
 			});
 
@@ -596,30 +596,6 @@ export default class ExamplePlugin extends Plugin {
 			await this.dataLoaderPromise;
 		}
 
-		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		// Activate the graph view
-		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-		// First I activate the ForceGraph View
-		// I should check if with this method both gets open or I can control them individually
-		let forceGraphLeaf: WorkspaceLeaf | null = null;
-		const forceGraphLeaves = workspace.getLeavesOfType(VIEW_TYPE_FORCE_GRAPH)
-
-		if (forceGraphLeaves.length > 0) {
-			// It exist, so show it
-			forceGraphLeaf = forceGraphLeaves[0]
-		} else {
-			// Create it
-			const leaf = workspace.getLeaf(false);
-			if (!leaf) return; // or throw new Error("Could not get leaf")
-			forceGraphLeaf = leaf;
-			// forceGraphLeaf = workspace.getRightLeaf(false);
-			await forceGraphLeaf.setViewState({
-				type: VIEW_TYPE_FORCE_GRAPH,
-				active: true
-			});
-		}
-
-		await workspace.revealLeaf(forceGraphLeaf);
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		// Activate the info view
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -697,35 +673,63 @@ export default class ExamplePlugin extends Plugin {
 		}
 
 		workspace.revealLeaf(metadataPanelLeaf)
+
+
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		// Activate the graph view
+		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+		// First I activate the ForceGraph View
+		// I should check if with this method both gets open or I can control them individually
+		let forceGraphLeaf: WorkspaceLeaf | null = null;
+		const forceGraphLeaves = workspace.getLeavesOfType(VIEW_TYPE_FORCE_GRAPH)
+
+		if (forceGraphLeaves.length > 0) {
+			// It exist, so show it
+			forceGraphLeaf = forceGraphLeaves[0]
+		} else {
+			// Create it
+			const leaf = workspace.getLeaf(false);
+			if (!leaf) return; // or throw new Error("Could not get leaf")
+			forceGraphLeaf = leaf;
+			// forceGraphLeaf = workspace.getRightLeaf(false);
+			await forceGraphLeaf.setViewState({
+				type: VIEW_TYPE_FORCE_GRAPH,
+				active: true
+			});
+		}
+
+		await workspace.revealLeaf(forceGraphLeaf);
+
+
 	}
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	// Where is this used???
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-	getFilesFromDirectory(dirPath: string): FileInfo[] {
-		try {
-			if (!fs.existsSync(dirPath)) {
-				throw new Error('Directory does not exist');
-			}
+	// getFilesFromDirectory(dirPath: string): FileInfo[] {
+	// 	try {
+	// 		if (!fs.existsSync(dirPath)) {
+	// 			throw new Error('Directory does not exist');
+	// 		}
 
-			const items = fs.readdirSync(dirPath);
+	// 		const items = fs.readdirSync(dirPath);
 
-			return items.map(item => {
-				const fullPath = path.join(dirPath, item);
-				const stats = fs.statSync(fullPath);
+	// 		return items.map(item => {
+	// 			const fullPath = path.join(dirPath, item);
+	// 			const stats = fs.statSync(fullPath);
 
-				return {
-					name: item,
-					path: fullPath,
-					size: stats.size,
-					modified: stats.mtime,
-					isDirectory: stats.isDirectory()
-				};
-			});
-		} catch (error) {
-			console.error('Error reading directory:', error);
-			return [];
-		}
-	}
+	// 			return {
+	// 				name: item,
+	// 				path: fullPath,
+	// 				size: stats.size,
+	// 				modified: stats.mtime,
+	// 				isDirectory: stats.isDirectory()
+	// 			};
+	// 		});
+	// 	} catch (error) {
+	// 		console.error('Error reading directory:', error);
+	// 		return [];
+	// 	}
+	// }
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	// Initialize OSC connection
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––

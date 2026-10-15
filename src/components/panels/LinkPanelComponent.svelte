@@ -2,7 +2,7 @@
 	import Sortable from "sortablejs";
 	import { onMount } from "svelte";
 	import PanelLink from "./PanelLink.svelte";
-	import Panelplus from "./Panelplus.svelte";
+	import Panelplus from "./PanelLinkPlus.svelte";
 	import type { GraphState } from "src/state/graphState.svelte";
 
 	interface Props {

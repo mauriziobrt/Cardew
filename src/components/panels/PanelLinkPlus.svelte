@@ -33,7 +33,7 @@
 			placeholder="Connect to node..."
 		/>
 		<datalist id="all-node-ids">
-			{#each nodeIds.slice(0, 20) as id}
+			{#each nodeIds.slice(0, 50) as id}
 				<option value={id}></option>
 			{/each}
 		</datalist>

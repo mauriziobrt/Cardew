@@ -1,7 +1,14 @@
 <script lang="ts">
 	import { Menu } from "obsidian";
 	import { onMount } from "svelte";
-	let { name, dict = $bindable(), onDeleteMetadata } = $props();
+	let {
+		name,
+		dict = $bindable(),
+		onDeleteMetadata,
+		onKeydown,
+		allProperties,
+		allPropertyValues,
+	} = $props();
 
 	// let currentType = $state("text");
 	let currentType = $state("text");
@@ -14,8 +21,13 @@
 
 	onMount(() => {
 		// setIcon(btnEl, "x");
+
 		currentType = typeof dict[name];
-		// console.log(typeof dict[name])
+		// console.log(typeof dict[name]);
+		// if (currentType == "string") {
+		// 	// console.log(name);
+		// 	console.log(allPropertyValues);
+		// }
 	});
 	let fields = ["object", "number", "string"];
 	// Ok so this is the internal single line element, that focused block, here we already have the information
@@ -136,8 +148,14 @@
 			enterkeyhint="next"
 			type="text"
 			aria-label="duration"
+			list="all-properties-no-reserved"
 			bind:value={name}
 		/>
+		<datalist id="all-properties-no-reserved">
+			{#each allProperties.slice(0, 10) as id}
+				<option value={id}></option>
+			{/each}
+		</datalist>
 	</div>
 	<!-- VALUE PART -->
 	<div class="metadata-property-value" data-property-type="multitext">
@@ -147,13 +165,23 @@
 					class="metadata-input-text"
 					type="number"
 					bind:value={dict[name]}
+					onkeydown={onKeydown}
 				/>
 			{:else}
 				<input
 					class="metadata-input-text"
 					type={currentType}
 					bind:value={dict[name]}
+					onkeydown={onKeydown}
+					list="metadata-values-{name}"
 				/>
+				{#if currentType == "string"}
+					<datalist id="metadata-values-{name}">
+						{#each allPropertyValues.slice(0, 10) as nd}
+							<option value={nd}></option>
+						{/each}
+					</datalist>
+				{/if}
 			{/if}
 		{:else}
 			<!-- This part should be added systematically with a function, ah ok if class Object, decompose it in its parts  -->

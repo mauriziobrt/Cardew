@@ -23,9 +23,9 @@
 	onMount(() => {
 		const cfg = graphState.config.current.graph;
 
-		graph = new ForceGraph()(container)
+		graph = new ForceGraph(container)
 			.graphData({ nodes: [], links: [] })
-			.dagMode("radialout")
+			.dagMode("Null")
 			.nodeId("id")
 			.nodeLabel("user")
 			.nodeVal(
@@ -92,22 +92,22 @@
 		) {
 			// ctx.fillStyle = "black";
 			const shapesByOpenAccess = {
-				open: (x, y, r, ctx) => {
+				open: (x: any, y: any, r: any, ctx: { beginPath: () => void; arc: (arg0: any, arg1: any, arg2: any, arg3: number, arg4: number, arg5: boolean) => void; fill: () => void; }) => {
 					ctx.beginPath();
 					ctx.arc(x, y, r, 0, 2 * Math.PI, false);
 					ctx.fill();
 				}, // circle
-				closed: (x, y, r, ctx) => {
+				closed: (x: number, y: number, r: number, ctx: { fillRect: (arg0: number, arg1: number, arg2: number, arg3: number) => void; }) => {
 					ctx.fillRect(x - r, y - r * 0.66, r * 2, r * 1.33);
 				}, // rectangle
-				green: (x, y, r, ctx) => {
+				green: (x: number, y: number, r: number, ctx: { beginPath: () => void; moveTo: (arg0: any, arg1: number) => void; lineTo: (arg0: number, arg1: any) => void; fill: () => void; }) => {
 					ctx.beginPath();
 					ctx.moveTo(x, y - r);
 					ctx.lineTo(x - r, y + r);
 					ctx.lineTo(x + r, y + r);
 					ctx.fill();
 				}, // triangle
-				gold: (x, y, r, ctx) => {
+				gold: (x: number, y: number, r: number, ctx: { beginPath: () => void; moveTo: (arg0: any, arg1: number) => void; lineTo: (arg0: number, arg1: any) => void; closePath: () => void; fill: () => void; }) => {
 					ctx.beginPath();
 					ctx.moveTo(x, y - r);
 					ctx.lineTo(x + r, y);
@@ -116,7 +116,7 @@
 					ctx.closePath();
 					ctx.fill();
 				}, // diamond/rhombus shape, filled solid
-				diamond: (x, y, r, ctx) => {
+				diamond: (x: number, y: number, r: number, ctx: { beginPath: () => void; moveTo: (arg0: any, arg1: number) => void; lineTo: (arg0: number, arg1: any) => void; closePath: () => void; lineWidth: number; strokeStyle: any; fillStyle: any; stroke: () => void; }) => {
 					// outlined diamond (hollow), to distinguish from gold
 					ctx.beginPath();
 					ctx.moveTo(x, y - r);
@@ -128,7 +128,7 @@
 					ctx.strokeStyle = ctx.fillStyle;
 					ctx.stroke();
 				},
-				hybrid: (x, y, r, ctx) => {
+				hybrid: (x: any, y: any, r: any, ctx: { beginPath: () => void; arc: (arg0: any, arg1: any, arg2: any, arg3: number, arg4: number) => void; fill: () => void; lineWidth: number; strokeStyle: any; fillStyle: any; stroke: () => void; }) => {
 					// half-filled circle: left half solid, right half outline
 					ctx.beginPath();
 					ctx.arc(x, y, r, Math.PI / 2, (3 * Math.PI) / 2);
@@ -139,7 +139,7 @@
 					ctx.strokeStyle = ctx.fillStyle;
 					ctx.stroke();
 				},
-				unknown: (x, y, r, ctx) => {
+				unknown: (x: any, y: any, r: number, ctx: { font: string; textAlign: string; textBaseline: string; fillText: (arg0: string, arg1: any, arg2: any) => void; }) => {
 					ctx.font = `${r * 2}px Sans-Serif`;
 					ctx.textAlign = "center";
 					ctx.textBaseline = "middle";
@@ -192,7 +192,7 @@
 			onCmdA: actions.selectAll,
 			undo: actions.undo,
 			redo: actions.redo,
-		});
+		}, container);
 		cleanupOSCControls = registerOSCcontrols(
 			{
 				msgUp: actions.navigateUp,
@@ -201,6 +201,7 @@
 				msgRight: actions.navigateRight,
 				msgSpace: actions.rhythm,
 				msgPos: actions.hover,
+				msgMove: actions.move
 			},
 			graphState.oscManager,
 		);
@@ -217,7 +218,7 @@
 		if (graphState.config.current.creative.modeEnabled) {
 			graphState.setupCreativeConfig();
 		} else {
-			// now it is stuck
+			// now nothing happens to the graph ways
 		}
 	});
 
