@@ -62,8 +62,6 @@
 	}
 </script>
 
-<button onclick={selectResults()}>Select All</button>
-
 <div class="search-input-container">
 	<input type="text" placeholder="Search..." bind:value={query} />
 </div>
