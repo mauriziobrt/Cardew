@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Development &#8212; cornelius</title>
+    <title>Development &#8212; cardew</title>
   
   
   
@@ -119,7 +119,7 @@
   
   
   
-    <p class="title logo__title">cornelius</p>
+    <p class="title logo__title">cardew</p>
   
 </a></div>
     
@@ -219,7 +219,7 @@
           
           
           
-          <a href="https://github.com/mauriziobrt/Cornelius" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+          <a href="https://github.com/mauriziobrt/Cardew" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -346,7 +346,7 @@
           
           
           
-          <a href="https://github.com/mauriziobrt/Cornelius" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+          <a href="https://github.com/mauriziobrt/Cardew" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -425,6 +425,53 @@
                   
   <section id="development">
 <h1>Development<a class="headerlink" href="#development" title="Link to this heading">#</a></h1>
+<section id="how-to-access-view-from-a-user-action">
+<h2>How to access View from a user action<a class="headerlink" href="#how-to-access-view-from-a-user-action" title="Link to this heading">#</a></h2>
+<p>I want to map cmd+i to open the metadata view.</p>
+</section>
+<section id="how-to-add-a-new-osc-control">
+<h2>How to add a new OSC control<a class="headerlink" href="#how-to-add-a-new-osc-control" title="Link to this heading">#</a></h2>
+<p>OSC mapping is defined in 4 steps:</p>
+<ol class="arabic simple">
+<li><p>In control.ts we retrieve the OSC control (which address and arguments).</p></li>
+<li><p>In ForceGraphComponent.svelte I add the control to RegisterOscControl</p></li>
+<li><p>In graphActions.ts I map the control to a function in graphState.</p></li>
+<li><p>I create the function in graphState to do an action on the graph.</p></li>
+</ol>
+<p>Create a function in graphState.svelte.ts, in this case I created:</p>
+<p><code class="docutils literal notranslate"><span class="pre">findNodes(query:</span> <span class="pre">string)</span> <span class="pre">{</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">const</span> <span class="pre">filtered</span> <span class="pre">=</span> <span class="pre">this.filteringState.search(this.graphData?.nodes,</span> <span class="pre">query);</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">console.log(filtered);</span>&#160;&#160;&#160;&#160; <span class="pre">}</span></code></p>
+<p>Now, I need to create a OSC control in control.ts.
+First I add a handler msgSearch: (query: string) =&gt; void, with string because we are running a string query (but in the case of filtering we’ll expand to search by property and value). Then we add a case inside oscManager.onMessage()
+case ‘/search’:
+handlers.msgSearch(args[0]);
+break;</p>
+<p>Then in ForceGraphComponent.svelte -&gt;
+cleanupOSCControls = registerOSCcontrols(
+{
+msgUp: actions.navigateUp,
+msgLeft: actions.navigateLeft,
+msgDown: actions.navigateDown,
+msgRight: actions.navigateRight,
+msgSpace: actions.rhythm,
+msgPos: actions.hover,
+msgMove: actions.move,
+msgCreate: actions.createComplexNode,
+msgDelete: actions.deleteNode,
+msgSearch: actions.searchNodes
+},
+graphState.oscManager,
+);</p>
+<p>And in graphActions.ts -&gt;
+searchNodes: (query: string) =&gt; graphState.findNodes(query);</p>
+<p>Finally in graphState.svelte.ts -&gt;</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>findNodes(query: string) {
+    console.log(query)
+    const filtered = this.filteringState.search(this.graphData?.nodes, query);
+    console.log(filtered);
+}
+</pre></div>
+</div>
+</section>
 <section id="how-to-create-a-new-view-in-obsidian-plugin">
 <h2>How to create a new View in Obsidian Plugin<a class="headerlink" href="#how-to-create-a-new-view-in-obsidian-plugin" title="Link to this heading">#</a></h2>
 <p>The main.ts is structured as follows:</p>
@@ -580,6 +627,8 @@ I define the view type as a constant. I don’t know yet what the string name is
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-access-view-from-a-user-action">How to access View from a user action</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-add-a-new-osc-control">How to add a new OSC control</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-create-a-new-view-in-obsidian-plugin">How to create a new View in Obsidian Plugin</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-create-a-new-view-in-osc">How to create a new View in OSC</a></li>
 </ul>

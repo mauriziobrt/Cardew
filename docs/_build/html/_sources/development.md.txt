@@ -1,5 +1,58 @@
 # Development
 
+## How to access View from a user action
+
+I want to map cmd+i to open the metadata view.
+
+## How to add a new OSC control
+
+OSC mapping is defined in 4 steps:
+1. In control.ts we retrieve the OSC control (which address and arguments).
+2. In ForceGraphComponent.svelte I add the control to RegisterOscControl
+3. In graphActions.ts I map the control to a function in graphState.
+4. I create the function in graphState to do an action on the graph.
+
+Create a function in graphState.svelte.ts, in this case I created:
+
+``findNodes(query: string) {
+        const filtered = this.filteringState.search(this.graphData?.nodes, query);
+        console.log(filtered);
+    }``
+
+Now, I need to create a OSC control in control.ts.
+First I add a handler msgSearch: (query: string) => void, with string because we are running a string query (but in the case of filtering we'll expand to search by property and value). Then we add a case inside oscManager.onMessage() 
+case '/search':
+                handlers.msgSearch(args[0]);
+                break;
+
+Then in ForceGraphComponent.svelte ->
+cleanupOSCControls = registerOSCcontrols(
+			{
+				msgUp: actions.navigateUp,
+				msgLeft: actions.navigateLeft,
+				msgDown: actions.navigateDown,
+				msgRight: actions.navigateRight,
+				msgSpace: actions.rhythm,
+				msgPos: actions.hover,
+				msgMove: actions.move,
+				msgCreate: actions.createComplexNode,
+				msgDelete: actions.deleteNode,
+				msgSearch: actions.searchNodes
+			},
+			graphState.oscManager,
+		);
+
+And in graphActions.ts ->
+    searchNodes: (query: string) => graphState.findNodes(query);
+
+Finally in graphState.svelte.ts -> 
+
+    findNodes(query: string) {
+        console.log(query)
+        const filtered = this.filteringState.search(this.graphData?.nodes, query);
+        console.log(filtered);
+    }
+
 ## How to create a new View in Obsidian Plugin
 
 The main.ts is structured as follows:

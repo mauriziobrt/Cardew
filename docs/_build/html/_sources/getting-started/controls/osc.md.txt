@@ -5,7 +5,7 @@ It's possible to edit the port configuration in the settings of the application.
 ![The settings screen with the OSC configuration](/img/osc-config.png)
 
 ## Message out
-Cornelius sends message out when a node is selected and using the different interaction modes.
+Cardew sends message out when a node is selected and using the different interaction modes.
 
 - Navigation
 - Rhythmic
@@ -19,7 +19,7 @@ Users can select for each class which proeprties to send via OSC, and their orde
  
 
 ## Message in
-Cornelius can receive messages in through OSC, sending to the predefined port (to edit the OSC port, check settings (LINK Missing))
+Cardew can receive messages in through OSC, sending to the predefined port (to edit the OSC port, check settings (LINK Missing))
 
 - **Navigation**: ```/up, /down, /left, /right```
     - From a selected node, navigate to the first node in that direction

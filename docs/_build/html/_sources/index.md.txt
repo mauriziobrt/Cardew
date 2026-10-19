@@ -1,6 +1,6 @@
 ![The plugin as it when opened](/img/screen.png)
 
-**Cornelius** is an interactive force-graph plugin for Obsidian. It allows users to explore, edit and create force graphs.
+**Cardew** is an interactive force-graph plugin for Obsidian. It allows users to explore, edit and create force graphs.
 It is developed with composers and experimental musicians in mind, allowing the exploration of rhizomatic[^1] structures and the creation of meta-scores[^2].
 
 *The plugin is named after Cornelius Cardew, inspired by his work on graphical notation.*
@@ -13,8 +13,8 @@ It is developed with composers and experimental musicians in mind, allowing the 
 
 ## Links
 
-- [GitHub repository](https://github.com/mauriziobrt/Cornelius)
-- [Report a bug](https://github.com/mauriziobrt/Cornelius/issues)
+- [GitHub repository](https://github.com/mauriziobrt/Cardew)
+- [Report a bug](https://github.com/mauriziobrt/Cardew/issues)
 
 ## Summary
 
