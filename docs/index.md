@@ -1,5 +1,5 @@
 # Cardew
-![The plugin as it when opened](/img/screen.png)
+![The plugin as it when opened](./_static/images/screen.png)
 
 **Cardew** is an interactive force-graph plugin for Obsidian. It allows users to explore, edit and create force graphs.
 It is developed with composers and experimental musicians in mind, allowing the exploration of rhizomatic[^1] structures and the creation of meta-scores[^2].

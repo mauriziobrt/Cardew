@@ -2,7 +2,7 @@
 
 ## Configuring OSC in the settings
 It's possible to edit the port configuration in the settings of the application. Here we can change the **input port**, the **output port**, the **output network address** and the **IP version** to use.
-![The settings screen with the OSC configuration](/img/osc-config.png)
+![The settings screen with the OSC configuration](../../_static/images/osc-config.png)
 
 ## Message out
 Cardew sends message out when a node is selected and using the different interaction modes.
@@ -15,7 +15,7 @@ Cardew sends message out when a node is selected and using the different interac
 Message out are class dependent, and are configured in the OSC Configuration view, accessible in the sidebar.
 Users can select for each class which proeprties to send via OSC, and their order.
 
-![The view with the OSC message out configuration](/img/osc-config-view.png)
+![The view with the OSC message out configuration](../../_static/images/osc-config-view.png)
  
 
 ## Message in

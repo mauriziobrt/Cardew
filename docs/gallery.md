@@ -45,7 +45,7 @@ Explore and manipulate networked data.
 :::
 
 :::{grid-item-card}
-:img-top: img/thewing.png
+:img-top: _static/images/thewing.png
 :img-alt: Search interface
 
 **The wing**

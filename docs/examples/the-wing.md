@@ -1,3 +1,3 @@
 # The wing
 
-![The wing score](/img/thewing.png)
+![The wing score](../_static/images/thewing.png)
