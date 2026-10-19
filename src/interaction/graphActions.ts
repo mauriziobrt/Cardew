@@ -16,15 +16,19 @@ export function createGraphActions(graphState: GraphState) {
     mouseDown: () => null,
     mouseUp: () => null,
     mouseDrag: () => null,
+    toggleMetadataView: () => graphState.toggleMetadata(),
     onMultiSelect: (e: MouseEvent) => graphState.toggleMultiselect(true),
     offMultiSelect: (e: MouseEvent) => graphState.toggleMultiselect(false),
     rectangleSelectionStart: (e: MouseEvent) => graphState.selectionStart(e),
     rectangleSelectionEnd: (e: MouseEvent) => graphState.selectionEnd(e),
     clearSelection: () => graphState.clearSelection(),
     createNode: (e: MouseEvent) => graphState.createNode(e),
+    createComplexNode: (id: string, pairs: []) => graphState.createComplexNode(id,pairs),
+    deleteNode: (id: string) => graphState.deleteNodeAtId(id),
     selectAll: () => graphState.selectAll(),
     undo: () => graphState.undo(),
     redo: () => graphState.redo(),
+    searchNodes: (property: string, query: string) => graphState.findNodes(property, query),
     move: (id: string, dimension: string, value: number) => graphState.moveNode(id, dimension, value)
   };
 }

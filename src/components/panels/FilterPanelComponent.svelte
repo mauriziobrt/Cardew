@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { map } from "d3";
 	import { prepareFuzzySearch, sortSearchResults } from "obsidian";
 	import type { SearchResult } from "obsidian";
 	import type { GraphState } from "src/state/graphState.svelte";
@@ -50,11 +49,20 @@
 
 	// get node id at description
 	function highlightNode(id: string) {
-		console.log("THIS IS THE ID:", id)
+		console.log("THIS IS THE ID:", id);
 		// I should store somehow the original node id, so that I can recall through that
 		graphState.selectNode(graphState.getNodeAtID(id));
 	}
+
+	function selectResults() {
+		console.log(results);
+		const resNodes = results.map((r) => graphState.getNodeAtID(r.id));
+		console.log(resNodes);
+		graphState.selectionState.selectedNodes = resNodes;
+	}
 </script>
+
+<button onclick={selectResults()}>Select All</button>
 
 <div class="search-input-container">
 	<input type="text" placeholder="Search..." bind:value={query} />
@@ -67,7 +75,6 @@
 			<div class="metadata-properties">
 				{#each results as { id, item, match } (id)}
 					<div class="metadata-property">
-						<!-- <div class="metadata-property-key"> -->
 						<div
 							class="result"
 							role="button"
@@ -83,7 +90,6 @@
 								<div class="setting-item-description"></div>
 							</div>
 						</div>
-						<!-- </div> -->
 					</div>
 					<span style="margin: 3px"></span>
 				{/each}

@@ -12,7 +12,7 @@
 	}
 
 	// Props are defined in main.ts
-	let { graphState }: Props = $props();
+	let { graphState, onToggleMetadata }: Props = $props();
 
 	const RESERVED = [
 		"x",
@@ -143,6 +143,8 @@
 		<MetadataPlus onAdd={handleAdd} allProperties={graphState.allProperties} />
 	</div>
 </div>
+
+<button onclick={onToggleMetadata}>Toggle Metadata</button>
 
 <style>
 	.metadata-container {

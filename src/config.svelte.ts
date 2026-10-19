@@ -32,6 +32,7 @@ export interface PluginConfig {
     };
     newName: string;
     hasEdits: boolean;
+    physicsOn: boolean;
 }
 
 export const DEFAULT_CONFIG: PluginConfig = {
@@ -66,7 +67,8 @@ export const DEFAULT_CONFIG: PluginConfig = {
     },
     newName: "gennarino_",
     dagMode: "",
-    hasEdits: false
+    hasEdits: false,
+    physicsOn: true
 };
 
 // Reactive config class

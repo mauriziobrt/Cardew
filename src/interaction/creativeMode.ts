@@ -58,6 +58,6 @@ export function creativeConfig(
     // config.update({ graph: { nodeSize: 1 } });
     config.updateGraph({ alphaDecay: 0 });
     config.updateGraph({ nodeSize: 0.1 });
-    graphState.graph?.nodeSize(100);
+    graphState.graph?.nodeVal(100);
     graphState.graph?.d3AlphaDecay(0);
 }

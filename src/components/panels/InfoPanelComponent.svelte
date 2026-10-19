@@ -9,6 +9,8 @@
 	let { graphState }: Props = $props();
 
 	let creativeEnabled = $state(true);
+	let physicsEnabled = $state(true);
+
 	let centerAtNode = $state(true);
 	let snapGraph;
 
@@ -75,6 +77,18 @@
 		} else {
 			creativeEnabled = true;
 			graphState.config.current.creative.modeEnabled = true;
+		}
+	}
+
+	function enablePhysics() {
+		if (physicsEnabled) {
+			physicsEnabled = false;
+			graphState.physicsOn(physicsEnabled);
+			graphState.config.current.physicsOn = false;
+		} else {
+			physicsEnabled = true;
+			graphState.physicsOn(physicsEnabled);
+			graphState.config.current.physicsOn = true;
 		}
 	}
 
@@ -153,6 +167,19 @@
 		<div class="setting-item-value">
 			<div class:is-enabled={creativeEnabled} class="checkbox-container">
 				<input type="checkbox" onchange={enableCreative} />
+			</div>
+		</div>
+	</div>
+	<div class="setting-item">
+		<div class="setting-item-info">
+			<div class="setting-item-name">Toggle Physics</div>
+			<div class="setting-item-description">
+				Enable physics
+			</div>
+		</div>
+		<div class="setting-item-value">
+			<div class:is-enabled={physicsEnabled} class="checkbox-container">
+				<input type="checkbox" onchange={enablePhysics} />
 			</div>
 		</div>
 	</div>

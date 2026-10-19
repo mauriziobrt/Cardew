@@ -6,6 +6,14 @@ A graph interface for exploring data and creating interactive scores. Distribute
 
 The name is inspired by Cornelius Cardew's graphical scores.
 
+## How to use
+
+In Obsidian, create a new Vault (see [Obsidian Docs](https://obsidian.md/)). Clone the reposityory inside the vault's folder at ```vault-name/.obsidian/plugins```.
+In Obsidian's setting allow for external plugin and enable Cornelius.
+
+Extended documentation can be found at [Cornelius Docs](https://mauriziobrt.github.io.cornelius)
+
+## Build Documentation
 
 1. Create Python envrionment
 2. Activate Python environment

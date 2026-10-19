@@ -12,6 +12,7 @@ import { CursorState } from './cursorState';
 import { MetadataState } from './metadataState.svelte';
 import { SelectionState } from './selectionState.svelte';
 import { Notice } from 'obsidian';
+import { FilteringState } from './filteringState.svelte';
 
 //=======================================================================================
 // Main Graph Class most operations appear here
@@ -27,7 +28,7 @@ export class GraphState {
     config: Config;
     cursor = new CursorState;
     oscConfig = $state<Record<string, string[]>>({});
-    selectedNodes = $state<Array<NodeObject>>([]);
+    // selectedNodes = $state<Array<NodeObject>>([]);
     graphData = $state<GraphData | null>(null);
     graph = $state<ForceGraph | null>(null);
     lastOscMessage = $state<any[] | null>(null);
@@ -74,16 +75,25 @@ export class GraphState {
         "__dragged",
     ]);
     copyMetatada = $state<Record<string, any>>({});
+    // Next 5 lines straight up from Claude
+    metadataOpen = $state(false);
+    openMetadata: () => void = () => { };
+    closeMetadata: () => void = () => { };
+    toggleMetadata() {
+        this.metadataOpen ? this.closeMetadata() : this.openMetadata();
+    }
+    //
     //====================================================================================
     //States
     //====================================================================================
     selectionState = new SelectionState(() => this.colorScale, () => this.config, () => this.oscManager, () => this.oscConfig, () => this.degree);
     metadataState = new MetadataState(() => this.selectionState.selectedNodes[0]);
+    filteringState = new FilteringState();
     //====================================================================================
     // Declare class properties
     //====================================================================================
     private colorScale!: d3.ScaleOrdinal<string, string>;
-    // private previousSelectedId: string | null = null;
+    private previousSelectedId: string | null = null;
     // Positional Properties
     //––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
     private position: { x: number, y: number } | null = null;
@@ -103,6 +113,7 @@ export class GraphState {
     theGraph(graph: ForceGraph) {
         this.graph = graph;
     }
+
     //====================================================================================
     // Update/Edit Data
     //====================================================================================
@@ -121,21 +132,18 @@ export class GraphState {
         // this.graph.nodeColor((n: Node) => n.highlighted ? 'red' : this.colorScale(n.openacces));
         // console.log("LENGTH", data["nodes"]);
         this.numberElements = data["nodes"].length;
-        // Calculate node degrees
-        this.degree = {}
         // data.nodes.forEach(node => {
         //     node.className = "empty";
         // })
-        data.links.forEach(link => {
-            // console.log(link.source, link.target, link.weight);
-            this.degree[link.source] = (this.degree[link.source] || 0) + 1;
-            this.degree[link.target] = (this.degree[link.target] || 0) + 1;
-        });
+        this.updateDegree();
     }
+
     updateGraphData() {
         if (!this.graphData || !this.graph) return [];
         this.graph.graphData({ nodes: this.graphData.nodes, links: this.graphData.links });
-        this.updateDegree()
+        this.updateDegree();
+
+        // console.log($state.snapshot(this.degree))
     };
 
     // this should just run on startup, write somewhere and then change when an edit happens
@@ -165,14 +173,46 @@ export class GraphState {
         if (!this.graphData) return;
         // Calculate node degrees
         this.degree = {};
-
         this.graphData.links.forEach(link => {
             this.degree[link.source.id ?? link.source] = (this.degree[link.source.id ?? link.source] || 0) + 1;
             this.degree[link.target.id ?? link.target] = (this.degree[link.target.id ?? link.target] || 0) + 1;
         });
     }
 
+    physicsOn(state: boolean) {
+        if (!state) {
+            this.graph?.cooldownTicks(0);
+            this.graph?.cooldownTime(0);
+        } else {
+            this.graph?.cooldownTicks(1000);
+            this.graph?.cooldownTime(10000);
+        }
+    }
+
+
+    //========================================================
+    // Search 
+    //========================================================
+
+    findNodes(property: string, query: string) {
+        this.selectionState.selectedNodes = [];
+        console.log(property, query)
+        const filtered = this.filteringState.search(this.graphData?.nodes, property, query);
+        // console.log(filtered);
+        // this.selectionState.selectedNodes = filtered;
+        for (const el of filtered) {
+            // console.log(el.id)
+            const elObj = this.getNodeAtID(el.id)
+            this.selectionState.multiSelect = true;
+            this.selectNode(elObj);
+        }
+        this.selectionState.multiSelect = false;
+    }
+
+    //========================================================
     // Undo Redo
+    //========================================================
+
     // New state
     private undoStack: GraphData[] = [];
     private redoStack: GraphData[] = [];
@@ -202,6 +242,7 @@ export class GraphState {
         this.config.current.hasEdits = true;
 
         previous.links = previous.links.map(link => ({
+            ...link,
             source: link.source.id ?? link.source,
             target: link.target.id ?? link.target
         }));
@@ -220,6 +261,7 @@ export class GraphState {
         this.undoStack.push(current);
 
         next.links = next.links.map(link => ({
+            ...link,
             source: link.source.id ?? link.source,
             target: link.target.id ?? link.target
         }));
@@ -579,18 +621,21 @@ export class GraphState {
             // console.log("SELECTED", nextNode);
         }
     }
+
     // Rhythmic interaction mode
     rhythm() {
         if (!this.selectionState.selectedNodes[0] || !this.graphData || !this.graph) return;
         //TODO: APPLY stats of current cluster
         highlightNeighborsGradually(this.selectionState.selectedNodes[0], this.graph, this.graphData.nodes, this.graphData.links, this.selectionState);
     }
+
     // Transition interaction mode
     transition() {
         if (!this.selectionState.selectedNodes || !this.graphData) return;
         console.log(this.selectionState.selectedNodes);
         //for any combination of nodes find a path that traverse them
     }
+
     //=======================================================================================
     // Creative Mode Components
     //=======================================================================================
@@ -599,9 +644,35 @@ export class GraphState {
         // creativeConfig;
         // this.graph?.d3VelocityDecay(1)
     }
+
+    createComplexNode(id: string, pairs: []) {
+        this.pushUndo();
+        if (!this.graph || !this.graphData) return [];
+        // Basic metadata created here, but can be edited in the information view
+        const newNodeID = createNewNode(this.graphData, 0, 0, this.config.current.newName);
+        this.updateGraphData();
+        this.selectNode(this.getNodeAtID(newNodeID));
+        const newNode = this.getNodeAtID(newNodeID);
+        // console.log(newNodeID, "these are the pairs", pairs);
+        let el;
+        for (el of pairs) {
+            console.log(typeof (el[1]))
+            const property = el[0];
+            const value = el[1];
+            if (typeof (value) != "object") {
+                newNode[property] = value;
+                console.log(property)
+            } else {
+                newNode[property] = value.value;
+            }
+        }
+    }
+
     //Maybe here lifeDeathNode() if background if not call the other IDK
     createNode(e: MouseEvent) {
         // Create a new node at position
+        const previousId = this.selectionState.previousSelectedId;
+        // get its metadata but not the reserved and apply to it
         if (this.config.current.creative.modeEnabled) {
             this.pushUndo();
             if (!this.graph || !this.graphData) return [];
@@ -611,12 +682,19 @@ export class GraphState {
             const newNodeID = createNewNode(this.graphData, this.position.x, this.position.y, this.config.current.newName);
             this.updateGraphData();
             this.selectNode(this.getNodeAtID(newNodeID));
+            // return newNodeID;
+            // applyMetadata function use
         }
     }
 
     get graphAll() {
         if (!this.graphData) return [];
         return this.graphData
+    }
+
+    deleteNodeAtId(id: string) {
+        this.selectNode(this.getNodeAtID(id));
+        this.killNode();
     }
 
     killNode() {
@@ -638,6 +716,7 @@ export class GraphState {
                     return s !== deletedId && t !== deletedId;
                 })
                 .map(link => ({
+                    ...link,
                     source: link.source.id ?? link.source,
                     target: link.target.id ?? link.target
                 }));

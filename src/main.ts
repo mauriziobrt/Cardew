@@ -171,7 +171,8 @@ export class MetadataView extends ItemView {
 			props: {
 				//Here I should define the props, the runes I am passing to the component
 				graphState: this.plugin.graphState,
-				app: this.app
+				app: this.app,
+				onToggleMetadata: () => this.plugin.toggleMetadataView()
 			}
 		});
 	}
@@ -381,6 +382,7 @@ export default class ExamplePlugin extends Plugin {
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	//
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
 	async onload() {
 		try {
 			//Initialize config
@@ -397,6 +399,11 @@ export default class ExamplePlugin extends Plugin {
 			this.dataLoaderPromise = new Promise((resolve) => {
 				this.dataLoadedResolve = resolve;
 			})
+			// from claude
+			this.graphState.openMetadata = () => this.activateMetadataView();
+			this.graphState.closeMetadata = () =>
+				this.app.workspace.detachLeavesOfType(VIEW_TYPE_METADATA_PANEL);
+			// end claude
 
 			const fileLoader = new FileLoader(this.graphState);
 			const dataPath = this.config.current.paths.defaultDataPath + '/5-co-cit-coupling.json';// /sandbox.json 5-co-cit-coupling
@@ -524,11 +531,31 @@ export default class ExamplePlugin extends Plugin {
 				this.activateLinkView();
 			});
 
+			//claude
+			this.registerEvent(this.app.workspace.on('layout-change', () => {
+				this.graphState.metadataOpen =
+					this.app.workspace.getLeavesOfType(VIEW_TYPE_METADATA_PANEL).length > 0;
+			}));
+			//endclaude
+
 		} catch (error) {
 			console.error("Plugin initialization failed:", error);
 			new Notice("Failed to initialize Force Graph plugin");
 		}
 	}
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+	//
+	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
+	async toggleMetadataView() {
+		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_METADATA_PANEL);
+		if (leaves.length > 0) {
+			leaves.forEach(l => l.detach());
+		} else {
+			await this.activateMetadataView();
+		}
+	}
+
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	//
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -582,7 +609,7 @@ export default class ExamplePlugin extends Plugin {
 		} else {
 			const leaf = workspace.getRightLeaf(false);
 			if (!leaf) return;
-			await leaf.setViewState({ type: VIEW_TYPE_METADATA_PANEL, active: true });
+			await leaf.setViewState({ type: VIEW_TYPE_METADATA_PANEL, active: false });
 			workspace.revealLeaf(leaf);
 		}
 	}

@@ -9,7 +9,7 @@ export class SelectionState {
     selectedNodes = $state<Array<NodeObject>>([]);
     multiSelect = $state<boolean>(false);
     selectedNodeIndex = $state<number | null>(null);
-    // previousSelectedId: string | null = null;
+    previousSelectedId: string | null = null;
     selectionStartMouse: { x: number, y: number } | null = null;
     selectionEndMouse: { x: number, y: number } | null = null
 
@@ -44,7 +44,7 @@ export class SelectionState {
         if (!graph || !nodes) return;
         // this.selectedNode = node;
         if (node.id) {
-            // this.previousSelectedId = node.id;
+            this.previousSelectedId = node.id;
             this.selectedNodeIndex = nodes.indexOf(node);
             if (this.multiSelect) {
                 // if it's not there yet then add - don't create duplicates
@@ -53,6 +53,7 @@ export class SelectionState {
                 }
                 // console.log("Selected multiple nodes: ", [...this.selectedNodes]);
             } else {
+
                 // graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.getColorScale()(n.openacces));
                 this.selectedNodes = [node];
                 if (this.getConfig().config.centerAtNode.modeEnabled) {
@@ -68,7 +69,7 @@ export class SelectionState {
                 // allora facciamo quelle va intanto.
                 // console.log(this.getOscConfig());
                 if (!node.className) return;
-                
+
                 const currentClass = [node.className];
                 const oscConfig = this.getOscConfig()[currentClass[0]];
                 // console.log(oscConfig);
@@ -80,6 +81,7 @@ export class SelectionState {
                 //     this.getDegree()[node.id], 1000, node.year, node.x, node.y, 2, 55, 800
                 // ]);
             }
+
             graph.nodeColor(n => this.selectedNodes.some(s => s.id === n.id) ? 'red' : this.getColorScale()(n.openacces));
 
         };

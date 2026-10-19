@@ -56,7 +56,7 @@
 			.height(container.clientHeight)
 			.backgroundColor("rgba(0, 0, 0, 0)")
 			.linkColor(() => linkStaticColor)
-			// .linkCurvature(0.2)
+			.linkCurvature(0.2)
 			.onEngineStop(() => console.log("Physics stopped"))
 			.onBackgroundClick(() => {
 				graphState.setupBackgroundClick();
@@ -190,6 +190,7 @@
 			onAltMouseUp: actions.clearSelection,
 			onAltMouseDrag: actions.rectangleSelectionEnd,
 			onCmdA: actions.selectAll,
+			onCmdI: actions.toggleMetadataView,
 			undo: actions.undo,
 			redo: actions.redo,
 		}, container);
@@ -201,7 +202,10 @@
 				msgRight: actions.navigateRight,
 				msgSpace: actions.rhythm,
 				msgPos: actions.hover,
-				msgMove: actions.move
+				msgMove: actions.move,
+				msgCreate: actions.createComplexNode,
+				msgDelete: actions.deleteNode,
+				msgSearch: actions.searchNodes
 			},
 			graphState.oscManager,
 		);
