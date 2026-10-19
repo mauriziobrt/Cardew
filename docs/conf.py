@@ -1,7 +1,7 @@
 
 from pathlib import Path
 
-project = "cornelius"
+project = "cardew"
 author = "Maurizio Berta"
 release = "0.0.1"
 
@@ -40,7 +40,7 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "GitHub",
-            "url": "https://github.com/mauriziobrt/Cornelius",
+            "url": "https://github.com/mauriziobrt/Cardew",
             "icon": "fa-brands fa-github",
         },
     ],

@@ -1,6 +1,6 @@
 # Examples
 
-Explore some of Cornelius' applications
+Explore some of Cardew's applications
 
 ::::{grid} 1 2 2 3
 :gutter: 3

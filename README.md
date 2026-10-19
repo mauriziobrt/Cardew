@@ -1,4 +1,4 @@
-# Cornelius
+# Cardew
 A graph interface for exploring data and creating interactive scores. Distributed as an Obsidian Plugin.
 
 ![alt text](image.png)
@@ -9,9 +9,9 @@ The name is inspired by Cornelius Cardew's graphical scores.
 ## How to use
 
 In Obsidian, create a new Vault (see [Obsidian Docs](https://obsidian.md/)). Clone the reposityory inside the vault's folder at ```vault-name/.obsidian/plugins```.
-In Obsidian's setting allow for external plugin and enable Cornelius.
+In Obsidian's setting allow for external plugin and enable Cardew.
 
-Extended documentation can be found at [Cornelius Docs](https://mauriziobrt.github.io.cornelius)
+Extended documentation can be found at [Cardew Docs](https://mauriziobrt.github.io.cardew)
 
 ## Build Documentation
 

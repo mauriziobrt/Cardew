@@ -416,7 +416,7 @@ export default class ExamplePlugin extends Plugin {
 				this.dataLoadedResolve();
 			}
 			const fruits = this.addStatusBarItem();
-			fruits.createEl('span', { text: 'Cornelius © Maurizio Berta, 2026' });
+			fruits.createEl('span', { text: 'Cardew © Maurizio Berta, 2026' });
 
 			this.registerView(
 				VIEW_TYPE_FORCE_GRAPH,
