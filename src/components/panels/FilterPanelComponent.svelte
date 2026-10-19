@@ -54,12 +54,12 @@
 		graphState.selectNode(graphState.getNodeAtID(id));
 	}
 
-	function selectResults() {
-		console.log(results);
-		const resNodes = results.map((r) => graphState.getNodeAtID(r.id));
-		console.log(resNodes);
-		graphState.selectionState.selectedNodes = resNodes;
-	}
+	// function selectResults() {
+	// 	console.log(results);
+	// 	const resNodes = results.map((r) => graphState.getNodeAtID(r.id));
+	// 	console.log(resNodes);
+	// 	graphState.selectionState.selectedNodes = resNodes;
+	// }
 </script>
 
 <div class="search-input-container">
