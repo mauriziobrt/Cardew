@@ -58,3 +58,15 @@ Composition based on trajectories over linked data.
 :::
 
 ::::
+
+---
+
+```{toctree}
+:maxdepth: 2
+:caption: Examples
+
+examples/playing-with-physics
+examples/writing-scores.md
+examples/exploring-data
+examples/the-wing
+```
