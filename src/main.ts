@@ -19,50 +19,6 @@ import { OSReplView, VIEW_TYPE_OSREPL } from './osrepl/OSReplView';
 import { createOSReplState, OSReplState } from './osrepl/osreplState.svelte';
 
 //================================================================================================
-// File Explorer
-//================================================================================================
-
-// export interface FileInfo {
-// 	name: string;
-// 	path: string;
-// 	size: number;
-// 	modified: Date;
-// 	isDirectory: boolean;  // Added this
-// }
-
-// class FileExplorerModal extends Modal {
-// 	component: FileListModal | undefined;
-// 	plugin: ExamplePlugin;
-// 	dirPath: string;
-
-// 	constructor(app: App, plugin: ExamplePlugin, dirPath: string,) {
-// 		super(app);
-// 		this.plugin = plugin;
-// 		this.dirPath = dirPath;
-// 	}
-
-// 	async onOpen() {
-// 		const { contentEl } = this;
-
-// 		this.component = mount(FileListModal, {
-// 			target: this.contentEl,
-// 			props: {
-// 				dirPath: this.dirPath,
-// 				graphState: this.plugin.graphState,
-// 				onClose: () => this.close()
-// 			}
-// 		});
-// 	}
-
-// 	onClose() {
-// 		if (this.component) {
-// 			unmount(this.component);
-// 			// this.component.$destroy();
-// 		}
-// 	}
-// }
-
-//================================================================================================
 // OSC Configuration
 //================================================================================================
 
@@ -446,11 +402,6 @@ export default class ExamplePlugin extends Plugin {
 				(leaf) => new LinkView(leaf, this)
 			);
 
-			// this.addRibbonIcon(
-			// 	'folder-search',
-			// 	'Load Graph',
-			// 	() => new FileExplorerModal(this.app, this, '/Users/maurizioberta/Documents/Development/graph-sonification/public/data').open()
-			// );
 
 			this.addRibbonIcon(
 				'folder-pen',
@@ -508,14 +459,6 @@ export default class ExamplePlugin extends Plugin {
 			})
 
 			this.addSettingTab(new ForceGraphSettingTab(this.app, this));
-
-			// this.addCommand({
-			// 	id: 'browse-external-files',
-			// 	name: 'Browse external files',
-			// 	callback: () => {
-			// 		new FileExplorerModal(this.app, this, '/Users/maurizioberta/Documents/Development/graph-sonification/public/data').open();
-			// 	}
-			// });
 
 			this.addCommand({
 				id: 'config-metadata-osc',

@@ -50,7 +50,7 @@ export const DEFAULT_CONFIG: PluginConfig = {
         cooldownTicks: 200
     },
     paths: {
-        defaultDataPath: '/Users/maurizioberta/Documents/Development/graph-sonification/public/data'
+        defaultDataPath: '/path/to/data'
     },
     colors: {
         gold: "#fff260a7",
