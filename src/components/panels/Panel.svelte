@@ -213,6 +213,7 @@
 					</div>
 				{/each}
 				<!-- This has to be made interactive now -->
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 				<div
 					class="multi-select-input"
 					contenteditable="true"

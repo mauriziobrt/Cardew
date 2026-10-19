@@ -14,30 +14,23 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/d3": "^7.4.3",
-		"@types/node": "^16.11.6",
-		"@types/node-osc": "^9.1.0",
-		"@typescript-eslint/eslint-plugin": "5.29.0",
-		"@typescript-eslint/parser": "5.29.0",
-		"builtin-modules": "3.3.0",
-		"esbuild": "^0.28.1",
+		"@types/node": "^26.6.5",
+		"@types/node-osc": "^11.2.0",
+		"@typescript-eslint/eslint-plugin": "^8.72.0",
+		"@typescript-eslint/parser": "^8.72.0",
+		"builtin-modules": "^5.4.0",
+		"esbuild": "^0.28.2",
 		"esbuild-svelte": "^0.9.5",
 		"obsidian": "latest",
-		"simple-svelte-autocomplete": "^2.5.2",
-		"svelte": "^5.45.4",
-		"svelte-check": "^4.3.4",
-		"svelte-preprocess": "^6.0.3",
+		"svelte": "^5.57.2",
+		"svelte-check": "^4.7.7",
+		"svelte-preprocess": "^6.0.5",
 		"tslib": "2.4.0",
-		"typescript": "~5.0.0"
+		"typescript": "5.0.4"
 	},
 	"dependencies": {
-		"@cosmograph/cosmograph": "^2.0.0",
-		"@tanstack/svelte-table": "^9.0.0-alpha.10",
-		"@tanstack/table-core": "^8.21.3",
-		"autocompleter": "^10.0.0",
-		"force-graph": "^1.51.0",
-		"osc": "^2.4.2",
-		"osc-js": "^2.4.1",
-		"sortablejs": "^1.15.7",
-		"tailwindcss": "^4.1.18"
+		"d3": "^7.9.0",
+		"force-graph": "^1.52.0",
+		"sortablejs": "^1.15.7"
 	}
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Sortable from "sortablejs";
+	// import Sortable from "sortablejs";
 	import { onMount } from "svelte";
 	import PanelLink from "./PanelLink.svelte";
 	import Panelplus from "./PanelLinkPlus.svelte";
@@ -14,16 +14,16 @@
 
 	let nodeSort: HTMLElement;
 
-	onMount(async function () {
-		Sortable.create(nodeSort, {
-			group: {
-				name: "nodeSort",
-				put: false,
-				pull: false,
-			},
-			animation: 200,
-		});
-	});
+	// onMount(async function () {
+	// 	Sortable.create(nodeSort, {
+	// 		group: {
+	// 			name: "nodeSort",
+	// 			put: false,
+	// 			pull: false,
+	// 		},
+	// 		animation: 200,
+	// 	});
+	// });
 
 	//Handlers
 	// function handleChange(event) {
@@ -73,7 +73,8 @@ So what is needed:
 	<div class="metadata-container">
 		<div class="metadata-content">
 			<div class="metadata-properties">
-				<section bind:this={nodeSort}>
+				<!-- <section bind:this={nodeSort}> -->
+				<section>
 					{#if graphState.selectionState.selectedNodeIndex !== null}
 						<!-- the issue is connecting to the links and on each editing make it work
 		also on // the other end -->
