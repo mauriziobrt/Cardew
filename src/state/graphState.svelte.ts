@@ -6,14 +6,15 @@ import { rectangleMultiSelect } from 'src/interaction/multipleNodeSelection';
 import * as d3 from "d3";
 import type { OSCManager } from 'src/osc/osc';
 import type { Config } from 'src/config.svelte';
-import type { GraphData, LinkObject, NodeObject } from 'force-graph';
+import type { GraphData, LinkObject } from 'force-graph';
 import type ForceGraph from 'force-graph';
+import type { MyNode } from 'src/types/graph';
 import { CursorState } from './cursorState';
 import { MetadataState } from './metadataState.svelte';
 import { SelectionState } from './selectionState.svelte';
 import { Notice } from 'obsidian';
 import { FilteringState } from './filteringState.svelte';
-
+import { idOf } from "../utils/graphUtils";
 //=======================================================================================
 // Main Graph Class most operations appear here
 
@@ -28,7 +29,7 @@ export class GraphState {
     config: Config;
     cursor = new CursorState;
     oscConfig = $state<Record<string, string[]>>({});
-    // selectedNodes = $state<Array<NodeObject>>([]);
+    // selectedNodes = $state<Array<MyNode>>([]);
     graphData = $state<GraphData | null>(null);
     graph = $state<ForceGraph | null>(null);
     lastOscMessage = $state<any[] | null>(null);
@@ -174,8 +175,8 @@ export class GraphState {
         // Calculate node degrees
         this.degree = {};
         this.graphData.links.forEach(link => {
-            this.degree[link.source.id ?? link.source] = (this.degree[link.source.id ?? link.source] || 0) + 1;
-            this.degree[link.target.id ?? link.target] = (this.degree[link.target.id ?? link.target] || 0) + 1;
+            this.degree[idOf(link.source) ?? link.source] = (this.degree[idOf(link.source) ?? link.source] || 0) + 1;
+            this.degree[idOf(link.target) ?? link.target] = (this.degree[idOf(link.target) ?? link.target] || 0) + 1;
         });
     }
 
@@ -243,8 +244,8 @@ export class GraphState {
 
         previous.links = previous.links.map(link => ({
             ...link,
-            source: link.source.id ?? link.source,
-            target: link.target.id ?? link.target
+            source: idOf(link.source) ?? link.source,
+            target: idOf(link.target) ?? link.target
         }));
 
         this.graphData = previous;
@@ -262,8 +263,8 @@ export class GraphState {
 
         next.links = next.links.map(link => ({
             ...link,
-            source: link.source.id ?? link.source,
-            target: link.target.id ?? link.target
+            source: idOf(link.source) ?? link.source,
+            target: idOf(link.target) ?? link.target
         }));
         this.graphData = next;
         this.selectionState.selectedNodes[0] = {};
@@ -334,10 +335,10 @@ export class GraphState {
         // So first I create a set to avoid duplicates that filters through the link and get the full link where either it is the source or the target
         const onlyIDs = new Set(this.graphData.links.filter(
             link =>
-                link.source.id === this.selectionState.selectedNodes[0].id ||
-                link.target.id === this.selectionState.selectedNodes[0].id
+                idOf(link.source) === this.selectionState.selectedNodes[0].id ||
+                idOf(link.target) === this.selectionState.selectedNodes[0].id
         )
-            .flatMap(link => [link.source.id, link.target.id])); //flatmap flattens it but I'm still not sure what it does actually
+            .flatMap(link => [idOf(link.source), idOf(link.target)])); //flatmap flattens it but I'm still not sure what it does actually
 
         // there are no duplicates but now I need to create an array from this probably there's a quick
         // way.
@@ -353,8 +354,8 @@ export class GraphState {
         if (!this.selectionState.selectedNodes[0] || !this.graphData) return [];
         return this.graphData.links.filter(
             link =>
-                link.source.id === this.selectionState.selectedNodes[0].id ||
-                link.target.id === this.selectionState.selectedNodes[0].id
+                idOf(link.source) === this.selectionState.selectedNodes[0].id ||
+                idOf(link.target) === this.selectionState.selectedNodes[0].id
         )
     }
 
@@ -362,7 +363,7 @@ export class GraphState {
         if (!this.graphData || !this.selectionState.selectedNodes[0]) return;
         if (newTargetId === this.selectionState.selectedNodes[0].id) return;
         this.pushUndo();
-        if (link.source.id === this.selectionState.selectedNode.id || link.source === this.selectionState.selectedNodes[0].id) {
+        if (idOf(link.source) === this.selectionState.selectedNode.id || link.source === this.selectionState.selectedNodes[0].id) {
             link.target = newTargetId;
         } else {
             link.source = newTargetId;
@@ -392,8 +393,8 @@ export class GraphState {
 
         // if the link already exist then return I don't need to create duplicates
         const exists = this.graphData.links.some(link => {
-            const s = link.source.id ?? link.source;
-            const t = link.target.id ?? link.target;
+            const s = idOf(link.source) ?? link.source;
+            const t = idOf(link.target) ?? link.target;
             return (s === sourceId && t === normalizedTarget) || (s === normalizedTarget && t === sourceId);
         });
         if (exists) return;
@@ -416,7 +417,7 @@ export class GraphState {
     highlightLink(link: LinkObject) {
         if (!this.graph) return;
         this.graph.nodeColor(node =>
-            node.id === link.source.id || node.id === link.target.id ? 'red' : this.colorScale(node.openacces)
+            node.id === idOf(link.source) || node.id === idOf(link.target) ? 'red' : this.colorScale(node.openacces)
         );
     }
 
@@ -431,7 +432,7 @@ export class GraphState {
     //====================================================================================
 
 
-    getNodeAtID(id: string): NodeObject {
+    getNodeAtID(id: string): MyNode {
         return this.graph.graphData().nodes.find((n) => n.id === id);
     }
 
@@ -452,7 +453,7 @@ export class GraphState {
     }
 
     // Function that decides the behaviour of the graph when a node is selected
-    selectNode(node: NodeObject) {
+    selectNode(node: MyNode) {
         if (!this.graph || !this.graphData) return;
         this.selectionState.selectNode(node, this.graph, this.graphData.nodes);
     }
@@ -711,14 +712,14 @@ export class GraphState {
             // // handling both raw ids and force-graph-resolved node objects
             this.graphData.links = this.graphData.links
                 .filter(link => {
-                    const s = link.source.id ?? link.source;
-                    const t = link.target.id ?? link.target;
+                    const s = idOf(link.source) ?? link.source;
+                    const t = idOf(link.target) ?? link.target;
                     return s !== deletedId && t !== deletedId;
                 })
                 .map(link => ({
                     ...link,
-                    source: link.source.id ?? link.source,
-                    target: link.target.id ?? link.target
+                    source: idOf(link.source) ?? link.source,
+                    target: idOf(link.target) ?? link.target
                 }));
             this.selectionState.selectedNodes = this.selectionState.selectedNodes.filter(n => n.id !== deletedId);
         }

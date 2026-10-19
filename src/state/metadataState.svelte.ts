@@ -1,4 +1,4 @@
-import type { NodeObject } from 'force-graph';
+import type { MyNode } from "src/types/graph";
 import { Notice } from 'obsidian';
 
 export class MetadataState {
@@ -41,7 +41,7 @@ export class MetadataState {
         "__dragged",
     ]);
 
-    constructor(private getSelectedNode: () => NodeObject | null) {
+    constructor(private getSelectedNode: () => MyNode | null) {
         // this.getSelectedNode;
     }
     // get selectedNode() { return this.getSelectedNode; }
@@ -50,7 +50,7 @@ export class MetadataState {
     // Functions
     //================================================================
 
-    retrieveNodeClass(selectedNode: NodeObject) {
+    retrieveNodeClass(selectedNode: MyNode) {
         if (!selectedNode) return;
         if (!selectedNode.className) {
             new Notice("Element doesn't have a class yet");
@@ -59,7 +59,7 @@ export class MetadataState {
         this.copyClass = selectedNode.className;
     }
 
-    retrieveNodeCleanMetadata(selectedNode: NodeObject) {
+    retrieveNodeCleanMetadata(selectedNode: MyNode) {
         if (!selectedNode) return;
         //Check ReservedKeys and remove
         // Helper to check for empty values, including empty arrays
@@ -72,7 +72,7 @@ export class MetadataState {
 
         // Remove empty non-reserved keys from selectedNode
         // I need to make a copy though
-        const localNode: NodeObject = { ...selectedNode };
+        const localNode: MyNode = { ...selectedNode };
         for (const key of Object.keys(selectedNode)) {
             if (!this.reservedKeys.has(key) && isEmpty(localNode[key])) {
                 delete localNode[key];
@@ -82,7 +82,7 @@ export class MetadataState {
         this.copyMetatada = localNode;
     }
 
-    applyMetadata(selectedNode: NodeObject) {
+    applyMetadata(selectedNode: MyNode) {
         if (!selectedNode) return;
         console.log("SELECTED", selectedNode)
         console.log(this.copyMetatada)
@@ -102,12 +102,12 @@ export class MetadataState {
         }
     }
 
-    applyRetrievedNodeClass(selectedNode: NodeObject, template: Record<string, any>){
+    applyRetrievedNodeClass(selectedNode: MyNode, template: Record<string, any>){
         if (!this.copyClass) return;
         this.applyNodeClass(selectedNode, this.copyClass, template[this.copyClass])
     }
 
-    applyNodeClass(selectedNode: NodeObject, className: string | number, template: Record<string, any>) {
+    applyNodeClass(selectedNode: MyNode, className: string | number, template: Record<string, any>) {
         if (!selectedNode) return;
         // console.log("This is the node!!", selectedNode)
         // const template = this.nodeClasses[className];
@@ -139,7 +139,7 @@ export class MetadataState {
         // console.log("This is the node!!", selectedNode)
     }
 
-    getEmptyFields(selectedNode: NodeObject) {
+    getEmptyFields(selectedNode: MyNode) {
         // if overwrite on I can saveToExistingClas
         if (!selectedNode) return [];
         const fields = { ...selectedNode };

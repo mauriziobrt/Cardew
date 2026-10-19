@@ -1,11 +1,12 @@
-import type { NodeObject, GraphData, LinkObject } from "force-graph";
+import type { GraphData, LinkObject } from "force-graph";
+import type { MyNode } from "src/types/graph";
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 
 export function findShortestPath(
-    startNode: NodeObject,
+    startNode: MyNode,
     graphData: GraphData,
-    endNode: NodeObject,
+    endNode: MyNode,
 ): {} {
     const nodes = graphData.nodes
     const links = graphData.links
@@ -14,8 +15,8 @@ export function findShortestPath(
     nodes.forEach(node => { adjacencyList[node.id] = [] })
     
     links.forEach(link => {
-        const source = typeof link.source === 'object' ? link.source.id : link.source
-        const target = typeof link.target === 'object' ? link.target.id : link.target
+        const source = typeof link.source === 'object' ? idOf(link.source) : link.source
+        const target = typeof link.target === 'object' ? idOf(link.target) : link.target
         adjacencyList[source].push({ node: target, link: link })
         adjacencyList[target].push({ node: source, link: link })
     })
@@ -46,15 +47,15 @@ export function findShortestPath(
 }
 
 export function connectSelectedNodes(
-    selectedNode: NodeObject,
+    selectedNode: MyNode,
     graphData: GraphData,
-    endNode: NodeObject,
+    endNode: MyNode,
 ): void {
 
 }
 
 export function transition(
-    currentNode: NodeObject,
+    currentNode: MyNode,
     direction: Direction,
     graphData: GraphData,
     freeMode: any

@@ -4,6 +4,7 @@
 	import PanelLink from "./PanelLink.svelte";
 	import Panelplus from "./PanelLinkPlus.svelte";
 	import type { GraphState } from "src/state/graphState.svelte";
+	import { idOf } from "src/utils/graphUtils";
 
 	interface Props {
 		graphState: GraphState;
@@ -80,7 +81,7 @@ So what is needed:
 		also on // the other end -->
 						{#each graphState.selectedNodeRawLinks as link (link)}
 							{@const otherNode =
-								link.source.id === graphState.selectionState.selectedNodes[0].id
+								idOf(link.source) === graphState.selectionState.selectedNodes[0].id
 									? link.target
 									: link.source}
 							<PanelLink

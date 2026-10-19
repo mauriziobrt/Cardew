@@ -1,12 +1,13 @@
 import type ForceGraph from "force-graph";
-import type { GraphData, LinkObject, NodeObject } from "force-graph";
+import type { GraphData, LinkObject } from "force-graph";
+import type { MyNode } from "src/types/graph";
 import { rectangleMultiSelect } from "src/interaction/multipleNodeSelection";
 import type { Config } from "src/config.svelte";
 import type { OSCManager } from "src/osc/osc";
 
 export class SelectionState {
-    // selectedNode = $state(null) as NodeObject | null;
-    selectedNodes = $state<Array<NodeObject>>([]);
+    // selectedNode = $state(null) as MyNode | null;
+    selectedNodes = $state<Array<MyNode>>([]);
     multiSelect = $state<boolean>(false);
     selectedNodeIndex = $state<number | null>(null);
     previousSelectedId: string | null = null;
@@ -40,7 +41,7 @@ export class SelectionState {
     }
 
     // Function that decides the behaviour of the graph when a node is selected
-    selectNode(node: NodeObject, graph: ForceGraph, nodes: NodeObject[]) {
+    selectNode(node: MyNode, graph: ForceGraph, nodes: MyNode[]) {
         if (!graph || !nodes) return;
         // this.selectedNode = node;
         if (node.id) {
@@ -86,13 +87,13 @@ export class SelectionState {
 
         };
     }
-    selectionStart(e: MouseEvent, graph: ForceGraph<NodeObject, LinkObject<NodeObject>>) {
+    selectionStart(e: MouseEvent, graph: ForceGraph<MyNode, LinkObject<MyNode>>) {
         // if (!this.graph) return;
         // Selection start is triggered on Mouse Down.
         const { x, y } = graph.screen2GraphCoords(e.layerX, e.layerY)
         this.selectionStartMouse = { x, y }
     }
-    selectionEnd(e: MouseEvent, graph: ForceGraph<NodeObject, LinkObject<NodeObject>>) {
+    selectionEnd(e: MouseEvent, graph: ForceGraph<MyNode, LinkObject<MyNode>>) {
         // if (!this.graph) return;
         // Selection end is linked with Mouse Drag
         const { x, y } = graph.screen2GraphCoords(e.layerX, e.layerY)

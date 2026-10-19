@@ -11,7 +11,7 @@ The name is inspired by Cornelius Cardew's graphical scores.
 In Obsidian, create a new Vault (see [Obsidian Docs](https://obsidian.md/)). Clone the reposityory inside the vault's folder at ```vault-name/.obsidian/plugins```.
 In Obsidian's setting allow for external plugin and enable Cardew.
 
-Extended documentation can be found at [Cardew Docs](https://mauriziobrt.github.io.cardew)
+Extended documentation can be found at [Cardew Docs](https://mauriziobrt.github.io/Cardew)
 
 ## Build Documentation
 

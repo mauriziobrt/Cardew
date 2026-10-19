@@ -1,4 +1,6 @@
-import type { GraphData, NodeObject, LinkObject } from "force-graph";
+import type { GraphData, LinkObject } from "force-graph";
+import type { MyNode } from "src/types/graph";
+import { idOf } from "src/utils/graphUtils";
 
 
 // interface Node {
@@ -22,16 +24,16 @@ function findClosestNodeInDirection(
     graphData: GraphData,
     freeMode: any
     // currentNode: Node
-): NodeObject | null {
+): MyNode | null {
     // Find closest node in the given direction
     // based on x, y coordinates
     // console.log("NODES", graphData.nodes)
     // const nodes = graphData().nodes;
     const connectedLinks = graphData.links
-        .filter(link => link.source.id === currentNodeId || link.target.id === currentNodeId);
+        .filter(link => idOf(link.source) === currentNodeId || idOf(link.target) === currentNodeId);
 
     const connectedNodes = connectedLinks
-        .map(link => link.source.id === currentNodeId ? link.target : link.source);
+        .map(link => idOf(link.source) === currentNodeId ? link.target : link.source);
     // console.log(connectedNodes)
     const nodes = graphData.nodes;
     if (!nodes || nodes.length === 0) return null;
@@ -108,10 +110,10 @@ function findClosestNodeInDirection(
 }
 
 export function navigateInDirection(
-    currentNode: NodeObject,
+    currentNode: MyNode,
     direction: Direction,
     graphData: GraphData,
     freeMode: any
-): NodeObject | null {
+): MyNode | null {
     return findClosestNodeInDirection(currentNode.id, direction, graphData, freeMode);
 }

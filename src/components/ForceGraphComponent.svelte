@@ -6,7 +6,8 @@
 		registerOSCcontrols,
 	} from "src/interaction/control";
 	import { createGraphActions } from "../interaction/graphActions";
-	import ForceGraph, { type NodeObject } from "force-graph";
+	import ForceGraph from "force-graph";
+	import type { MyNode } from "src/types/graph";
 	import { showNodeMenu } from "src/ui/NodeMenu";
 	interface Props {
 		graphState: GraphState;
@@ -67,15 +68,15 @@
 				},
 			)
 			// Add function that opens a contextual menu on right click
-			.onBackgroundRightClick((node: NodeObject, event: MouseEvent) => {
+			.onBackgroundRightClick((node: MyNode, event: MouseEvent) => {
 				// graphState.selectNode(node);
 				showNodeMenu(node, event, graphState);
 			})
-			.onNodeRightClick((node: NodeObject, event: MouseEvent) => {
+			.onNodeRightClick((node: MyNode, event: MouseEvent) => {
 				graphState.selectNode(node);
 				showNodeMenu(node, event, graphState);
 			})
-			.onNodeClick((node: NodeObject) => {
+			.onNodeClick((node: MyNode) => {
 				graphState.selectNode(node);
 			});
 
