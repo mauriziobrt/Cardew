@@ -1,5 +1,6 @@
 import type { GraphData, LinkObject } from "force-graph";
 import type { MyNode } from "src/types/graph";
+import { idOf } from "src/utils/graphUtils";
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 

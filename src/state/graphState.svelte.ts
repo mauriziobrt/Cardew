@@ -8,13 +8,13 @@ import type { OSCManager } from 'src/osc/osc';
 import type { Config } from 'src/config.svelte';
 import type { GraphData, LinkObject } from 'force-graph';
 import type ForceGraph from 'force-graph';
-import type { MyNode } from 'src/types/graph';
+import type { MyGraph, MyGraphData, MyLink, MyNode } from 'src/types/graph';
 import { CursorState } from './cursorState';
 import { MetadataState } from './metadataState.svelte';
 import { SelectionState } from './selectionState.svelte';
 import { Notice } from 'obsidian';
 import { FilteringState } from './filteringState.svelte';
-import { idOf } from "../utils/graphUtils";
+import { idOf, idStr } from "../utils/graphUtils";
 //=======================================================================================
 // Main Graph Class most operations appear here
 
@@ -30,16 +30,18 @@ export class GraphState {
     cursor = new CursorState;
     oscConfig = $state<Record<string, string[]>>({});
     // selectedNodes = $state<Array<MyNode>>([]);
-    graphData = $state<GraphData | null>(null);
-    graph = $state<ForceGraph | null>(null);
+    graphData = $state.raw<MyGraphData | null>(null);
+    graph = $state.raw<MyGraph | null>(null);
     lastOscMessage = $state<any[] | null>(null);
     numberElements = $state<number | null>(null);
     statsDataset = $state<any[] | null>(null);
-    degree = $state<Record<number, number> | null>(null);
+    // degree = $state.raw<Record<string, number>>({});
+    degree = $state.raw<Record<string, number>>({});
     ctx = <CanvasRenderingContext2D | null>(null);
     globalScale = $state<number>(0);
     multiSelect = $state<boolean>(false);
     nodeIdCounter = $state<number>(0);
+    physicState = $state<boolean>(true);
     nodeClasses = $state<Record<string, any>>({
         "bibliometrics": {
             "id": "",
@@ -58,6 +60,7 @@ export class GraphState {
             "grainSize": 0,
         }
     });
+
 
     reservedKeys = new Set([
         "id",
@@ -80,9 +83,9 @@ export class GraphState {
     metadataOpen = $state(false);
     openMetadata: () => void = () => { };
     closeMetadata: () => void = () => { };
-    toggleMetadata() {
-        this.metadataOpen ? this.closeMetadata() : this.openMetadata();
-    }
+    // toggleMetadata() {
+    //     this.metadataOpen ? this.closeMetadata() : this.openMetadata();
+    // }
     //
     //====================================================================================
     //States
@@ -129,7 +132,7 @@ export class GraphState {
         this.graph.graphData(this.graphData);
         // Update Colors
         this.colorScale = this.createColorScale();
-        this.graph.nodeColor((node: { openacces: string; }) => this.colorScale(node.openacces));
+        this.graph.nodeColor((node) => this.colorScale(node.openacces));
         // this.graph.nodeColor((n: Node) => n.highlighted ? 'red' : this.colorScale(n.openacces));
         // console.log("LENGTH", data["nodes"]);
         this.numberElements = data["nodes"].length;
@@ -141,9 +144,18 @@ export class GraphState {
 
     updateGraphData() {
         if (!this.graphData || !this.graph) return [];
-        this.graph.graphData({ nodes: this.graphData.nodes, links: this.graphData.links });
-        this.updateDegree();
-
+        if (this.physicState) {
+            // this.physicsOn(false);
+            this.graph.graphData({ nodes: this.graphData.nodes, links: this.graphData.links });
+            this.updateDegree();
+            // setTimeout(() => {
+            //     this.physicsOn(true);
+            // }, 1000);
+        } else {
+            this.graph.graphData({ nodes: this.graphData.nodes, links: this.graphData.links });
+            this.updateDegree();
+        }
+        // this.physicsOn(true);
         // console.log($state.snapshot(this.degree))
     };
 
@@ -173,20 +185,30 @@ export class GraphState {
     updateDegree() {
         if (!this.graphData) return;
         // Calculate node degrees
-        this.degree = {};
-        this.graphData.links.forEach(link => {
-            this.degree[idOf(link.source) ?? link.source] = (this.degree[idOf(link.source) ?? link.source] || 0) + 1;
-            this.degree[idOf(link.target) ?? link.target] = (this.degree[idOf(link.target) ?? link.target] || 0) + 1;
-        });
+        const deg: Record<string, number> = {};
+        for (const l of this.graphData.links) {
+            deg[idStr(l.source)] = (deg[idStr(l.source)] ?? 0) + 1;
+            deg[idStr(l.target)] = (deg[idStr(l.target)] ?? 0) + 1;
+        }
+        this.degree = deg;
+        // this.degree = {};
+        // this.graphData.links.forEach(link => {
+        //     this.degree[idOf(link.source) ?? link.source] = (this.degree[idOf(link.source) ?? link.source] || 0) + 1;
+        //     this.degree[idOf(link.target) ?? link.target] = (this.degree[idOf(link.target) ?? link.target] || 0) + 1;
+        // });
     }
 
     physicsOn(state: boolean) {
         if (!state) {
+            this.physicState = false;
             this.graph?.cooldownTicks(0);
             this.graph?.cooldownTime(0);
+
         } else {
+            this.physicState = true;
             this.graph?.cooldownTicks(1000);
             this.graph?.cooldownTime(10000);
+
         }
     }
 
@@ -198,16 +220,22 @@ export class GraphState {
     findNodes(property: string, query: string) {
         this.selectionState.selectedNodes = [];
         console.log(property, query)
-        const filtered = this.filteringState.search(this.graphData?.nodes, property, query);
-        // console.log(filtered);
-        // this.selectionState.selectedNodes = filtered;
-        for (const el of filtered) {
-            // console.log(el.id)
-            const elObj = this.getNodeAtID(el.id)
-            this.selectionState.multiSelect = true;
-            this.selectNode(elObj);
+        if (this.graphData?.nodes) {
+            const filtered = this.filteringState.search(this.graphData?.nodes, property, query);
+            // console.log(filtered);
+            // this.selectionState.selectedNodes = filtered;
+            if (filtered) {
+                for (const el of filtered) {
+                    // console.log(el.id)
+                    if (el.id) {
+                        const elObj = this.getNodeAtID(el.id)
+                        this.selectionState.multiSelect = true;
+                        this.selectNode(elObj);
+                    }
+                }
+                this.selectionState.multiSelect = false;
+            }
         }
-        this.selectionState.multiSelect = false;
     }
 
     //========================================================
@@ -217,13 +245,18 @@ export class GraphState {
     // New state
     private undoStack: GraphData[] = [];
     private redoStack: GraphData[] = [];
-    private maxHistory = 50; // avoid unbounded memory growth
+    private maxHistory = 20; // avoid unbounded memory growth
 
     // hasEdits = $state(false);
 
-    snapshot(): GraphData {
+    snapshot(): MyGraphData {
+        const g = $state.snapshot(this.graphData)!;       // already a deep clone, drop structuredClone
+        return {
+            nodes: g.nodes,
+            links: g.links.map(l => ({ ...l, source: idOf(l.source) ?? l.source, target: idOf(l.target) ?? l.target })),
+        };
         // Use $state.snapshot to strip Svelte proxies, then deep clone
-        return structuredClone($state.snapshot(this.graphData));
+        // return structuredClone($state.snapshot(this.graphData)) as MyGraphData;
     }
 
     private pushUndo() {
@@ -249,7 +282,8 @@ export class GraphState {
         }));
 
         this.graphData = previous;
-        this.selectionState.selectedNodes[0] = {};
+        // this.selectionState.selectedNodes[0] = {};
+        this.selectionState.selectedNodes = [];
         // this.selectionState.selectedNodeIndex = null;
         this.resetColor();
         this.updateGraphData();
@@ -267,7 +301,8 @@ export class GraphState {
             target: idOf(link.target) ?? link.target
         }));
         this.graphData = next;
-        this.selectionState.selectedNodes[0] = {};
+        // this.selectionState.selectedNodes[0] = {};
+        this.selectionState.selectedNodes = [];
         // this.selectionState.selectedNodeIndex = null;
         this.resetColor();
         this.updateGraphData();
@@ -359,15 +394,31 @@ export class GraphState {
         )
     }
 
-    editLink(link: LinkObject, newTargetId: string) {
+    editLink(link: LinkObject, newTargetId: MyNode["id"]) {
         if (!this.graphData || !this.selectionState.selectedNodes[0]) return;
         if (newTargetId === this.selectionState.selectedNodes[0].id) return;
         this.pushUndo();
-        if (idOf(link.source) === this.selectionState.selectedNode.id || link.source === this.selectionState.selectedNodes[0].id) {
+        if (idOf(link.source) === this.selectionState.selectedNodes[0].id || link.source === this.selectionState.selectedNodes[0].id) {
             link.target = newTargetId;
         } else {
             link.source = newTargetId;
         }
+        this.updateGraphData();
+    }
+
+    getLinkDirection(node: MyNode, link: MyLink) {
+        if (idOf(link.source) === node.id || link.source === node.id) {
+            return "right"
+        } else {
+            return "left"
+        }
+    }
+
+    editLinkDirection(link: MyLink) {
+        if (!this.graphData || !this.selectionState.selectedNodes[0]) return;
+        this.pushUndo();
+        console.log(link);
+        [link.source, link.target] = [link.target, link.source]
         this.updateGraphData();
     }
 
@@ -423,8 +474,11 @@ export class GraphState {
 
     resetColor() {
         if (!this.graph) return;
-        this.graph.nodeColor((node) =>
-            this.colorScale(node.openacces)
+        this.graph.nodeColor((node) => {
+            if (node.openacces) {
+                this.colorScale(node.openacces)
+            }
+        }
         );
     }
     //====================================================================================
@@ -432,8 +486,8 @@ export class GraphState {
     //====================================================================================
 
 
-    getNodeAtID(id: string): MyNode {
-        return this.graph.graphData().nodes.find((n) => n.id === id);
+    getNodeAtID(id: string | number): MyNode {
+        return this.graph?.graphData().nodes.find((n) => n.id === id);
     }
 
     toggleMultiselect(toggle: boolean) {
@@ -462,7 +516,7 @@ export class GraphState {
         if (!this.graph) return;
         // this.selectionState.selectionStart(e, this.graph);
         // Selection start is triggered on Mouse Down.
-        const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
+        const { x, y } = this.graph.screen2GraphCoords(e.offsetX, e.offsetY)
 
         this.selectionStartMouse = { x, y }
     }
@@ -471,8 +525,8 @@ export class GraphState {
         // this.selectionState.selectionEnd(e, this.graph);
 
         // Selection end is linked with Mouse Drag
-        const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
-        // console.log(e.layerX, e.layerY)
+        const { x, y } = this.graph.screen2GraphCoords(e.offsetX, e.offsetY)
+        // console.log(e.offsetX, e.offsetY)
         this.selectionEndMouse = { x, y }  // just update state
     }
     drawOverlay(ctx: CanvasRenderingContext2D, globalScale: number) {
@@ -541,20 +595,19 @@ export class GraphState {
             if (!n) { this.targets.delete(id); continue; }
 
             if (t.x !== undefined) {
-                n.fx += (t.x - n.fx) * this.smoothing;
+                n.fx = (n.fx ?? n.x ?? 0) + (t.x - (n.fx ?? n.x ?? 0)) * this.smoothing;
                 if (Math.abs(t.x - n.fx) < 0.1) { n.fx = t.x; delete t.x; }
                 else active = true;
             }
             if (t.y !== undefined) {
-                n.fy += (t.y - n.fy) * this.smoothing;
+                n.fy = (n.fy ?? n.y ?? 0) + (t.y - (n.fy ?? n.y ?? 0)) * this.smoothing;
                 if (Math.abs(t.y - n.fy) < 0.1) { n.fy = t.y; delete t.y; }
                 else active = true;
             }
             if (t.x === undefined && t.y === undefined) this.targets.delete(id);
         }
 
-        this.graph.d3ReheatSimulation(); // replace `graph` with your ForceGraph instance, so it redraws
-
+        this.graph?.d3ReheatSimulation();
         this.rafId = active ? requestAnimationFrame(this.step) : null;
     };
     // moveNode(id: string, dimension: string, value: number) {
@@ -583,15 +636,15 @@ export class GraphState {
         // Use CSS-pixel dimensions, not canvas.width (which includes devicePixelRatio)
         const screenX = nx * this.graph.width();
         const screenY = ny * this.graph.height();
-        const { x, y } = this.graph.screen2GraphCoords(screenX, screenY);
+        const { x, y } = this.graph?.screen2GraphCoords(screenX, screenY);
 
-        const zoom = this.graph.zoom();          // graph units -> screen px
+        const zoom = this.graph?.zoom();          // graph units -> screen px
         const minRadius = 12 / zoom;             // at least ~12px on screen
 
         let closest: any = null;
         let closestDist = Infinity;
 
-        for (const n of this.graph.graphData().nodes as any[]) {
+        for (const n of this.graph?.graphData().nodes as any[]) {
             if (n.x == null || n.y == null) continue;
 
             const dx = n.x - x;
@@ -646,7 +699,7 @@ export class GraphState {
         // this.graph?.d3VelocityDecay(1)
     }
 
-    createComplexNode(id: string, pairs: []) {
+    createComplexNode(pairs: [string, string | { value: any }][]) {
         this.pushUndo();
         if (!this.graph || !this.graphData) return [];
         // Basic metadata created here, but can be edited in the information view
@@ -677,7 +730,7 @@ export class GraphState {
         if (this.config.current.creative.modeEnabled) {
             this.pushUndo();
             if (!this.graph || !this.graphData) return [];
-            const { x, y } = this.graph.screen2GraphCoords(e.layerX, e.layerY)
+            const { x, y } = this.graph.screen2GraphCoords(e.offsetX, e.offsetY)
             this.position = { x, y }
             // Basic metadata created here, but can be edited in the information view
             const newNodeID = createNewNode(this.graphData, this.position.x, this.position.y, this.config.current.newName);
@@ -734,8 +787,8 @@ export class GraphState {
     crossCursor() { this.cursor.crossCursor(); };
     resetCrossCursor() { this.cursor.resetCursor(); };
 
-    public createColorScale() {
-        if (!this.graphData) return;
+    public createColorScale(): d3.ScaleOrdinal<string, string> {
+        // if (!this.graphData) return;
         // const nodes = this.graphData.nodes;
         // //change here so new colorscale can get created with different configs, maybe just for each class a specific color? idk
         // const userValues = [
@@ -746,7 +799,7 @@ export class GraphState {
         const statuses = Object.keys(COLORS);
         // Map custom colors to the domain values
         return d3
-            .scaleOrdinal()
+            .scaleOrdinal<string, string>()
             .domain(statuses)
             .range(
                 statuses.map((color) =>
@@ -800,3 +853,7 @@ export class GraphState {
     }
 }
 export const createGraphState = (oscManager: OSCManager, config: Config) => new GraphState(oscManager, config);
+
+// // other null guards
+// this.graph?.screen2GraphCoords(...)     // or `if (!this.graph) return` at the top
+// this.graphData!.nodes                    // in allProperties, selectAll, rectangleMultiSelect call

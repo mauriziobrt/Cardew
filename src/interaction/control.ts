@@ -24,7 +24,7 @@ export function registerControls(handlers: {
     onAltMouseUp?: (e: MouseEvent) => void;
     onAltMouseDrag?: (e: MouseEvent) => void;
     onCmdA: () => void;
-    onCmdI: () => void;
+    // onCmdI: () => void;
     undo: () => void;
     redo: () => void;
 }, root: HTMLElement) {
@@ -47,10 +47,10 @@ export function registerControls(handlers: {
             e.preventDefault();
             handlers.onCmdA();
         }
-        if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
-            e.preventDefault();
-            handlers.onCmdI();
-        }
+        // if ((e.ctrlKey || e.metaKey) && e.key === 'i') {
+        //     e.preventDefault();
+        //     handlers.onCmdI();
+        // }
         if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
             e.preventDefault();
             handlers.undo();
@@ -185,7 +185,7 @@ export function registerOSCcontrols(handlers: {
                     // Posted by Simon Buchan, modified by community. See post 'Timeline' for change history
                     // Retrieved 2026-10-16, License - CC BY-SA 4.0
 
-                    const pairs = propertyArray.flatMap((_, i, a) => i % 2 ? [] : [a.slice(i, i + 2)]);
+                    const pairs = propertyArray.flatMap((_: any, i: number, a: string | any[]) => i % 2 ? [] : [a.slice(i, i + 2)]);
                     handlers.msgCreate(args[0], pairs);
                     break;
                 case '/delete':

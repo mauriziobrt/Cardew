@@ -1,6 +1,7 @@
 <script>
 	import { setIcon } from "obsidian";
 	import { onMount } from "svelte";
+	import TriStateToggle from "../TriStateToggle.svelte";
 
 	let btnEl;
 
@@ -8,16 +9,17 @@
 		setIcon(btnEl, "x");
 	});
 	let {
-		position,
 		nodes = $bindable(),
 		links,
 		otherNode,
 		onDelete,
-		onEdit,
+		// onEdit,
 		onClick,
 		onLeave,
 		selectNode,
 		degree,
+		direction,
+		editDirection
 	} = $props();
 	// So I create a set to store these node_ids[]
 	// const node_ids = [...new Set(nodes.map((n) => n.id))];
@@ -47,11 +49,11 @@
 		selectNode(otherNode);
 	}
 
-	function commitEdit() {
-		if (inputValue !== otherNode?.id) {
-			onEdit(inputValue);
-		}
-	}
+	// function commitEdit() {
+	// 	if (inputValue !== otherNode?.id) {
+	// 		onEdit(inputValue);
+	// 	}
+	// }
 
 	// function selectOtherLink() {
 	// 	selectNode(otherNode);
@@ -89,6 +91,15 @@
 			aria-label="Delete connection"
 			onclick={() => triggerDelete(links)}
 		></button>
+		direction:
+		<TriStateToggle bind:value={direction} editDirection={() => editDirection()}/>
+		<!-- <input
+			class="metadata-input-text"
+			type="string"
+			style="width:3em"
+			bind:value={direction}
+			onchange={changeDirection()}
+		/> -->
 		<!-- <button style="cursor: pointer;" onclick={() => triggerDelete(links)}
 			>delete</button
 		> -->

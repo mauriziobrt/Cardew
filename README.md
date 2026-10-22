@@ -51,7 +51,8 @@ Extended documentation can be found at [Cardew Docs](https://mauriziobrt.github.
 - [ ] When creating a new node, option to start from zero or keeping the last edited node’s class. Config, new node behavior menu keep last or no, also copy paste of single nodes.
 
 
-
+Checking tsc errors: npx tsc --noEmit > errors.txt
+Use correct node version nvm use node
 
 ## Cite
 

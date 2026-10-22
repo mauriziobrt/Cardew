@@ -12,6 +12,8 @@ src/interaction/control.ts(176,64): error TS2551: Property 'value' does not exis
 src/interaction/control.ts(189,40): error TS2345: Argument of type 'OSCValue' is not assignable to parameter of type 'string'.
 src/interaction/control.ts(195,40): error TS2345: Argument of type 'OSCValue' is not assignable to parameter of type 'string'.
 src/interaction/control.ts(201,40): error TS2345: Argument of type 'OSCValue' is not assignable to parameter of type 'string'.
+src/interaction/graphActions.ts(19,42): error TS2339: Property 'toggleMetadata' does not exist on type 'GraphState'.
+src/interaction/graphActions.ts(26,83): error TS2554: Expected 1 arguments, but got 2.
 src/interaction/multipleNodeSelection.ts(31,9): error TS18048: 'n.x' is possibly 'undefined'.
 src/interaction/multipleNodeSelection.ts(31,24): error TS18048: 'n.x' is possibly 'undefined'.
 src/interaction/multipleNodeSelection.ts(31,39): error TS18048: 'n.y' is possibly 'undefined'.
@@ -40,20 +42,18 @@ src/interaction/rhythmUtils.ts(52,92): error TS2339: Property 'id' does not exis
   Property 'id' does not exist on type 'string'.
 src/interaction/rhythmUtils.ts(62,39): error TS2345: Argument of type 'string | number | NodeObject | undefined' is not assignable to parameter of type 'MyNode'.
   Type 'undefined' is not assignable to type 'MyNode'.
-src/interaction/transitionUtils.ts(15,43): error TS2538: Type 'undefined' cannot be used as an index type.
-src/interaction/transitionUtils.ts(18,58): error TS2304: Cannot find name 'idOf'.
-src/interaction/transitionUtils.ts(19,58): error TS2304: Cannot find name 'idOf'.
-src/interaction/transitionUtils.ts(20,9): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
-src/interaction/transitionUtils.ts(21,9): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
-src/interaction/transitionUtils.ts(28,17): error TS2339: Property 'node' does not exist on type '{ node: string | number | undefined; path: never[]; links: never[]; } | undefined'.
-src/interaction/transitionUtils.ts(28,23): error TS2339: Property 'path' does not exist on type '{ node: string | number | undefined; path: never[]; links: never[]; } | undefined'.
-src/interaction/transitionUtils.ts(28,29): error TS2339: Property 'links' does not exist on type '{ node: string | number | undefined; path: never[]; links: never[]; } | undefined'.
-src/interaction/transitionUtils.ts(34,9): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
-src/interaction/transitionUtils.ts(34,37): error TS7006: Parameter 'neighbor' implicitly has an 'any' type.
-src/interaction/transitionUtils.ts(39,28): error TS2322: Type 'any' is not assignable to type 'never'.
-src/interaction/transitionUtils.ts(39,37): error TS2322: Type 'any' is not assignable to type 'never'.
-src/interaction/transitionUtils.ts(40,29): error TS2322: Type 'any' is not assignable to type 'never'.
-src/interaction/transitionUtils.ts(40,39): error TS2322: Type 'any' is not assignable to type 'never'.
+src/interaction/transitionUtils.ts(16,43): error TS2538: Type 'undefined' cannot be used as an index type.
+src/interaction/transitionUtils.ts(21,23): error TS2538: Type 'undefined' cannot be used as an index type.
+src/interaction/transitionUtils.ts(22,23): error TS2538: Type 'undefined' cannot be used as an index type.
+src/interaction/transitionUtils.ts(29,17): error TS2339: Property 'node' does not exist on type '{ node: string | number | undefined; path: never[]; links: never[]; } | undefined'.
+src/interaction/transitionUtils.ts(29,23): error TS2339: Property 'path' does not exist on type '{ node: string | number | undefined; path: never[]; links: never[]; } | undefined'.
+src/interaction/transitionUtils.ts(29,29): error TS2339: Property 'links' does not exist on type '{ node: string | number | undefined; path: never[]; links: never[]; } | undefined'.
+src/interaction/transitionUtils.ts(35,9): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{}'.
+src/interaction/transitionUtils.ts(35,37): error TS7006: Parameter 'neighbor' implicitly has an 'any' type.
+src/interaction/transitionUtils.ts(40,28): error TS2322: Type 'any' is not assignable to type 'never'.
+src/interaction/transitionUtils.ts(40,37): error TS2322: Type 'any' is not assignable to type 'never'.
+src/interaction/transitionUtils.ts(41,29): error TS2322: Type 'any' is not assignable to type 'never'.
+src/interaction/transitionUtils.ts(41,39): error TS2322: Type 'any' is not assignable to type 'never'.
 src/io/saveGraph.ts(2,27): error TS2304: Cannot find name 'jsonData'.
 src/io/saveGraph.ts(2,46): error TS7006: Parameter 'err' implicitly has an 'any' type.
 src/main.ts(37,3): error TS2322: Type '{ $on?(type: string, callback: (e: any) => void): () => void; $set?(props: Partial<Record<string, any>>): void; } & Record<string, any>' is not assignable to type 'Comp | undefined'.
@@ -88,63 +88,26 @@ src/state/filteringState.svelte.ts(72,52): error TS7053: Element implicitly has 
   Property '0' does not exist on type 'Number'.
 src/state/filteringState.svelte.ts(72,76): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type 'Number'.
   Property '0' does not exist on type 'Number'.
-src/state/graphState.svelte.ts(90,134): error TS2322: Type 'Record<number, number> | null' is not assignable to type 'Record<number, number>'.
-  Type 'null' is not assignable to type 'Record<number, number>'.
-src/state/graphState.svelte.ts(131,9): error TS2322: Type 'ScaleOrdinal<string, unknown, string> | undefined' is not assignable to type 'ScaleOrdinal<string, string, never>'.
-  Type 'undefined' is not assignable to type 'ScaleOrdinal<string, string, never>'.
-src/state/graphState.svelte.ts(132,30): error TS2345: Argument of type '(node: {    openacces: string;}) => string' is not assignable to parameter of type 'NodeAccessor<string, NodeObject>'.
-  Type '(node: {    openacces: string;}) => string' is not assignable to type '(obj: NodeObject) => string'.
-    Types of parameters 'node' and 'obj' are incompatible.
-      Property 'openacces' is missing in type 'NodeObject' but required in type '{ openacces: string; }'.
-src/state/graphState.svelte.ts(158,28): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(178,13): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(178,25): error TS2538: Type 'NodeObject' cannot be used as an index type.
-src/state/graphState.svelte.ts(178,25): error TS2538: Type 'undefined' cannot be used as an index type.
-src/state/graphState.svelte.ts(178,62): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(178,74): error TS2538: Type 'NodeObject' cannot be used as an index type.
-src/state/graphState.svelte.ts(178,74): error TS2538: Type 'undefined' cannot be used as an index type.
-src/state/graphState.svelte.ts(179,13): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(179,25): error TS2538: Type 'NodeObject' cannot be used as an index type.
-src/state/graphState.svelte.ts(179,25): error TS2538: Type 'undefined' cannot be used as an index type.
-src/state/graphState.svelte.ts(179,62): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(179,74): error TS2538: Type 'NodeObject' cannot be used as an index type.
-src/state/graphState.svelte.ts(179,74): error TS2538: Type 'undefined' cannot be used as an index type.
-src/state/graphState.svelte.ts(201,53): error TS2345: Argument of type 'NodeObject[] | undefined' is not assignable to parameter of type 'MyNode[]'.
-  Type 'undefined' is not assignable to type 'MyNode[]'.
-src/state/graphState.svelte.ts(204,26): error TS18048: 'filtered' is possibly 'undefined'.
-src/state/graphState.svelte.ts(206,44): error TS2345: Argument of type 'string | number | undefined' is not assignable to parameter of type 'string'.
+src/state/graphState.svelte.ts(132,56): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-src/state/graphState.svelte.ts(226,9): error TS2322: Type 'GraphData<NodeObject, LinkObject<NodeObject>> | null' is not assignable to type 'GraphData<NodeObject, LinkObject<NodeObject>>'.
-  Type 'null' is not assignable to type 'GraphData<NodeObject, LinkObject<NodeObject>>'.
-src/state/graphState.svelte.ts(366,55): error TS2551: Property 'selectedNode' does not exist on type 'SelectionState'. Did you mean 'selectedNodes'?
-src/state/graphState.svelte.ts(420,107): error TS2339: Property 'openacces' does not exist on type 'NodeObject'.
-src/state/graphState.svelte.ts(427,34): error TS2339: Property 'openacces' does not exist on type 'NodeObject'.
-src/state/graphState.svelte.ts(436,9): error TS2322: Type 'NodeObject | undefined' is not assignable to type 'MyNode'.
+src/state/graphState.svelte.ts(158,28): error TS2531: Object is possibly 'null'.
+src/state/graphState.svelte.ts(434,102): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/state/graphState.svelte.ts(440,30): error TS2345: Argument of type '(node: MyNode) => void' is not assignable to parameter of type 'NodeAccessor<string, MyNode>'.
+  Type '(node: MyNode) => void' is not assignable to type '(obj: MyNode) => string'.
+    Type 'void' is not assignable to type 'string'.
+src/state/graphState.svelte.ts(453,9): error TS2322: Type 'MyNode | undefined' is not assignable to type 'MyNode'.
   Type 'undefined' is not assignable to type 'MyNode'.
-src/state/graphState.svelte.ts(436,16): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(450,93): error TS2345: Argument of type 'ForceGraph<NodeObject, LinkObject<NodeObject>> | null' is not assignable to parameter of type 'ForceGraph<NodeObject, LinkObject<NodeObject>>'.
+src/state/graphState.svelte.ts(467,93): error TS2345: Argument of type 'MyGraph | null' is not assignable to parameter of type 'ForceGraph<NodeObject, LinkObject<NodeObject>>'.
   Type 'null' is not assignable to type 'ForceGraph<NodeObject, LinkObject<NodeObject>>'.
-src/state/graphState.svelte.ts(450,105): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(465,58): error TS2339: Property 'layerX' does not exist on type 'MouseEvent'.
-src/state/graphState.svelte.ts(465,68): error TS2339: Property 'layerY' does not exist on type 'MouseEvent'.
-src/state/graphState.svelte.ts(474,58): error TS2339: Property 'layerX' does not exist on type 'MouseEvent'.
-src/state/graphState.svelte.ts(474,68): error TS2339: Property 'layerY' does not exist on type 'MouseEvent'.
-src/state/graphState.svelte.ts(544,17): error TS18048: 'n.fx' is possibly 'undefined'.
-src/state/graphState.svelte.ts(544,32): error TS18048: 'n.fx' is possibly 'undefined'.
-src/state/graphState.svelte.ts(545,36): error TS18048: 'n.fx' is possibly 'undefined'.
-src/state/graphState.svelte.ts(549,17): error TS18048: 'n.fy' is possibly 'undefined'.
-src/state/graphState.svelte.ts(549,32): error TS18048: 'n.fy' is possibly 'undefined'.
-src/state/graphState.svelte.ts(550,36): error TS18048: 'n.fy' is possibly 'undefined'.
-src/state/graphState.svelte.ts(556,9): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(584,30): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(585,30): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(586,26): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(588,22): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(594,25): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(601,37): error TS2531: Object is possibly 'null'.
-src/state/graphState.svelte.ts(667,43): error TS2339: Property 'value' does not exist on type 'never'.
-src/state/graphState.svelte.ts(680,62): error TS2339: Property 'layerX' does not exist on type 'MouseEvent'.
-src/state/graphState.svelte.ts(680,72): error TS2339: Property 'layerY' does not exist on type 'MouseEvent'.
+src/state/graphState.svelte.ts(467,105): error TS2531: Object is possibly 'null'.
+src/state/graphState.svelte.ts(600,30): error TS2531: Object is possibly 'null'.
+src/state/graphState.svelte.ts(601,30): error TS2531: Object is possibly 'null'.
+src/state/graphState.svelte.ts(602,17): error TS2339: Property 'x' does not exist on type '{ x: number; y: number; } | undefined'.
+src/state/graphState.svelte.ts(602,20): error TS2339: Property 'y' does not exist on type '{ x: number; y: number; } | undefined'.
+src/state/graphState.svelte.ts(605,32): error TS18048: 'zoom' is possibly 'undefined'.
+src/state/graphState.svelte.ts(764,9): error TS2322: Type 'ScaleOrdinal<string, string, string>' is not assignable to type 'ScaleOrdinal<string, string, never>'.
+  Type 'string' is not assignable to type 'never'.
 src/state/metadataState.svelte.ts(138,9): error TS2322: Type 'string | number' is not assignable to type 'string | undefined'.
   Type 'number' is not assignable to type 'string'.
 src/state/metadataState.svelte.ts(166,19): error TS2339: Property 'graphData' does not exist on type 'MetadataState'.

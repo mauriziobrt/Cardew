@@ -2,24 +2,10 @@ import type { GraphData, LinkObject } from "force-graph";
 import type { MyNode } from "src/types/graph";
 import { idOf } from "src/utils/graphUtils";
 
-
-// interface Node {
-//     id: number;
-//     group: number;
-//     x?: number;
-//     y?: number;
-//     z?: number;
-// }
-
-// interface Link {
-//     source: number | Node;
-//     target: number | Node;
-// }
-
 export type Direction = 'up' | 'down' | 'left' | 'right';
 
 function findClosestNodeInDirection(
-    currentNodeId: number,
+    currentNodeId: MyNode["id"],
     direction: Direction,
     graphData: GraphData,
     freeMode: any
@@ -29,12 +15,38 @@ function findClosestNodeInDirection(
     // based on x, y coordinates
     // console.log("NODES", graphData.nodes)
     // const nodes = graphData().nodes;
+    // First we filter all links and find the ones where our node exists
     const connectedLinks = graphData.links
         .filter(link => idOf(link.source) === currentNodeId || idOf(link.target) === currentNodeId);
 
+    // Then we retrieve the nodes, I don't know why
+    //visually it prints before moving to the direction so that's why it seems like it uses two nodes instead of one
     const connectedNodes = connectedLinks
-        .map(link => idOf(link.source) === currentNodeId ? link.target : link.source);
+        .map(link => idOf(link.source) === currentNodeId ? [link.target, "out"] : [link.source, "in"]);
+
+    const outNodes = connectedNodes.filter(link => link[1] === "out")
+
+    // console.log(outNodes, "CIAOOOO")
+
+    const filteredOutNodes = outNodes.map(link => link[0])
+    // console.log(filteredOutNodes, "CIAOOOO")
+    // console.log(connectedNodes[0], connectedNodes[1])
+
+    // wait we have a currentNode, we just need to check if it is target or source
+    // const directionAtNode = connectedLinks;
+    // console.log(connectedLinks)
+    // const directionLinks = connectedLinks.map(link => idOf(link.source) === currentNodeId || link.source === currentNodeId ? "out" : "in")
+    // console.log(directionLinks)
+
+    // only nav to nodes in out direction
+    // const direction =     if (idOf(link.source) === node.id || link.source === node.id) {
+    //          "out"
+    //     } else {
+    //          "in"
+    //     }
+
     // console.log(connectedNodes)
+
     const nodes = graphData.nodes;
     if (!nodes || nodes.length === 0) return null;
 
@@ -54,7 +66,7 @@ function findClosestNodeInDirection(
     const currentX = currentNode.x ?? 0;
     const currentY = currentNode.y ?? 0;
 
-    function isInDirection(angle: number, targetDirection: string) {
+    function isInDirection(angle: number, targetDirection: Direction) {
         // Normalize angle to range [0, 2π)
         const a = (angle + 2 * Math.PI) % (2 * Math.PI);
 
@@ -79,16 +91,16 @@ function findClosestNodeInDirection(
     let closest = null;
     let closestDistanceSquared = Infinity;
     let navNode = null;
-    if (freeMode == true) {
+    if (freeMode == false) {
         navNode = nodes;
     } else {
-        navNode = connectedNodes;
+        navNode = filteredOutNodes;
     }
 
     for (const node of navNode) {
         // console.log("Node count:", nodes.length, "Unique IDs:", new Set(nodes.map(n => n.id)).size);
-
-        if (node.id === currentNodeId) continue; // Compare by ID, not reference
+        if (node)
+            if (node.id === currentNodeId) continue; // Compare by ID, not reference
 
         const nodeX = node.x ?? 0;
         const nodeY = node.y ?? 0;

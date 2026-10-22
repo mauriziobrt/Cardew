@@ -1,10 +1,9 @@
 <script lang="ts">
-	// import Sortable from "sortablejs";
-	import { onMount } from "svelte";
 	import PanelLink from "./PanelLink.svelte";
 	import Panelplus from "./PanelLinkPlus.svelte";
 	import type { GraphState } from "src/state/graphState.svelte";
 	import { idOf } from "src/utils/graphUtils";
+	import type { MyLink, MyNode } from "src/types/graph";
 
 	interface Props {
 		graphState: GraphState;
@@ -13,29 +12,11 @@
 	// Props are defined in main.ts
 	let { graphState }: Props = $props();
 
-	let nodeSort: HTMLElement;
-
-	// onMount(async function () {
-	// 	Sortable.create(nodeSort, {
-	// 		group: {
-	// 			name: "nodeSort",
-	// 			put: false,
-	// 			pull: false,
-	// 		},
-	// 		animation: 200,
-	// 	});
-	// });
-
-	//Handlers
-	// function handleChange(event) {
-	// 	console.log(event.detail);
-	// }
-
-	function handleAdd(targetId) {
-		graphState.addLink(targetId);
+	function handleAdd(targetId: MyNode["id"]) {
+		if(targetId) graphState.addLink(targetId);
 	}
 
-	function handleDelete(link) {
+	function handleDelete(link: MyLink) {
 		if (confirm("Press a button!\nEither OK or Cancel.")) {
 			graphState.removeLink(link);
 		} else {
@@ -66,10 +47,8 @@ overlap with the input
 So what is needed:
 - Links expanded, add a menu to select the node and on node display the different links
 
-
 //===============================================================
 -->
-<!-- <h1 class="setting-title">Linked Nodes</h1> -->
 <div class="view-content">
 	<div class="metadata-container">
 		<div class="metadata-content">
@@ -88,14 +67,17 @@ So what is needed:
 								links={link}
 								otherNode={otherNode}
 								onDelete={handleDelete}
-								onEdit={(newTargetId) =>
-									graphState.editLink(link, newTargetId)}
-								bind:nodes={graphState.allNodeIds}
+								// onEdit at the moment is unused
+								// onEdit={(newTargetId: MyNode["id"]) =>
+								// 	{if(newTargetId) graphState.editLink(link, newTargetId)}}
+								// bind:nodes={graphState.allNodeIds}
 								onClick={() => graphState.highlightLink(link)}
 								onLeave={() => graphState.selectNode(graphState.selectionState.selectedNodes[0])}
-								selectNode={(node) =>
+								selectNode={(node: MyNode) =>
 									graphState.selectNode(node)}
 								degree={graphState.degree[otherNode.id]}
+								direction={graphState.getLinkDirection(graphState.selectionState.selectedNodes[0], link)}
+								editDirection={() => graphState.editLinkDirection(link)}
 							/>
 						{/each}
 					{/if}
@@ -104,8 +86,6 @@ So what is needed:
 		</div>
 
 		<span style="margin: 0.1px"></span>
-		<!-- <h1 class="setting-title">Connect Nodes</h1> -->
-
 		<Panelplus onAdd={handleAdd} nodeIds={graphState.allNodeIds} />
 	</div>
 </div>

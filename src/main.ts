@@ -468,10 +468,20 @@ export default class ExamplePlugin extends Plugin {
 				}
 			});
 
+			this.addCommand({
+				id: 'metadata-view-toggle',
+				name: 'Open and close metadata view',
+				callback: () => {
+					this.toggleMetadataView()
+				}
+			});
+
+
 			this.app.workspace.onLayoutReady(() => {
 				this.activateBothViews();
 				// this.activateMetadataView();
 				this.activateLinkView();
+				this.app.workspace.detachLeavesOfType("all-properties");
 			});
 
 			//claude

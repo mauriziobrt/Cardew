@@ -1,4 +1,7 @@
-import type { NodeObject, LinkObject } from "force-graph";
+import type { NodeObject, LinkObject, GraphData } from "force-graph";
+import type ForceGraph from "force-graph";
+export type MyGraphData = GraphData<MyNode, MyLink>;
+export type MyGraph = ForceGraph<MyNode, MyLink>;
 
 export interface MyNode extends NodeObject {
   className?: string;
