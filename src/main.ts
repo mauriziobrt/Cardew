@@ -4,6 +4,7 @@ import ForceGraphComponent from './components/ForceGraphComponent.svelte';
 import InfoPanelComponent from './components/panels/InfoPanelComponent.svelte';
 import FilterPanelComponent from './components/panels/FilterPanelComponent.svelte';
 import MetadataPanelComponent from './components/panels/MetadataPanelComponent.svelte';
+import ShapePanelComponent from './components/panels/ShapePanelComponent.svelte';
 import LinkPanelComponent from './components/panels/LinkPanelComponent.svelte';
 import { mount, unmount } from 'svelte';
 import { createGraphState, GraphState } from './state/graphState.svelte';
@@ -17,6 +18,40 @@ import { Config, DEFAULT_CONFIG } from 'src/config.svelte';
 import { ForceGraphSettingTab } from './ui/SettingsTab';
 import { OSReplView, VIEW_TYPE_OSREPL } from './osrepl/OSReplView';
 import { createOSReplState, OSReplState } from './osrepl/osreplState.svelte';
+
+//================================================================================================
+// Node Shapes and Color Panel
+//================================================================================================
+class ShapeConfigModal extends Modal {
+	component: ShapePanelComponent | undefined;
+	plugin: ExamplePlugin;
+
+	constructor(app: App, plugin: ExamplePlugin,) {
+		super(app);
+		this.plugin = plugin;
+	}
+
+	async onOpen() {
+		const { contentEl } = this;
+
+		this.component = mount(ShapePanelComponent, {
+			target: this.contentEl,
+			props: {
+				graphState: this.plugin.graphState,
+				oscConfig: this.plugin.oscConfig,
+				onSave: async () => this.plugin.saveData({ ...(await this.plugin.loadData()), oscConfig: this.plugin.oscConfig }),
+				onClose: () => this.close()
+			}
+		});
+	}
+
+	onClose() {
+		if (this.component) {
+			unmount(this.component);
+			// this.component.$destroy();
+		}
+	}
+}
 
 //================================================================================================
 // OSC Configuration
@@ -128,7 +163,7 @@ export class MetadataView extends ItemView {
 				//Here I should define the props, the runes I am passing to the component
 				graphState: this.plugin.graphState,
 				app: this.app,
-				onToggleMetadata: () => this.plugin.toggleMetadataView()
+				// onToggleMetadata: () => this.plugin.toggleMetadataView()
 			}
 		});
 	}
@@ -458,6 +493,10 @@ export default class ExamplePlugin extends Plugin {
 				new OSCConfigModal(this.app, this).open();
 			})
 
+			this.addRibbonIcon("paintbrush", 'Open Shape and Color Configuration', () => {
+				new ShapeConfigModal(this.app, this).open();
+			})
+
 			this.addSettingTab(new ForceGraphSettingTab(this.app, this));
 
 			this.addCommand({
@@ -469,10 +508,26 @@ export default class ExamplePlugin extends Plugin {
 			});
 
 			this.addCommand({
+				id: 'config-shapes',
+				name: 'Config Shapes and Colours',
+				callback: () => {
+					new ShapeConfigModal(this.app, this).open();
+				}
+			});
+
+			this.addCommand({
 				id: 'metadata-view-toggle',
 				name: 'Open and close metadata view',
 				callback: () => {
 					this.toggleMetadataView()
+				}
+			});
+
+			this.addCommand({
+				id: 'link-view-toggle',
+				name: 'Open and close link view',
+				callback: () => {
+					this.toggleLinkView()
 				}
 			});
 
@@ -506,6 +561,15 @@ export default class ExamplePlugin extends Plugin {
 			leaves.forEach(l => l.detach());
 		} else {
 			await this.activateMetadataView();
+		}
+	}
+
+	async toggleLinkView() {
+		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_LINK_PANEL);
+		if (leaves.length > 0) {
+			leaves.forEach(l => l.detach());
+		} else {
+			await this.activateLinkView();
 		}
 	}
 

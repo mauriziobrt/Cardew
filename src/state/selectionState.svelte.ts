@@ -4,13 +4,14 @@ import type { MyNode } from "src/types/graph";
 import { rectangleMultiSelect } from "src/interaction/multipleNodeSelection";
 import type { Config } from "src/config.svelte";
 import type { OSCManager } from "src/osc/osc";
+import { Notice } from "obsidian";
 
 export class SelectionState {
     // selectedNode = $state(null) as MyNode | null;
     selectedNodes = $state<Array<MyNode>>([]);
     multiSelect = $state<boolean>(false);
     selectedNodeIndex = $state<number | null>(null);
-    previousSelectedId: string | null = null;
+    // previousSelectedId: string | null = null;
     selectionStartMouse: { x: number, y: number } | null = null;
     selectionEndMouse: { x: number, y: number } | null = null
 
@@ -45,7 +46,7 @@ export class SelectionState {
         if (!graph || !nodes) return;
         // this.selectedNode = node;
         if (node.id) {
-            this.previousSelectedId = node.id;
+            // this.previousSelectedId = node.id;
             this.selectedNodeIndex = nodes.indexOf(node);
             if (this.multiSelect) {
                 // if it's not there yet then add - don't create duplicates
@@ -54,7 +55,6 @@ export class SelectionState {
                 }
                 // console.log("Selected multiple nodes: ", [...this.selectedNodes]);
             } else {
-
                 // graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.getColorScale()(n.openacces));
                 this.selectedNodes = [node];
                 if (this.getConfig().config.centerAtNode.modeEnabled) {
@@ -68,21 +68,17 @@ export class SelectionState {
                 // ]);
                 // qua comunque cambia perchè faccio le configurazioni io quindi ha senso vedere come faccio le config.
                 // allora facciamo quelle va intanto.
-                // console.log(this.getOscConfig());
-                if (!node.className) return;
-
-                const currentClass = [node.className];
-                const oscConfig = this.getOscConfig()[currentClass[0]];
-                // console.log(oscConfig);
-                const values = (oscConfig ?? []).map((k) => this.resolveParam(node, k));
-                const oscMsg = currentClass.concat(values)
-                this.getOsc().sendMessage('/control', oscMsg);
-                // this.getOsc().sendMessage('/control', [
-                //     node.id, node.openacces, node.citations,
-                //     this.getDegree()[node.id], 1000, node.year, node.x, node.y, 2, 55, 800
-                // ]);
+                if (!node.className) {
+                    new Notice("Element has no class");
+                } else {
+                    const currentClass = [node.className];
+                    const oscConfig = this.getOscConfig()[currentClass[0]];
+                    // console.log(oscConfig);
+                    const values = (oscConfig ?? []).map((k) => this.resolveParam(node, k));
+                    const oscMsg = currentClass.concat(values)
+                    this.getOsc().sendMessage('/control', oscMsg);
+                }
             }
-
             graph.nodeColor(n => this.selectedNodes.some(s => s.id === n.id) ? 'red' : this.getColorScale()(n.openacces));
 
         };

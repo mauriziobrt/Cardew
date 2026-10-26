@@ -94,6 +94,19 @@ export class ForceGraphSettingTab extends PluginSettingTab {
                 }));
 
         new Setting(containerEl)
+            .setName('Navigation Mode')
+            .setDesc('Choose the navigation mode')
+            .addDropdown(dropdown => dropdown
+                .addOption('free', 'Free')
+                .addOption('cl', 'Connected')
+                .addOption('cldir', 'Connected+Out')
+                .setValue(this.plugin.config.current.navMode)
+                .onChange(async (value: 'free' | 'cl' | 'cldir') => {
+                    await this.plugin.config.save(this.plugin);
+                    this.plugin.graphState.config.current.navMode = value;
+                }));
+
+        new Setting(containerEl)
             .setName('Node Size')
             .setDesc('Relative size of nodes in the graph')
             .addSlider(slider => slider

@@ -5,24 +5,6 @@ export class MetadataState {
     // selectedNode: Node | undefined;
     copyMetatada = <Record<string, any>>({});
     copyClass: string = "";
-    // nodeClasses = $state<Record<string, any>>({
-    //     "bibliometrics": {
-    //         "id": "",
-    //         "user": "",
-    //         "description": "",
-    //         "year": "",
-    //         "openacces": "",
-    //         "citations": 0,
-    //         "subject areas": [],
-    //         "scival topics cluster": [],
-    //         "scival topics": []
-    //     },
-    //     "notes": {
-    //     },
-    //     "granulator": {
-    //         "grainSize": 0,
-    //     }
-    // });
 
     private reservedKeys = new Set([
         "id",

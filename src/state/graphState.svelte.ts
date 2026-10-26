@@ -30,7 +30,7 @@ export class GraphState {
     cursor = new CursorState;
     oscConfig = $state<Record<string, string[]>>({});
     // selectedNodes = $state<Array<MyNode>>([]);
-    graphData = $state.raw<MyGraphData | null>(null);
+    graphData = $state<MyGraphData | null>(null); // this makes it lag, but if I make it raw 
     graph = $state.raw<MyGraph | null>(null);
     lastOscMessage = $state<any[] | null>(null);
     numberElements = $state<number | null>(null);
@@ -41,7 +41,6 @@ export class GraphState {
     globalScale = $state<number>(0);
     multiSelect = $state<boolean>(false);
     nodeIdCounter = $state<number>(0);
-    physicState = $state<boolean>(true);
     nodeClasses = $state<Record<string, any>>({
         "bibliometrics": {
             "id": "",
@@ -96,7 +95,7 @@ export class GraphState {
     //====================================================================================
     // Declare class properties
     //====================================================================================
-    private colorScale!: d3.ScaleOrdinal<string, string>;
+    public colorScale!: d3.ScaleOrdinal<string, string>;
     private previousSelectedId: string | null = null;
     // Positional Properties
     //––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -130,6 +129,8 @@ export class GraphState {
             return;
         }
         this.graph.graphData(this.graphData);
+        this.physicsOn(this.config.current.physicsOn);
+        this.directionOn(this.config.current.directionToggle);
         // Update Colors
         this.colorScale = this.createColorScale();
         this.graph.nodeColor((node) => this.colorScale(node.openacces));
@@ -144,19 +145,8 @@ export class GraphState {
 
     updateGraphData() {
         if (!this.graphData || !this.graph) return [];
-        if (this.physicState) {
-            // this.physicsOn(false);
-            this.graph.graphData({ nodes: this.graphData.nodes, links: this.graphData.links });
-            this.updateDegree();
-            // setTimeout(() => {
-            //     this.physicsOn(true);
-            // }, 1000);
-        } else {
-            this.graph.graphData({ nodes: this.graphData.nodes, links: this.graphData.links });
-            this.updateDegree();
-        }
-        // this.physicsOn(true);
-        // console.log($state.snapshot(this.degree))
+        this.graph.graphData({ nodes: this.graphData.nodes, links: this.graphData.links });
+        this.updateDegree();
     };
 
     // this should just run on startup, write somewhere and then change when an edit happens
@@ -165,8 +155,16 @@ export class GraphState {
         return this.graphData.nodes.map(n => n.id)
     }
 
+    // updateConfig(configData: Partial<PluginConfig>) {
+    //     console.log("CURRENT", this.config)
+    //     // this.config.current = configData;
+    //     this.config.update(configData);
+    //     console.log(this.config)
+    // }
+
     // this should just run on startup, write somewhere and then change when an edit happens
     get allProperties() {
+        if (!this.graphData) return [];
         return [...new Set(this.graphData.nodes.flatMap(n => Object.keys(n)))]
             .filter(k => !this.reservedKeys.has(k));
     }
@@ -195,23 +193,19 @@ export class GraphState {
         // this.graphData.links.forEach(link => {
         //     this.degree[idOf(link.source) ?? link.source] = (this.degree[idOf(link.source) ?? link.source] || 0) + 1;
         //     this.degree[idOf(link.target) ?? link.target] = (this.degree[idOf(link.target) ?? link.target] || 0) + 1;
-        // });
+        // });f
     }
 
     physicsOn(state: boolean) {
-        if (!state) {
-            this.physicState = false;
-            this.graph?.cooldownTicks(0);
-            this.graph?.cooldownTime(0);
-
-        } else {
-            this.physicState = true;
-            this.graph?.cooldownTicks(1000);
-            this.graph?.cooldownTime(10000);
-
-        }
+        this.config.current.physicsOn = state;
+        this.graph?.cooldownTicks(state ? 1000 : 0);
+        this.graph?.cooldownTime(state ? 10000 : 0);
     }
 
+    directionOn(state: boolean) {
+        this.config.current.directionToggle = state;
+        this.graph?.linkDirectionalArrowLength(state ? 12 : 0);
+    }
 
     //========================================================
     // Search 
@@ -668,7 +662,7 @@ export class GraphState {
     navigate(direction: Direction) {
         if (!this.selectionState.selectedNodes[0] || !this.graphData) return;
         // TODO Direction add toggle to choose connected vs closer or external control
-        const nextNode = navigateInDirection(this.selectionState.selectedNodes[0], direction, this.graphData, true);
+        const nextNode = navigateInDirection(this.selectionState.selectedNodes[0], direction, this.graphData, this.config.current.navMode);
         if (nextNode) {
             // Always call this.selectNode so everything stays the same
             this.selectNode(nextNode);
@@ -853,7 +847,3 @@ export class GraphState {
     }
 }
 export const createGraphState = (oscManager: OSCManager, config: Config) => new GraphState(oscManager, config);
-
-// // other null guards
-// this.graph?.screen2GraphCoords(...)     // or `if (!this.graph) return` at the top
-// this.graphData!.nodes                    // in allProperties, selectAll, rectangleMultiSelect call

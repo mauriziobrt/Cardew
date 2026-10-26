@@ -132,7 +132,9 @@
 									onDeleteMetadata={handleDelete}
 									onKeydown={handleKeydown}
 									allProperties={graphState.allProperties}
-									allPropertyValues={graphState.allValuesAtProperty(key)}
+									allPropertyValues={graphState.allValuesAtProperty(
+										key,
+									)}
 								/>
 							{/each}
 						{/if}
@@ -140,7 +142,10 @@
 				{/if}
 			</div>
 		</div>
-		<MetadataPlus onAdd={handleAdd} allProperties={graphState.allProperties} />
+		<MetadataPlus
+			onAdd={handleAdd}
+			allProperties={graphState.allProperties}
+		/>
 	</div>
 </div>
 

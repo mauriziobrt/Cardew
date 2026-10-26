@@ -8,7 +8,7 @@ function findClosestNodeInDirection(
     currentNodeId: MyNode["id"],
     direction: Direction,
     graphData: GraphData,
-    freeMode: any
+    freeMode: string
     // currentNode: Node
 ): MyNode | null {
     // Find closest node in the given direction
@@ -23,12 +23,10 @@ function findClosestNodeInDirection(
     //visually it prints before moving to the direction so that's why it seems like it uses two nodes instead of one
     const connectedNodes = connectedLinks
         .map(link => idOf(link.source) === currentNodeId ? [link.target, "out"] : [link.source, "in"]);
-
     const outNodes = connectedNodes.filter(link => link[1] === "out")
-
-    // console.log(outNodes, "CIAOOOO")
-
     const filteredOutNodes = outNodes.map(link => link[0])
+
+    const allConnectedNodes = connectedLinks.map(link => idOf(link.source) === currentNodeId ? link.target : link.source);
     // console.log(filteredOutNodes, "CIAOOOO")
     // console.log(connectedNodes[0], connectedNodes[1])
 
@@ -91,12 +89,15 @@ function findClosestNodeInDirection(
     let closest = null;
     let closestDistanceSquared = Infinity;
     let navNode = null;
-    if (freeMode == false) {
+    if (freeMode == "free") {
         navNode = nodes;
-    } else {
+    } else if (freeMode == "cldir") {
         navNode = filteredOutNodes;
+    } else if (freeMode == "cl") {
+        navNode = allConnectedNodes;
     }
 
+    if (navNode)
     for (const node of navNode) {
         // console.log("Node count:", nodes.length, "Unique IDs:", new Set(nodes.map(n => n.id)).size);
         if (node)

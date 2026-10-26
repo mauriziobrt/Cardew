@@ -1,5 +1,6 @@
 // config.ts
 export interface PluginConfig {
+	textDisplayProperty: string;
     dagMode: string;
     osc: {
         localPort: number;
@@ -33,9 +34,12 @@ export interface PluginConfig {
     newName: string;
     hasEdits: boolean;
     physicsOn: boolean;
+    navMode: string;
+    directionToggle: boolean;
 }
 
 export const DEFAULT_CONFIG: PluginConfig = {
+    textDisplayProperty: "",
     osc: {
         localPort: 57122,
         remoteAddress: '127.0.0.1',
@@ -66,14 +70,16 @@ export const DEFAULT_CONFIG: PluginConfig = {
         modeEnabled: true
     },
     newName: "gennarino_",
-    dagMode: "",
+    dagMode: "null",
     hasEdits: false,
-    physicsOn: true
+    physicsOn: true,
+    navMode: "free",
+    directionToggle: true
 };
 
 // Reactive config class
 export class Config {
-    config = <PluginConfig>(structuredClone(DEFAULT_CONFIG));
+    config = $state<PluginConfig>(structuredClone(DEFAULT_CONFIG));
     private listeners: Set<(config: PluginConfig) => void> = new Set();
 
     get current(): PluginConfig {

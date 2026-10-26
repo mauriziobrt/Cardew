@@ -9,6 +9,9 @@
 	import ForceGraph from "force-graph";
 	import type { MyNode } from "src/types/graph";
 	import { showNodeMenu } from "src/ui/NodeMenu";
+	import { parseSvg, drawSvg } from "src/utils/svgUtils";
+	import { shapes } from "src/data/shapes";
+	
 	interface Props {
 		graphState: GraphState;
 	}
@@ -25,68 +28,12 @@
 		new Set(graphState.selectionState.selectedNodes.map((n) => n.id)),
 	);
 
-	const shapes: Record<
-		string,
-		(x: number, y: number, r: number, ctx: CanvasRenderingContext2D) => void
-	> = {
-		open: (x, y, r, ctx) => {
-			ctx.beginPath();
-			ctx.arc(x, y, r, 0, 2 * Math.PI);
-			ctx.fill();
-		},
-		closed: (x, y, r, ctx) =>
-			ctx.fillRect(x - r, y - r * 0.66, r * 2, r * 1.33),
-		green: (x, y, r, ctx) => {
-			ctx.beginPath();
-			ctx.moveTo(x, y - r);
-			ctx.lineTo(x - r, y + r);
-			ctx.lineTo(x + r, y + r);
-			ctx.fill();
-		},
-		gold: (x, y, r, ctx) => {
-			ctx.beginPath();
-			ctx.moveTo(x, y - r);
-			ctx.lineTo(x + r, y);
-			ctx.lineTo(x, y + r);
-			ctx.lineTo(x - r, y);
-			ctx.closePath();
-			ctx.fill();
-		},
-		diamond: (x, y, r, ctx) => {
-			ctx.beginPath();
-			ctx.moveTo(x, y - r);
-			ctx.lineTo(x + r, y);
-			ctx.lineTo(x, y + r);
-			ctx.lineTo(x - r, y);
-			ctx.closePath();
-			ctx.lineWidth = 1.5;
-			ctx.strokeStyle = ctx.fillStyle as string;
-			ctx.stroke();
-		},
-		hybrid: (x, y, r, ctx) => {
-			ctx.beginPath();
-			ctx.arc(x, y, r, Math.PI / 2, 1.5 * Math.PI);
-			ctx.fill();
-			ctx.beginPath();
-			ctx.arc(x, y, r, -Math.PI / 2, Math.PI / 2);
-			ctx.lineWidth = 1.5;
-			ctx.strokeStyle = ctx.fillStyle as string;
-			ctx.stroke();
-		},
-		unknown: (x, y, r, ctx) => {
-			ctx.font = `${r * 2}px Sans-Serif`;
-			ctx.textAlign = "center";
-			ctx.textBaseline = "middle";
-			ctx.fillText("?", x, y);
-		},
-	};
-
 	onMount(() => {
 		const cfg = graphState.config.current.graph;
 
 		graph = new ForceGraph(container)
 			.graphData({ nodes: [], links: [] })
-			.dagMode("Null")
+			.dagMode(null)
 			.nodeId("id")
 			.nodeLabel("user")
 			.nodeVal(
@@ -96,10 +43,21 @@
 			.nodeRelSize(cfg.nodeSize)
 			.d3AlphaDecay(cfg.alphaDecay)
 			.d3VelocityDecay(cfg.velocityDecay)
-			.nodeCanvasObject((node, ctx: CanvasRenderingContext2D) =>
-				nodePaint(node, ctx),
+			.nodeCanvasObject(
+				(node, ctx: CanvasRenderingContext2D, globalScale) => {
+					nodePaint(node, ctx);
+					const fontSize = 12 / globalScale;
+					ctx.font = `${fontSize}px Sans-Serif`;
+					ctx.textAlign = "center";
+					ctx.textBaseline = "bottom";
+					ctx.fillStyle = "#222";
+					ctx.fillText(
+						node[graphState.config.current.textDisplayProperty],
+						node.x,
+						node.y - 6,
+					); // 6 ≈ node radius + padding
+				},
 			)
-			// .nodePointerAreaPaint(nodePaint)
 			.nodePointerAreaPaint(({ id, x, y }, color, ctx) => {
 				const r = 3 + Math.sqrt(graphState.degree[id] || 1) * 2;
 				ctx.fillStyle = color;
@@ -119,7 +77,7 @@
 			.backgroundColor("rgba(0, 0, 0, 0)")
 			.linkColor(() => linkStaticColor)
 			.linkCurvature(0.2)
-			.onEngineStop(() => console.log("Physics stopped"))
+			.onEngineStop(() => {console.log("Physics stopped")})
 			.onBackgroundClick(() => {
 				graphState.setupBackgroundClick();
 			})
@@ -148,8 +106,8 @@
 		}
 
 		function nodePaint(
-			{ id, openacces, x, y },
-			ctx,
+			{ id, openacces, x, y }: MyNode,
+			ctx: CanvasRenderingContext2D,
 			overrideColor?: string,
 		) {
 			const radius = 3 + Math.sqrt(graphState.degree[id] || 1) * 2;
@@ -163,177 +121,6 @@
 			fn(x, y, radius, ctx);
 			ctx.restore();
 		}
-
-		// function nodePaint(
-		// 	{ id, openacces, x, y },
-		// 	ctx: CanvasRenderingContext2D,
-		// 	overrideColor?: string,
-		// ) {
-		// 	// ctx.fillStyle = "black";
-		// 	const shapesByOpenAccess = {
-		// 		open: (
-		// 			x: any,
-		// 			y: any,
-		// 			r: any,
-		// 			ctx: {
-		// 				beginPath: () => void;
-		// 				arc: (
-		// 					arg0: any,
-		// 					arg1: any,
-		// 					arg2: any,
-		// 					arg3: number,
-		// 					arg4: number,
-		// 					arg5: boolean,
-		// 				) => void;
-		// 				fill: () => void;
-		// 			},
-		// 		) => {
-		// 			ctx.beginPath();
-		// 			ctx.arc(x, y, r, 0, 2 * Math.PI, false);
-		// 			ctx.fill();
-		// 		}, // circle
-		// 		closed: (
-		// 			x: number,
-		// 			y: number,
-		// 			r: number,
-		// 			ctx: {
-		// 				fillRect: (
-		// 					arg0: number,
-		// 					arg1: number,
-		// 					arg2: number,
-		// 					arg3: number,
-		// 				) => void;
-		// 			},
-		// 		) => {
-		// 			ctx.fillRect(x - r, y - r * 0.66, r * 2, r * 1.33);
-		// 		}, // rectangle
-		// 		green: (
-		// 			x: number,
-		// 			y: number,
-		// 			r: number,
-		// 			ctx: {
-		// 				beginPath: () => void;
-		// 				moveTo: (arg0: any, arg1: number) => void;
-		// 				lineTo: (arg0: number, arg1: any) => void;
-		// 				fill: () => void;
-		// 			},
-		// 		) => {
-		// 			ctx.beginPath();
-		// 			ctx.moveTo(x, y - r);
-		// 			ctx.lineTo(x - r, y + r);
-		// 			ctx.lineTo(x + r, y + r);
-		// 			ctx.fill();
-		// 		}, // triangle
-		// 		gold: (
-		// 			x: number,
-		// 			y: number,
-		// 			r: number,
-		// 			ctx: {
-		// 				beginPath: () => void;
-		// 				moveTo: (arg0: any, arg1: number) => void;
-		// 				lineTo: (arg0: number, arg1: any) => void;
-		// 				closePath: () => void;
-		// 				fill: () => void;
-		// 			},
-		// 		) => {
-		// 			ctx.beginPath();
-		// 			ctx.moveTo(x, y - r);
-		// 			ctx.lineTo(x + r, y);
-		// 			ctx.lineTo(x, y + r);
-		// 			ctx.lineTo(x - r, y);
-		// 			ctx.closePath();
-		// 			ctx.fill();
-		// 		}, // diamond/rhombus shape, filled solid
-		// 		diamond: (
-		// 			x: number,
-		// 			y: number,
-		// 			r: number,
-		// 			ctx: {
-		// 				beginPath: () => void;
-		// 				moveTo: (arg0: any, arg1: number) => void;
-		// 				lineTo: (arg0: number, arg1: any) => void;
-		// 				closePath: () => void;
-		// 				lineWidth: number;
-		// 				strokeStyle: any;
-		// 				fillStyle: any;
-		// 				stroke: () => void;
-		// 			},
-		// 		) => {
-		// 			// outlined diamond (hollow), to distinguish from gold
-		// 			ctx.beginPath();
-		// 			ctx.moveTo(x, y - r);
-		// 			ctx.lineTo(x + r, y);
-		// 			ctx.lineTo(x, y + r);
-		// 			ctx.lineTo(x - r, y);
-		// 			ctx.closePath();
-		// 			ctx.lineWidth = 1.5;
-		// 			ctx.strokeStyle = ctx.fillStyle;
-		// 			ctx.stroke();
-		// 		},
-		// 		hybrid: (
-		// 			x: any,
-		// 			y: any,
-		// 			r: any,
-		// 			ctx: {
-		// 				beginPath: () => void;
-		// 				arc: (
-		// 					arg0: any,
-		// 					arg1: any,
-		// 					arg2: any,
-		// 					arg3: number,
-		// 					arg4: number,
-		// 				) => void;
-		// 				fill: () => void;
-		// 				lineWidth: number;
-		// 				strokeStyle: any;
-		// 				fillStyle: any;
-		// 				stroke: () => void;
-		// 			},
-		// 		) => {
-		// 			// half-filled circle: left half solid, right half outline
-		// 			ctx.beginPath();
-		// 			ctx.arc(x, y, r, Math.PI / 2, (3 * Math.PI) / 2);
-		// 			ctx.fill();
-		// 			ctx.beginPath();
-		// 			ctx.arc(x, y, r, -Math.PI / 2, Math.PI / 2);
-		// 			ctx.lineWidth = 1.5;
-		// 			ctx.strokeStyle = ctx.fillStyle;
-		// 			ctx.stroke();
-		// 		},
-		// 		unknown: (
-		// 			x: any,
-		// 			y: any,
-		// 			r: number,
-		// 			ctx: {
-		// 				font: string;
-		// 				textAlign: string;
-		// 				textBaseline: string;
-		// 				fillText: (arg0: string, arg1: any, arg2: any) => void;
-		// 			},
-		// 		) => {
-		// 			ctx.font = `${r * 2}px Sans-Serif`;
-		// 			ctx.textAlign = "center";
-		// 			ctx.textBaseline = "middle";
-		// 			ctx.fillText("?", x, y);
-		// 		},
-		// 	};
-
-		// 	const size = graphState.degree[id] || 1;
-		// 	const radius = 3 + Math.sqrt(size) * 2; // scale however looks right
-		// 	const fn =
-		// 		shapesByOpenAccess[openacces] ?? shapesByOpenAccess.unknown;
-
-		// 	const isSelected = graphState.selectionState.selectedNodes.some(
-		// 		(s) => s.id === id,
-		// 	);
-
-		// 	const color = isSelected ? "red" : graphState.colorScale(openacces);
-
-		// 	ctx.save();
-		// 	ctx.fillStyle = overrideColor ?? color;
-		// 	fn(x, y, radius, ctx);
-		// 	ctx.restore();
-		// }
 
 		//so i have to get the osc maybe inhereting from graphstate and say that on message /up: actions.navigateUp.
 		//so i need to create a new register controls but for the different cases of incoming messages.
@@ -362,7 +149,7 @@
 				onAltMouseUp: actions.clearSelection,
 				onAltMouseDrag: actions.rectangleSelectionEnd,
 				onCmdA: actions.selectAll,
-				onCmdI: actions.toggleMetadataView,
+				// onCmdI: actions.toggleMetadataView,
 				undo: actions.undo,
 				redo: actions.redo,
 			},
@@ -399,7 +186,6 @@
 			// now nothing happens to the graph ways
 		}
 	});
-	
 
 	onDestroy(() => {
 		graph?.pauseAnimation?.();
@@ -419,6 +205,5 @@
 	.force-graph-container {
 		width: 100%;
 		height: 100%;
-		/* background-color: --background-primary; */
 	}
 </style>
