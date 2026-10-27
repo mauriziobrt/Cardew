@@ -19,7 +19,7 @@
 		selectNode,
 		degree,
 		direction,
-		editDirection
+		editDirection,
 	} = $props();
 	// So I create a set to store these node_ids[]
 	// const node_ids = [...new Set(nodes.map((n) => n.id))];
@@ -92,7 +92,10 @@
 			onclick={() => triggerDelete(links)}
 		></button>
 		direction:
-		<TriStateToggle bind:value={direction} editDirection={() => editDirection()}/>
+		<TriStateToggle
+			bind:value={direction}
+			editDirection={() => editDirection()}
+		/>
 		<!-- <input
 			class="metadata-input-text"
 			type="string"

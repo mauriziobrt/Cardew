@@ -100,32 +100,35 @@
 	});
 </script>
 
-<h2>OSC Configuration</h2>
-<!-- <div class="setting-item"> -->
-{#each classes as oscClass, c}
-	<hr style="margin: 5px;" />
-	<div class="osc-class">
-		<div class="setting-item-heading">Class Name: {oscClass}</div>
-		<section bind:this={oscSort[c]} class="osc-grid">
-			{#each poolKeys(oscClass) as tmpcl, i}
-				<div
-					class="osc-item"
-					data-key={tmpcl}
-					style="--c: var(--color-{COLORS[i % COLORS.length]})"
-				>
-					{tmpcl}
-				</div>
-			{/each}
-		</section>
-
-		<div class="setting-item-heading">OSC Message order:</div>
-
-		<section
-			bind:this={oscCompose[c]}
-			class="osc-grid osc-compose"
-		></section>
-	</div>
-{/each}
+<div class="vertical-tab-content">
+	<h2>OSC Message Composition</h2>
+	<!-- <div class="setting-item"> -->
+	{#each classes as oscClass, c}
+		<hr style="margin: 10px;" />
+		<div class="osc-class">
+			<div>class: <b>{oscClass}</b></div>
+			<span style="margin: 5px;"></span>
+			<section bind:this={oscSort[c]} class="osc-grid">
+				{#each poolKeys(oscClass) as tmpcl, i}
+					<div
+						class="osc-item"
+						data-key={tmpcl}
+						style="--c: var(--color-{COLORS[i % COLORS.length]})"
+					>
+						{tmpcl}
+					</div>
+				{/each}
+			</section>
+			<span style="margin: 5px;"></span>
+			<!-- <div class="setting-item-heading">OSC Message order:</div> -->
+			<div>message order:</div>
+			<section
+				bind:this={oscCompose[c]}
+				class="osc-grid osc-compose"
+			></section>
+		</div>
+	{/each}
+</div>
 
 <style>
 	:global(.osc-grid) {

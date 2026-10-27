@@ -11,7 +11,7 @@
 	import { showNodeMenu } from "src/ui/NodeMenu";
 	import { parseSvg, drawSvg } from "src/utils/svgUtils";
 	import { shapes } from "src/data/shapes";
-	
+
 	interface Props {
 		graphState: GraphState;
 	}
@@ -77,7 +77,9 @@
 			.backgroundColor("rgba(0, 0, 0, 0)")
 			.linkColor(() => linkStaticColor)
 			.linkCurvature(0.2)
-			.onEngineStop(() => {console.log("Physics stopped")})
+			.onEngineStop(() => {
+				console.log("Physics stopped");
+			})
 			.onBackgroundClick(() => {
 				graphState.setupBackgroundClick();
 			})
@@ -106,12 +108,16 @@
 		}
 
 		function nodePaint(
-			{ id, openacces, x, y }: MyNode,
+			node: MyNode,
 			ctx: CanvasRenderingContext2D,
 			overrideColor?: string,
 		) {
+			const { id, openacces, x, y } = node;
+			const prop = graphState.config.current.mappings.property;
+			const rule = graphState.ruleMap.get(String(node[prop]));
 			const radius = 3 + Math.sqrt(graphState.degree[id] || 1) * 2;
-			const fn = shapes[openacces] ?? shapes.unknown;
+			const fn = shapes[rule?.shape] ?? shapes[openacces] ?? shapes.unknown;
+			// const fn = shapes[openacces] ?? shapes.unknown;
 			ctx.save();
 			ctx.fillStyle =
 				overrideColor ??

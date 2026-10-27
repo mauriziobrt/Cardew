@@ -28,21 +28,21 @@ export const shapes: Record<
     string,
     (x: number, y: number, r: number, ctx: CanvasRenderingContext2D) => void
 > = {
-    open: (x, y, r, ctx) => {
+    circle: (x, y, r, ctx) => {
         ctx.beginPath();
         ctx.arc(x, y, r, 0, 2 * Math.PI);
         ctx.fill();
     },
-    closed: (x, y, r, ctx) =>
+    rectangle: (x, y, r, ctx) =>
         ctx.fillRect(x - r, y - r * 0.66, r * 2, r * 1.33),
-    green: (x, y, r, ctx) => {
+    triangle: (x, y, r, ctx) => {
         ctx.beginPath();
         ctx.moveTo(x, y - r);
         ctx.lineTo(x - r, y + r);
         ctx.lineTo(x + r, y + r);
         ctx.fill();
     },
-    gold: (x, y, r, ctx) => {
+    rhombus: (x, y, r, ctx) => {
         ctx.beginPath();
         ctx.moveTo(x, y - r);
         ctx.lineTo(x + r, y);
@@ -62,7 +62,7 @@ export const shapes: Record<
         ctx.strokeStyle = ctx.fillStyle as string;
         ctx.stroke();
     },
-    hybrid: (x, y, r, ctx) => {
+    halfcircle: (x, y, r, ctx) => {
         ctx.beginPath();
         ctx.arc(x, y, r, Math.PI / 2, 1.5 * Math.PI);
         ctx.fill();
@@ -82,3 +82,4 @@ export const shapes: Record<
     },
 };
 
+export const SHAPE_NAMES = Object.keys(shapes);

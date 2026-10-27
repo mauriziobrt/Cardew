@@ -1,6 +1,6 @@
 // config.ts
 export interface PluginConfig {
-	textDisplayProperty: string;
+    textDisplayProperty: string;
     dagMode: string;
     osc: {
         localPort: number;
@@ -18,6 +18,7 @@ export interface PluginConfig {
     paths: {
         defaultDataPath: string;
     };
+    mappings: { property: string; rules: { value: string; shape: string; color: string }[] };
     colors: {
         gold: string;
         green: string;
@@ -74,7 +75,11 @@ export const DEFAULT_CONFIG: PluginConfig = {
     hasEdits: false,
     physicsOn: true,
     navMode: "free",
-    directionToggle: true
+    directionToggle: true,
+    mappings: {
+        property: "",
+        rules: []
+    }
 };
 
 // Reactive config class
@@ -88,6 +93,11 @@ export class Config {
 
     update(updates: Partial<PluginConfig>) {
         this.config = { ...this.config, ...updates };
+        this.notifyListeners();
+    }
+
+    updateMappings(m: PluginConfig['mappings']) {
+        this.config.mappings = m;
         this.notifyListeners();
     }
 

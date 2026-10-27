@@ -37,10 +37,14 @@ class ShapeConfigModal extends Modal {
 		this.component = mount(ShapePanelComponent, {
 			target: this.contentEl,
 			props: {
+				allProperties: this.plugin.graphState.allProperties,
+				allValuesAtProperty: this.plugin.graphState.allValuesAtProperty,
+				onSave: async () => {
+					await this.plugin.config.save(this.plugin);
+					this.plugin.graphState.updateData(this.plugin.graphState.graphData);
+				},
+				onClose: () => this.close(),
 				graphState: this.plugin.graphState,
-				oscConfig: this.plugin.oscConfig,
-				onSave: async () => this.plugin.saveData({ ...(await this.plugin.loadData()), oscConfig: this.plugin.oscConfig }),
-				onClose: () => this.close()
 			}
 		});
 	}

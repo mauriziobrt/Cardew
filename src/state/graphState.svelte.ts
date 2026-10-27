@@ -41,6 +41,11 @@ export class GraphState {
     globalScale = $state<number>(0);
     multiSelect = $state<boolean>(false);
     nodeIdCounter = $state<number>(0);
+    ruleMap = $derived(
+        new Map(
+            this.config.current.mappings.rules.map(r => [r.value, r])
+        )
+    );
     nodeClasses = $state<Record<string, any>>({
         "bibliometrics": {
             "id": "",
@@ -121,7 +126,7 @@ export class GraphState {
     // Update/Edit Data
     //====================================================================================
     // Function to load data in the form of json files
-    updateData(data: GraphData) {
+    updateData(data: MyGraphData) {
         this.graphData = data;
         // ADD THIS CHECK:
         if (!this.graph) {
@@ -687,6 +692,7 @@ export class GraphState {
     //=======================================================================================
     // Creative Mode Components
     //=======================================================================================
+
     setupCreativeConfig() {
         // TODO: function to enable creative mode, which causes the graph to be more static
         // creativeConfig;
