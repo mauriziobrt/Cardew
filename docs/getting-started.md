@@ -6,6 +6,7 @@
 
 getting-started/editing-metadata/index
 getting-started/editing-metadata/link-edit
+getting-started/editing-metadata/shape-edit
 ```
 
 ```{toctree}
