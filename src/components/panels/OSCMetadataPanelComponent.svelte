@@ -102,7 +102,6 @@
 
 <div class="vertical-tab-content">
 	<h2>OSC Message Composition</h2>
-	<!-- <div class="setting-item"> -->
 	{#each classes as oscClass, c}
 		<hr style="margin: 10px;" />
 		<div class="osc-class">
@@ -120,7 +119,6 @@
 				{/each}
 			</section>
 			<span style="margin: 5px;"></span>
-			<!-- <div class="setting-item-heading">OSC Message order:</div> -->
 			<div>message order:</div>
 			<section
 				bind:this={oscCompose[c]}

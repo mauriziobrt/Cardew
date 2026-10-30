@@ -15,6 +15,7 @@ import { SelectionState } from './selectionState.svelte';
 import { Notice } from 'obsidian';
 import { FilteringState } from './filteringState.svelte';
 import { idOf, idStr } from "../utils/graphUtils";
+import ForceGraphComponent from 'src/components/ForceGraphComponent.svelte';
 //=======================================================================================
 // Main Graph Class most operations appear here
 
@@ -66,9 +67,21 @@ export class GraphState {
     });
 
 
+    RESERVED = [
+        "x",
+        "y",
+        "vx",
+        "vy",
+        "index",
+        "__indexColor",
+        // "fx",
+        // "fy",
+        "__initialDragPos",
+        "__dragged",
+    ];
+
     reservedKeys = new Set([
         "id",
-        "name",
         "x",
         "y",
         "vx",
@@ -167,6 +180,19 @@ export class GraphState {
     //     console.log(this.config)
     // }
 
+    //claude solution which i don't know
+    valuesByProperty = $derived.by(() => {
+        const map = new Map<string, Set<any>>();
+        for (const n of this.graphData?.nodes ?? []) {
+            for (const k in n) {
+                if (this.RESERVED.includes(k)) continue;   // skip x/y/vx/vy so ticks don't matter
+                (map.get(k) ?? map.set(k, new Set()).get(k)!).add(n[k]);
+            }
+        }
+        return map;
+    });
+    // end of claude
+
     // this should just run on startup, write somewhere and then change when an edit happens
     get allProperties() {
         if (!this.graphData) return [];
@@ -210,6 +236,11 @@ export class GraphState {
     directionOn(state: boolean) {
         this.config.current.directionToggle = state;
         this.graph?.linkDirectionalArrowLength(state ? 12 : 0);
+    }
+
+    textOverlayOn(state: boolean) {
+        this.config.current.textOverlay = state;
+        this.updateGraphData();
     }
 
     //========================================================
@@ -349,7 +380,9 @@ export class GraphState {
     applyNodeClass(className: string | number) {
         if (!this.selectionState.selectedNodes[0] || !this.nodeClasses[className]) return;
         this.pushUndo();
-        this.metadataState.applyNodeClass(this.selectionState.selectedNodes[0], className, this.nodeClasses[className]);
+        for (const n of this.selectionState.selectedNodes) {
+            this.metadataState.applyNodeClass(n, className, this.nodeClasses[className]);
+        }
         this.updateGraphData();
     }
 

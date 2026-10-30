@@ -1,7 +1,15 @@
+<!-- Info Panel Component
+Here we have some of the settings that
+users should be able to change in real time,
+without having to navigate to the settings menu.GraphState
+TODO: change graphState pass to passing only
+the config. The functions for editing like physics will
+also be passed singularly. It doesn't make sense to
+pass the entire graph.
+  -->
 <script lang="ts">
 	import { Notice } from "obsidian";
 	import type { GraphState } from "../../state/graphState.svelte";
-	import MetadataPlus from "./PanelMetadataPlus.svelte";
 	import PanelEditInputProperty from "./PanelEditInputProperty.svelte";
 
 	interface Props {
@@ -115,18 +123,6 @@
 		input.click();
 	}
 
-	// function saveGraph() {
-	// 	const fs = require("fs");
-
-	// 	snapGraph = JSON.stringify(graphState.snapshot(), null, 2);
-	// 	fs.writeFile("/tmp/peppino.json", snapGraph, function (err) {
-	// 		if (err) {
-	// 			console.log(err);
-	// 		}
-	// 	});
-	// 	alert("peppino.json saved");
-	// }
-
 	function enableCreative() {
 		// if (creativeEnabled) {
 		// 	creativeEnabled = false;
@@ -172,10 +168,54 @@
 	function updateTextPropertyDisplay() {
 		graphState.updateGraphData();
 	}
+
+	function enableTextOverlay(
+		event: Event & { currentTarget: EventTarget & HTMLInputElement },
+	) {
+		if (graphState.config.current.textOverlay) {
+			graphState.textOverlayOn(true);
+		} else {
+			graphState.textOverlayOn(false);
+		}
+	}
 </script>
 
 <div class="info-panel">
-	<PanelEditInputProperty bind:metaName={graphState.config.current.textDisplayProperty} allProperties={graphState.allProperties} onChange={updateTextPropertyDisplay} />
+	<div class="setting-item">
+		<div class="setting-item-info">
+			<div class="setting-item-name">Toggle text overlay</div>
+			<div class="setting-item-description">
+				Toggle text display over nodes
+			</div>
+		</div>
+		<div class="setting-item-value">
+			<div
+				class:is-enabled={graphState.config.current.textOverlay}
+				class="checkbox-container"
+			>
+				<input
+					type="checkbox"
+					bind:checked={graphState.config.current.textOverlay}
+					onchange={enableTextOverlay}
+				/>
+			</div>
+		</div>
+	</div>
+	<div class="setting-item">
+		<div class="setting-item-info">
+			<div class="setting-item-name">Text overlay property</div>
+			<div class="setting-item-description">
+				Select which property to display over nodes
+			</div>
+		</div>
+		<div class="setting-item-control">
+			<PanelEditInputProperty
+				bind:metaName={graphState.config.current.textDisplayProperty}
+				allProperties={graphState.allProperties}
+				onChange={updateTextPropertyDisplay}
+			/>
+		</div>
+	</div>
 
 	<div class="setting-item">
 		<div class="setting-item-info">

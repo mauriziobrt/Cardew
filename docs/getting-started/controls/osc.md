@@ -17,6 +17,7 @@ Users can select for each class which proeprties to send via OSC, and their orde
 
 ![The view with the OSC message out configuration](../../_static/images/osc-config-view.png)
  
+The OSC message composer is divided in two parts for each class: the top part contains all of the available properties for a class, the bottom part the selected properties in order that will be sent to the 
 
 ## Message in
 Cardew can receive messages in through OSC, sending to the predefined port (to edit the OSC port, check settings (LINK Missing))

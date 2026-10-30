@@ -43,6 +43,23 @@
 		"__initialDragPos",
 		"__dragged",
 	];
+	const RESERVED_SET = new Set(RESERVED);
+
+	const allProps = $derived.by(() => {
+		const s = new Set<string>();
+		for (const n of graphState.graphData?.nodes ?? [])
+			for (const k of Object.keys(n)) if (!RESERVED_SET.has(k)) s.add(k);
+		return [...s];
+	});
+
+	const entries = $derived.by(() => {
+		const i = graphState.selectionState.selectedNodeIndex;
+		const node = i !== null ? graphState.graphData?.nodes[i] : null;
+		if (!node) return [];
+		return Object.keys(node)
+			.filter((k) => !RESERVED.includes(k))
+			.map((k) => [k, node[k]] as const);
+	});
 
 	function handleAdd(metaName: string, metaValue: any) {
 		if (!graphState.selectionState.selectedNodes[0] || !metaName?.trim())
@@ -120,23 +137,23 @@
 							graphState.graphData.nodes[
 								graphState.selectionState.selectedNodeIndex
 							]}
-
 						{#if node}
-							{#each Object.entries(node).filter(([key]) => !RESERVED.includes(key)) as [key, value] (key)}
+							{#each entries as [key, value] (key)}
 								<Panel
 									name={key}
-									dict={graphState.graphData.nodes[
-										graphState.selectionState
-											.selectedNodeIndex
-									]}
+									dict={node}
 									onDeleteMetadata={handleDelete}
 									onKeydown={handleKeydown}
-									allProperties={graphState.allProperties}
-									allPropertyValues={graphState.allValuesAtProperty(
-										key,
-									)}
+									allProperties={allProps}
+									allPropertyValues={() =>
+										graphState.allValuesAtProperty(key)}
 								/>
 							{/each}
+							<datalist id="all-properties-no-reserved">
+								{#each allProps.slice(0, 10) as id (id)}
+									<option value={id}></option>
+								{/each}
+							</datalist>
 						{/if}
 					{/if}
 				{/if}

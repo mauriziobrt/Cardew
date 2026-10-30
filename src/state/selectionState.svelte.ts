@@ -10,7 +10,7 @@ export class SelectionState {
     // selectedNode = $state(null) as MyNode | null;
     selectedNodes = $state<Array<MyNode>>([]);
     multiSelect = $state<boolean>(false);
-    selectedNodeIndex = $state<number | null>(null);
+    selectedNodeIndex = $state<number[] | null>(null);
     // previousSelectedId: string | null = null;
     selectionStartMouse: { x: number, y: number } | null = null;
     selectionEndMouse: { x: number, y: number } | null = null
@@ -47,15 +47,20 @@ export class SelectionState {
         // this.selectedNode = node;
         if (node.id) {
             // this.previousSelectedId = node.id;
-            this.selectedNodeIndex = nodes.indexOf(node);
             if (this.multiSelect) {
                 // if it's not there yet then add - don't create duplicates
                 if (!this.selectedNodes.includes(node)) {
                     this.selectedNodes.push(node);
                 }
+                if (this.selectedNodeIndex) {
+                    if (!this.selectedNodeIndex.includes(nodes.indexOf(node))) {
+                        this.selectedNodeIndex.push(nodes.indexOf(node));
+                    }
+                }
                 // console.log("Selected multiple nodes: ", [...this.selectedNodes]);
             } else {
                 // graph.nodeColor(n => n.id === this.selectedNode.id ? 'red' : this.getColorScale()(n.openacces));
+                this.selectedNodeIndex = [nodes.indexOf(node)];
                 this.selectedNodes = [node];
                 if (this.getConfig().config.centerAtNode.modeEnabled) {
                     graph.centerAt(node.x, node.y, 300);
@@ -72,8 +77,8 @@ export class SelectionState {
                     new Notice("Element has no class");
                 } else {
                     const currentClass = [node.className];
-                    const oscConfig = this.getOscConfig()[currentClass[0]];
-                    // console.log(oscConfig);
+                    let oscConfig = this.getOscConfig()[currentClass[0]];
+                    console.log(this.getOscConfig()[currentClass[0]], oscConfig, currentClass[0], this.getOscConfig());
                     const values = (oscConfig ?? []).map((k) => this.resolveParam(node, k));
                     const oscMsg = currentClass.concat(values)
                     this.getOsc().sendMessage('/control', oscMsg);

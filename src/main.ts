@@ -77,8 +77,8 @@ class OSCConfigModal extends Modal {
 			target: this.contentEl,
 			props: {
 				graphState: this.plugin.graphState,
-				oscConfig: this.plugin.oscConfig,
-				onSave: async () => this.plugin.saveData({ ...(await this.plugin.loadData()), oscConfig: this.plugin.oscConfig }),
+				oscConfig: this.plugin.graphState.oscConfig,
+				onSave: async () => this.plugin.saveData({ ...(await this.plugin.loadData()), oscConfig: this.plugin.graphState.oscConfig }),
 				onClose: () => this.close()
 			}
 		});

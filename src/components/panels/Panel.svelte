@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Menu } from "obsidian";
-	import { onMount } from "svelte";
+	import { onMount, untrack } from "svelte";
 	let {
 		name,
 		dict = $bindable(),
@@ -18,6 +18,16 @@
 	// });
 
 	let listEl: string[] = $state(["text"]);
+
+	//claude from here
+
+	let options: string[] = $state([]);
+
+	function loadOptions() {
+		options = untrack(() => [...allPropertyValues()]).slice(0, 10);
+	}
+
+	//till here
 
 	onMount(() => {
 		// setIcon(btnEl, "x");
@@ -147,15 +157,10 @@
 			autocapitalize="none"
 			enterkeyhint="next"
 			type="text"
-			aria-label="duration"
+			aria-label={name}
 			list="all-properties-no-reserved"
-			bind:value={name}
+			value={name}
 		/>
-		<datalist id="all-properties-no-reserved">
-			{#each allProperties.slice(0, 10) as id}
-				<option value={id}></option>
-			{/each}
-		</datalist>
 	</div>
 	<!-- VALUE PART -->
 	<div class="metadata-property-value" data-property-type="multitext">
@@ -173,11 +178,13 @@
 					type={currentType}
 					bind:value={dict[name]}
 					onkeydown={onKeydown}
+					onfocus={loadOptions}
+					oninput={loadOptions}
 					list="metadata-values-{name}"
 				/>
 				{#if currentType == "string"}
 					<datalist id="metadata-values-{name}">
-						{#each allPropertyValues.slice(0, 10) as nd}
+						{#each options as nd (nd)}
 							<option value={nd}></option>
 						{/each}
 					</datalist>

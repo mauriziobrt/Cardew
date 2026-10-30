@@ -1,5 +1,6 @@
 // config.ts
 export interface PluginConfig {
+	textOverlay: boolean;
     textDisplayProperty: string;
     dagMode: string;
     osc: {
@@ -79,7 +80,8 @@ export const DEFAULT_CONFIG: PluginConfig = {
     mappings: {
         property: "",
         rules: []
-    }
+    },
+    textOverlay: true
 };
 
 // Reactive config class

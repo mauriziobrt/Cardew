@@ -16,10 +16,12 @@
 	// 	onselect,
 	// }: { items: string[]; onselect?: (item: string) => void } = $props();
 
+	let propertyName: string = $state("description");
+
 	let items = $derived(
 		graphState.graphData?.nodes.map((n) => ({
 			id: n.id,
-			description: n.description,
+			description: n[propertyName],
 		})) ?? [],
 	);
 
@@ -62,8 +64,21 @@
 	// }
 </script>
 
-<div class="search-input-container">
-	<input type="text" placeholder="Search..." bind:value={query} />
+<div>
+	<span>
+		<input
+			class="metadata-property-key-input"
+			type="text"
+			list="metadata-property-list"
+			enterkeyhint="next"
+			bind:value={propertyName}
+			placeholder="Metadata Name"
+			style="background-color:white"
+		/>
+	</span>
+	<div class="search-input-container">
+		<input type="text" placeholder="Search..." bind:value={query} />
+	</div>
 </div>
 
 <!-- Ok I iterate through them but I should get the node object as well to recall it -->
@@ -83,7 +98,7 @@
 						>
 							<div class="setting-item-info">
 								<div class="setting-item-name">
-									{item}
+									{id} - {item}
 								</div>
 								<div class="setting-item-description"></div>
 							</div>

@@ -124,7 +124,7 @@
 		<span style="padding: var(--metadata-input-padding);">Class</span>
 	</div>
 	<div class="metadata-property-value">
-		{className}
+		<span style="padding: var(--metadata-input-padding);">{className}</span>
 	</div>
 	<button onclick={openMenu}>Edit</button>
 </div>

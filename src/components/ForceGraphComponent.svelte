@@ -51,11 +51,13 @@
 					ctx.textAlign = "center";
 					ctx.textBaseline = "bottom";
 					ctx.fillStyle = "#222";
-					ctx.fillText(
-						node[graphState.config.current.textDisplayProperty],
-						node.x,
-						node.y - 6,
-					); // 6 ≈ node radius + padding
+					if (graphState.config.current.textOverlay) {
+						ctx.fillText(
+							node[graphState.config.current.textDisplayProperty],
+							node.x,
+							node.y - 6,
+						); // 6 ≈ node radius + padding
+					}
 				},
 			)
 			.nodePointerAreaPaint(({ id, x, y }, color, ctx) => {
@@ -116,7 +118,8 @@
 			const prop = graphState.config.current.mappings.property;
 			const rule = graphState.ruleMap.get(String(node[prop]));
 			const radius = 3 + Math.sqrt(graphState.degree[id] || 1) * 2;
-			const fn = shapes[rule?.shape] ?? shapes[openacces] ?? shapes.unknown;
+			const fn =
+				shapes[rule?.shape] ?? shapes[openacces] ?? shapes.unknown;
 			// const fn = shapes[openacces] ?? shapes.unknown;
 			ctx.save();
 			ctx.fillStyle =
