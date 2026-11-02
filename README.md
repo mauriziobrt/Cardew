@@ -30,7 +30,7 @@ Extended documentation can be found at [Cardew Docs](https://mauriziobrt.github.
 | **Custom node shapes and colours depending on class-dependent custom metadata properties** | October 2026 | X |
 | **Edit Link Directionality** | October 2026 | X |
 | **Graph commands using Obsidian's hotkeys** | October 2026 | X |
-| **Send continuous position of Node through OSC (toggle)** | October 2026 | |
+| **Send continuous position of Node through OSC (toggle)** | October 2026 | X |
 | **Export** | October 2026 | |
 | **Stats View**  | November 2026 | |
 | **Transition Interaction Re-implementation**  | November 2026 | |
