@@ -18,6 +18,7 @@ import { Config, DEFAULT_CONFIG } from 'src/config.svelte';
 import { ForceGraphSettingTab } from './ui/SettingsTab';
 import { OSReplView, VIEW_TYPE_OSREPL } from './osrepl/OSReplView';
 import { createOSReplState, OSReplState } from './osrepl/osreplState.svelte';
+// import data from "../src/data/metadataFields.json"
 
 //================================================================================================
 // Node Shapes and Color Panel
@@ -383,6 +384,7 @@ export default class ExamplePlugin extends Plugin {
 			//Initialize config
 			this.config = new Config();
 			await this.config.load(this);
+			this.config.onChange(() => this.config.save(this));
 
 			await this.initializeOSC();
 			this.replState = createOSReplState(this.oscManager);
@@ -403,6 +405,7 @@ export default class ExamplePlugin extends Plugin {
 			const fileLoader = new FileLoader(this.graphState);
 			const dataPath = this.config.current.paths.defaultDataPath + '/5-co-cit-coupling.json';// /sandbox.json 5-co-cit-coupling
 
+			// Try loading the graph
 			try {
 				await fileLoader.loadGraphData(dataPath);
 				this.dataLoadedResolve();
@@ -410,8 +413,9 @@ export default class ExamplePlugin extends Plugin {
 				console.error("Failed to load graph data:", error);
 				this.dataLoadedResolve();
 			}
-			const fruits = this.addStatusBarItem();
-			fruits.createEl('span', { text: 'Cardew © Maurizio Berta, 2026' });
+
+			const statusBar = this.addStatusBarItem();
+			statusBar.createEl('span', { text: 'Cardew © Maurizio Berta, 2026' });
 
 			this.registerView(
 				VIEW_TYPE_FORCE_GRAPH,
@@ -444,7 +448,7 @@ export default class ExamplePlugin extends Plugin {
 
 			this.addRibbonIcon(
 				'folder-pen',
-				'Load New Graph',
+				'Create New Graph',
 				async () => {
 					const fileLoader = new FileLoader(this.graphState);
 					const dataPath = this.config.current.paths.defaultDataPath + '/sandbox.json';// /sandbox.json 5-co-cit-coupling

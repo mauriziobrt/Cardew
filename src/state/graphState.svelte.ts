@@ -15,7 +15,9 @@ import { SelectionState } from './selectionState.svelte';
 import { Notice } from 'obsidian';
 import { FilteringState } from './filteringState.svelte';
 import { idOf, idStr } from "../utils/graphUtils";
-import ForceGraphComponent from 'src/components/ForceGraphComponent.svelte';
+//import ForceGraphComponent from 'src/components/ForceGraphComponent.svelte';
+// import data from "../data/metadataFields.json";
+
 //=======================================================================================
 // Main Graph Class most operations appear here
 
@@ -47,24 +49,26 @@ export class GraphState {
             this.config.current.mappings.rules.map(r => [r.value, r])
         )
     );
-    nodeClasses = $state<Record<string, any>>({
-        "bibliometrics": {
-            "id": "",
-            "user": "",
-            "description": "",
-            "year": "",
-            "openacces": "",
-            "citations": 0,
-            "subject areas": [],
-            "scival topics cluster": [],
-            "scival topics": []
-        },
-        "notes": {
-        },
-        "granulator": {
-            "grainSize": 0,
-        }
-    });
+    get nodeClasses() { return this.config.current.nodeClasses; }
+    // nodeClasses= $state<Record<string, any>>(data);
+    // nodeClasses = $state<Record<string, any>>({
+    //     "bibliometrics": {
+    //         "id": "",
+    //         "user": "",
+    //         "description": "",
+    //         "year": "",
+    //         "openacces": "",
+    //         "citations": 0,
+    //         "subject areas": [],
+    //         "scival topics cluster": [],
+    //         "scival topics": []
+    //     },
+    //     "notes": {
+    //     },
+    //     "granulator": {
+    //         "grainSize": 0,
+    //     }
+    // });
 
 
     RESERVED = [
@@ -128,7 +132,7 @@ export class GraphState {
         // Called when the graphState is built
         this.oscManager = oscManager;
         this.config = config;
-        // Initialize OSC
+        // Initialize OSC¨
     };
     // Here I store the Graph to access it's functions
     theGraph(graph: ForceGraph) {
@@ -151,7 +155,9 @@ export class GraphState {
         this.directionOn(this.config.current.directionToggle);
         // Update Colors
         this.colorScale = this.createColorScale();
+        //this does the same thing as in nodePaint in ForceGraphComponent.svelte
         this.graph.nodeColor((node) => this.colorScale(node.openacces));
+
         // this.graph.nodeColor((n: Node) => n.highlighted ? 'red' : this.colorScale(n.openacces));
         // console.log("LENGTH", data["nodes"]);
         this.numberElements = data["nodes"].length;
@@ -165,6 +171,7 @@ export class GraphState {
         if (!this.graphData || !this.graph) return [];
         this.graph.graphData({ nodes: this.graphData.nodes, links: this.graphData.links });
         this.updateDegree();
+        this.syncTracked();
     };
 
     // this should just run on startup, write somewhere and then change when an edit happens
@@ -387,10 +394,16 @@ export class GraphState {
     }
 
     saveNodeAsClass(className: string, overwrite: boolean) {
-        // if overwrite on I can saveToExistingClas|| !this.graphData
-        if (!this.selectionState.selectedNodes[0]) return [];
+        if (!this.selectionState.selectedNodes[0]) return;
+        if (!overwrite && this.nodeClasses[className]) return;
         const fields = this.metadataState.getEmptyFields(this.selectionState.selectedNodes[0]);
-        this.nodeClasses[className] = fields;
+        this.config.setNodeClass(className, fields);
+        // this.config.save(this.plugin); // you need a plugin reference here, or call save from main via onChange
+        // if overwrite on I can saveToExistingClas|| !this.graphData
+        // if (!this.selectionState.selectedNodes[0]) return [];
+        // const fields = this.metadataState.getEmptyFields(this.selectionState.selectedNodes[0]);
+        // this.nodeClasses[className] = fields;
+
     }
 
     //====================================================================================
@@ -514,6 +527,41 @@ export class GraphState {
         );
     }
     //====================================================================================
+    // Tracking (from Claude)
+    //====================================================================================
+
+    // in GraphState
+    trackedIds = new Set<string | number>();
+    lastPos = new Map<string | number, { x: number; y: number }>();
+
+    syncTracked() {
+        this.trackedIds.clear();
+        for (const n of this.graph?.graphData().nodes ?? []) {
+            if (String(n.Tracking) === "true") this.trackedIds.add(n.id);
+        }
+    }
+
+    checkTrackedNodes() {
+        for (const id of this.trackedIds) {
+            const node = this.getNodeAtID(id);
+            if (!node) continue;
+            const x = node.fx ?? node.x;
+            const y = node.fy ?? node.y;
+            const prev = this.lastPos.get(id);
+            if (!prev || prev.x !== x || prev.y !== y) {
+                this.lastPos.set(id, { x, y });
+                this.onTrackedNodeMoved(node, x, y);
+            }
+        }
+    }
+
+    onTrackedNodeMoved(node: MyNode, x: number, y: number) {
+        // your function
+        // console.log("TRACCANDO", node, x, y)
+        this.selectionState.sendOSCMessagePos(node);
+    }
+
+    //====================================================================================
     // Data Selection
     //====================================================================================
 
@@ -530,8 +578,9 @@ export class GraphState {
     selectAll() {
         if (!this.graph || !this.graphData) return;
         this.selectionState.toggleMultiselect(true);
+        // console.log(data)
         // get all the nodes of the graph
-        console.log("ALL", this.graphData.nodes)
+        //console.log("ALL", this.graphData.nodes)
         // this.graphData.nodes;
         this.graphData.nodes.map((singleNode) => this.selectionState.selectNode(singleNode, this.graph, this.graphData.nodes));
         // this.selectionState.selectNode(this.graphData.nodes, this.graph, this.graphData.nodes);
@@ -563,6 +612,7 @@ export class GraphState {
     }
     drawOverlay(ctx: CanvasRenderingContext2D, globalScale: number) {
         // this.selectionState.drawOverlay(ctx, globalScale, this.graphData, this.graph);
+        this.checkTrackedNodes();
         // Function to draw on top of the canvas
         this.ctx = ctx;
         // globalScale is the zoom value but not necessary at the moment
@@ -821,13 +871,12 @@ export class GraphState {
     resetCrossCursor() { this.cursor.resetCursor(); };
 
     public createColorScale(): d3.ScaleOrdinal<string, string> {
-        // if (!this.graphData) return;
-        // const nodes = this.graphData.nodes;
-        // //change here so new colorscale can get created with different configs, maybe just for each class a specific color? idk
-        // const userValues = [
-        //     ...new Set(nodes.map((node) => node.openacces)),
-        // ];
-        // console.log(userValues);
+        // change here so new colorscale can get created with different 
+        // configs, maybe just for each class a specific color? idk
+        // this creates an ordinal scale and just receiving the color
+        // string, but then like these are ordinal, maybe not scaleOrdinal
+        // then. Well but I am setting the colors per class now, so
+        // maybe not neeeded here. But will be useful in the future.
         const COLORS = this.config.current.colors;
         const statuses = Object.keys(COLORS);
         // Map custom colors to the domain values

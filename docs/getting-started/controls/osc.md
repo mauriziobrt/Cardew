@@ -11,6 +11,11 @@ Cardew sends message out when a node is selected and using the different interac
 - Rhythmic
 - Transition
 
+### Tracking a node position
+
+To track a single node position, open the metadata view, then add a property Tracking with value set to true.
+
+
 ### Configuring message out
 Message out are class dependent, and are configured in the OSC Configuration view, accessible in the sidebar.
 Users can select for each class which proeprties to send via OSC, and their order.

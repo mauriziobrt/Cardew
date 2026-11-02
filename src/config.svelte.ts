@@ -1,6 +1,7 @@
+import defaultNodeClasses from "./data/metadataFields.json"
 // config.ts
 export interface PluginConfig {
-	textOverlay: boolean;
+    textOverlay: boolean;
     textDisplayProperty: string;
     dagMode: string;
     osc: {
@@ -38,6 +39,7 @@ export interface PluginConfig {
     physicsOn: boolean;
     navMode: string;
     directionToggle: boolean;
+    nodeClasses: Record<string, any>;
 }
 
 export const DEFAULT_CONFIG: PluginConfig = {
@@ -81,7 +83,8 @@ export const DEFAULT_CONFIG: PluginConfig = {
         property: "",
         rules: []
     },
-    textOverlay: true
+    textOverlay: true,
+    nodeClasses: defaultNodeClasses
 };
 
 // Reactive config class
@@ -113,6 +116,21 @@ export class Config {
         this.notifyListeners();
     }
 
+    setNodeClass(name: string, fields: Record<string, any>) {
+        this.config.nodeClasses[name] = fields;
+        this.notifyListeners();
+    }
+
+    deleteNodeClass(name: string) {
+        delete this.config.nodeClasses[name];
+        this.notifyListeners();
+    }
+
+    resetNodeClasses() {
+        this.config.nodeClasses = structuredClone(defaultNodeClasses);
+        this.notifyListeners();
+    }
+
     onChange(callback: (config: PluginConfig) => void) {
         this.listeners.add(callback);
         return () => this.listeners.delete(callback);
@@ -123,7 +141,9 @@ export class Config {
     }
 
     async save(plugin: any) {
-        await plugin.saveData(this.config);
+        const existing = (await plugin.loadData()) ?? {};
+        await plugin.saveData({ ...existing, ...$state.snapshot(this.config) });
+        // await plugin.saveData(this.config);
     }
 
     async load(plugin: any) {

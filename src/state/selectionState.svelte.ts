@@ -34,6 +34,31 @@ export class SelectionState {
         }
     }
     //====================================================================================
+    // OSC Message from selected node
+    //====================================================================================
+
+    sendOSCMessage(node: MyNode) {
+        if (!node.className) {
+            new Notice("Element has no class");
+        } else {
+            const currentClass = [node.className];
+            let oscConfig = this.getOscConfig()[currentClass[0]];
+            console.log(this.getOscConfig()[currentClass[0]], oscConfig, currentClass[0], this.getOscConfig());
+            const values = (oscConfig ?? []).map((k) => this.resolveParam(node, k));
+            const oscMsg = currentClass.concat(values)
+            this.getOsc().sendMessage('/control', oscMsg);
+        }
+    }
+
+    sendOSCMessagePos(node: MyNode) {
+        {
+            const oscMsg = [node.id, node.x, node.y];
+            // console.log(oscMsg);
+            this.getOsc().sendMessage('/control', oscMsg);
+        }
+    }
+
+    //====================================================================================
     // Data Selection
     //====================================================================================
     toggleMultiselect(toggle: boolean) {

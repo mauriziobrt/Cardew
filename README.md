@@ -11,6 +11,8 @@ The name is inspired by Cornelius Cardew's graphical scores.
 In Obsidian, create a new Vault (see [Obsidian Docs](https://obsidian.md/)). Clone the reposityory inside the vault's folder at ```vault-name/.obsidian/plugins```.
 In Obsidian's setting allow for external plugin and enable Cardew.
 
+Inside the folder: npm install and npm run dev.
+
 Extended documentation can be found at [Cardew Docs](https://mauriziobrt.github.io/Cardew)
 
 ## Build Documentation
@@ -25,13 +27,13 @@ Extended documentation can be found at [Cardew Docs](https://mauriziobrt.github.
 
 | **Features** | **Release** | **Status** |
 |-|-| -|
+| **Custom node shapes and colours depending on class-dependent custom metadata properties** | October 2026 | X |
+| **Edit Link Directionality** | October 2026 | X |
+| **Graph commands using Obsidian's hotkeys** | October 2026 | X |
 | **Send continuous position of Node through OSC (toggle)** | October 2026 | |
-| **Custom node shapes and colours depending on class-dependent custom metadata properties** | October 2026 | |
 | **Export** | October 2026 | |
-| **Edit Link Directionality** | October 2026 | |
-| **Graph commands using Obsidian's hotkeys** | October 2026 | |
-| **Stats View**  | October 2026 | |
-| **Transition Interaction Re-implementation**  | October 2026 | |
+| **Stats View**  | November 2026 | |
+| **Transition Interaction Re-implementation**  | November 2026 | |
 | **Cluster Nodes**  | November 2026 | |
 | **Link Interaction**  | November 2026 | |
 | **Examples in Docs**  | November 2026 | *Development* |

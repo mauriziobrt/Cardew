@@ -9,7 +9,7 @@
 	import ForceGraph from "force-graph";
 	import type { MyNode } from "src/types/graph";
 	import { showNodeMenu } from "src/ui/NodeMenu";
-	import { parseSvg, drawSvg } from "src/utils/svgUtils";
+	// import { parseSvg, drawSvg } from "src/utils/svgUtils";
 	import { shapes } from "src/data/shapes";
 
 	interface Props {
@@ -87,6 +87,9 @@
 			})
 			.onRenderFramePost(
 				(ctx: CanvasRenderingContext2D, globalScale: number) => {
+					//if position different than lost position
+					// const lastPost = (but it should for each tracked node, so we need a sort of dict when we get the node something like [id, lastpost: x, y, pos: x, y])
+					// console.log(graphState.graphData?.nodes[0]["x"], graphState.graphData?.nodes[0]["y"]);
 					graphState.drawOverlay(ctx, globalScale);
 				},
 			)
@@ -109,6 +112,9 @@
 			graphState.updateData(graphState.graphData);
 		}
 
+		//In nodePaint the shapes and colors are created.
+		//the thing is that graphState.colorScale() is a sort
+		//of map between a property and some data
 		function nodePaint(
 			node: MyNode,
 			ctx: CanvasRenderingContext2D,
@@ -117,6 +123,7 @@
 			const { id, openacces, x, y } = node;
 			const prop = graphState.config.current.mappings.property;
 			const rule = graphState.ruleMap.get(String(node[prop]));
+			// console.log("RULE", rule?.color);
 			const radius = 3 + Math.sqrt(graphState.degree[id] || 1) * 2;
 			const fn =
 				shapes[rule?.shape] ?? shapes[openacces] ?? shapes.unknown;
@@ -126,7 +133,7 @@
 				overrideColor ??
 				(selectedIds.has(id)
 					? "red"
-					: graphState.colorScale(openacces));
+					: rule?.color); //graphState.colorScale(openacces))
 			fn(x, y, radius, ctx);
 			ctx.restore();
 		}
