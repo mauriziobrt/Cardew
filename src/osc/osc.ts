@@ -43,7 +43,7 @@ export class OSCManager {
         let isReady = false;
 
         // Bind with error handling
-        this.socket.bind(localPort, (err) => {
+        this.socket.bind(localPort, (err: any) => {
             if (err) {
                 console.error(`Failed to bind to port ${localPort}:`, err);
                 throw err;

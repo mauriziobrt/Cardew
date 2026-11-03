@@ -1,4 +1,4 @@
-import defaultNodeClasses from "./data/metadataFields.json"
+import * as defaultNodeClasses from "./data/metadataFields.json"
 // config.ts
 export interface PluginConfig {
     textOverlay: boolean;

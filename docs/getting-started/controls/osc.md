@@ -34,5 +34,7 @@ Cardew can receive messages in through OSC, sending to the predefined port (to e
 - **Move node**: ```/move id dimension value```
     - Given a node **id**, the dimension (**x** or **y**) and a position value, move the selected node to the declared position. Interpolation happens at the graph level, to avoid OSC overload.
     **Example**: ```/move node0 x 50.3```
+- **Real time physics control**: CURRENT DEVELOPMENT
 
 An user can develop and extend these messages by editing the file ```/src/interaction/control.ts``` and create new mappings.
+

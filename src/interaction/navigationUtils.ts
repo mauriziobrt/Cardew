@@ -103,8 +103,8 @@ function findClosestNodeInDirection(
         if (node)
             if (node.id === currentNodeId) continue; // Compare by ID, not reference
 
-        const nodeX = node.x ?? 0;
-        const nodeY = node.y ?? 0;
+        const nodeX = node?.x ?? 0;
+        const nodeY = node?.y ?? 0;
 
         const dx = nodeX - currentX;
         const dy = nodeY - currentY;

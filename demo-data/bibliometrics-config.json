@@ -1,0 +1,125 @@
+{
+  "textDisplayProperty": "name",
+  "osc": {
+    "localPort": 57122,
+    "remoteAddress": "127.0.0.1",
+    "remotePort": 57120,
+    "ipVersion": "udp4"
+  },
+  "graph": {
+    "nodeSize": 8,
+    "linkWidth": 2.5,
+    "alphaDecay": 0.01,
+    "velocityDecay": 0.9,
+    "cooldownTicks": 200
+  },
+  "paths": {
+    "defaultDataPath": "/Users/maurizioberta/Documents/Development/graph-sonification/public/data"
+  },
+  "colors": {
+    "gold": "#fff260a7",
+    "green": "#cdfec5a6",
+    "diamond": "#1eeff6a1",
+    "closed": "#d4d4d466",
+    "hybrid": "#cf6acc7e"
+  },
+  "creative": {
+    "modeEnabled": true
+  },
+  "centerAtNode": {
+    "modeEnabled": true
+  },
+  "newName": "nodo",
+  "dagMode": "null",
+  "hasEdits": true,
+  "physicsOn": true,
+  "navMode": "free",
+  "directionToggle": true,
+  "mappings": {
+    "property": "openacces",
+    "rules": [
+      {
+        "value": "diamond",
+        "shape": "diamond",
+        "color": "#3fcfe9"
+      },
+      {
+        "value": "gold",
+        "shape": "circle",
+        "color": "#fbff05"
+      },
+      {
+        "value": "hybrid",
+        "shape": "halfcircle",
+        "color": "#e665a4"
+      },
+      {
+        "value": "green",
+        "shape": "triangle",
+        "color": "#65e66e"
+      },
+      {
+        "value": "closed",
+        "shape": "rhombus",
+        "color": "#e7dfdf"
+      },
+      {
+        "value": "unknown",
+        "shape": "unknown",
+        "color": "#daa9a9"
+      }
+    ]
+  },
+  "textOverlay": false,
+  "nodeClasses": {
+    "bibliometrics": {
+      "id": "",
+      "user": "",
+      "description": "",
+      "year": "",
+      "openacces": "",
+      "citations": 0,
+      "subject areas": [],
+      "scival topics cluster": [],
+      "scival topics": []
+    },
+    "notes": {
+      "pitch": 0,
+      "velocity": 0
+    },
+    "granulator": {
+      "grainSize": 0
+    },
+    "giaoooo": {
+      "user": null,
+      "description": null,
+      "year": null,
+      "openacces": null,
+      "citations": null,
+      "subject areas": null,
+      "scival topics cluster": null,
+      "scival topics": null,
+      "className": null,
+      "pitch": null,
+      "velocity": null,
+      "gianni": null
+    }
+  },
+  "oscConfig": {
+    "bibliometrics": [
+      "user",
+      "scival topics"
+    ],
+    "notes": [
+      "pitch",
+      "x",
+      "velocity",
+      "degree",
+      "x"
+    ],
+    "granulator": [
+      "degree",
+      "grainSize"
+    ]
+  }
+}

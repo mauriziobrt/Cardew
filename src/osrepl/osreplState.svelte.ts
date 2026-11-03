@@ -28,6 +28,7 @@ export class OSReplState {
 	jobs = <Record<string, Job>>({});
 	// nuclearUnlocked = $state(false);
 	oscManager: OSCManager;
+	nuclearUnlocked!: boolean;
 
 	constructor(oscManager: OSCManager) {
 		this.oscManager = oscManager;
@@ -78,7 +79,7 @@ export class OSReplState {
 
 	private osascript(script: string): Promise<string> {
 		return new Promise((resolve, reject) => {
-			exec(`osascript -e '${script.replace(/'/g, "\\'")}'`, (err, stdout) => {
+			exec(`osascript -e '${script.replace(/'/g, "\\'")}'`, (err: any, stdout: string) => {
 				if (err) reject(err);
 				else resolve(stdout.trim());
 			});
@@ -146,7 +147,7 @@ export class OSReplState {
 	// 	});
 	// }
 
-	doTrack(software: string) {
+	doTrack(software: string, addr: string) {
 		this.trackerSend({ cmd: 'track', target: software });
 		// Job entry is log-only — stopping is also via WS
 		this.jobs[`${software}:track`] = {

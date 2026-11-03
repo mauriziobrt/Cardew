@@ -40,7 +40,7 @@ function positionSelection(
     // which action are available with multiselection? multidelete, multisend, 
     // analysis (also musicological maybe include mean centroid etc..)
     // console.log(graph.nodeColor())
-    graph.nodeColor(n =>
+    graph.nodeColor((n: { id: any; openacces: string }) =>
         selectedNodes.some(s => s.id === n.id) ? 'yellow' : colorScale(n.openacces));
     // console.log("Selected many nodes:", [...selectedNodes]);
     graph.selectedNodes = [...selectedNodes]

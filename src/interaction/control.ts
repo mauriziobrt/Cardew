@@ -1,6 +1,7 @@
 // to implement: cmd+i or i opens inspector
 
 import type { OSCManager } from "src/osc/osc";
+import { oscNumber, oscString } from "src/utils/oscUtils";
 
 // cmd+e creation/presentation mode
 export function registerControls(handlers: {
@@ -167,38 +168,43 @@ export function registerOSCcontrols(handlers: {
                 case '/pos':
                     // console.log("POST", args[0].value);
                     // Hover over nodes in the canvas and select them
-                    handlers.msgPos(args[0]?.value, args[1]?.value);
-                    break;
+                    handlers.msgPos(oscNumber(args[0]), oscNumber(args[1])); break;
                 case '/move':
                     // Dimension & Position \move {dimension} {position}
                     // Move a node on the canvas
                     // console.log("POST", args[0], args[1], args[2].value);
-                    handlers.msgMove(args[0], args[1], args[2]?.value);
+                    handlers.msgMove(oscString(args[0]), oscString(args[1]), oscNumber(args[2]));
                     break;
                 case '/create':
                     // Create new node with any amount of properties. 
                     // \create {id} {property} {value} {property} {value} ..... {property} {value}
                     // 
                     // console.log(args.slice(1));
-                    const propertyArray = args.slice(1);
+                    // const propertyArray = args.slice(1);
                     // Source - https://stackoverflow.com/a/57851980
                     // Posted by Simon Buchan, modified by community. See post 'Timeline' for change history
                     // Retrieved 2026-10-16, License - CC BY-SA 4.0
 
-                    const pairs = propertyArray.flatMap((_: any, i: number, a: string | any[]) => i % 2 ? [] : [a.slice(i, i + 2)]);
-                    handlers.msgCreate(args[0], pairs);
+                    // const pairs = propertyArray.flatMap((_: any, i: number, a: string | any[]) => i % 2 ? [] : [a.slice(i, i + 2)]);
+                    // handlers.msgCreate(args[0], pairs);
+                    const properties: Record<string, number[]> = {};
+                    for (let i = 1; i + 1 < args.length; i += 2) {
+                        const key = oscString(args[i]);
+                        (properties[key] ??= []).push(oscNumber(args[i + 1]));
+                    }
+                    handlers.msgCreate(oscString(args[0]), properties);
                     break;
                 case '/delete':
                     // Delete any node given an id
                     // \delete {id} 
                     // 
-                    handlers.msgDelete(args[0]);
+                    handlers.msgDelete(oscString(args[0]));
                     break;
                 case '/search':
                     // Delete any node given an id
                     // \delete {id} 
                     // 
-                    handlers.msgSearch(args[0], args[1]);
+                    handlers.msgSearch(oscString(args[0]), oscString(args[1]));
                     break;
             }
         }

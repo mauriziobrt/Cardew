@@ -32,6 +32,7 @@
 		const cfg = graphState.config.current.graph;
 
 		graph = new ForceGraph(container)
+			.autoPauseRedraw(false)
 			.graphData({ nodes: [], links: [] })
 			.dagMode(null)
 			.nodeId("id")
@@ -130,10 +131,7 @@
 			// const fn = shapes[openacces] ?? shapes.unknown;
 			ctx.save();
 			ctx.fillStyle =
-				overrideColor ??
-				(selectedIds.has(id)
-					? "red"
-					: rule?.color); //graphState.colorScale(openacces))
+				overrideColor ?? (selectedIds.has(id) ? "red" : rule?.color); //graphState.colorScale(openacces))
 			fn(x, y, radius, ctx);
 			ctx.restore();
 		}
