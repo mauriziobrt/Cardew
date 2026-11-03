@@ -51,7 +51,7 @@
 
 	// get node id at description
 	function highlightNode(id: string) {
-		console.log("THIS IS THE ID:", id);
+		// console.log("THIS IS THE ID:", id);
 		// I should store somehow the original node id, so that I can recall through that
 		graphState.selectNode(graphState.getNodeAtID(id));
 	}
@@ -65,22 +65,24 @@
 </script>
 
 <div>
-	<span>
-		<input
-			class="metadata-property-key-input"
-			type="text"
-			list="metadata-property-list"
-			enterkeyhint="next"
-			bind:value={propertyName}
-			placeholder="Metadata Name"
-			style="background-color:white"
-		/>
-	</span>
 	<div class="search-input-container">
 		<input type="text" placeholder="Search..." bind:value={query} />
 	</div>
+	<div style="padding: 5px"></div>
+	<span>
+		<div style="display:flex">
+			<span style="font-size: small; padding: 6px;">Property:</span>
+			<input
+				style="display:flex; width:100%"
+				type="text"
+				list="metadata-property-list"
+				enterkeyhint="next"
+				bind:value={propertyName}
+				placeholder="Metadata Name"
+			/>
+		</div>
+	</span>
 </div>
-
 <!-- Ok I iterate through them but I should get the node object as well to recall it -->
 <div class="view-content">
 	<div class="metadata-container">
@@ -96,9 +98,9 @@
 							onkeydown={(e) =>
 								e.key === "Enter" && highlightNode?.(id)}
 						>
-							<div class="setting-item-info">
+							<div class="setting-item-info" style="padding: 1px;">
 								<div class="setting-item-name">
-									{id} - {item}
+									<b>{id}</b> ~ <em>{item}</em>
 								</div>
 								<div class="setting-item-description"></div>
 							</div>

@@ -167,13 +167,13 @@ export function registerOSCcontrols(handlers: {
                 case '/pos':
                     // console.log("POST", args[0].value);
                     // Hover over nodes in the canvas and select them
-                    handlers.msgPos(args[0].value, args[1].value);
+                    handlers.msgPos(args[0]?.value, args[1]?.value);
                     break;
                 case '/move':
                     // Dimension & Position \move {dimension} {position}
                     // Move a node on the canvas
                     // console.log("POST", args[0], args[1], args[2].value);
-                    handlers.msgMove(args[0], args[1], args[2].value);
+                    handlers.msgMove(args[0], args[1], args[2]?.value);
                     break;
                 case '/create':
                     // Create new node with any amount of properties. 
