@@ -369,8 +369,9 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Editing Data</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../editing-metadata/index.html">Editing Metadata</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../editing-metadata/link-edit.html">Editing Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../editing/metadata.html">Editing Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../editing/link-edit.html">Editing Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../editing/shape-edit.html">Editing shapes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Interaction and Control</span></p>
 <ul class="current nav bd-sidenav">
@@ -451,11 +452,16 @@
 <li><p>Rhythmic</p></li>
 <li><p>Transition</p></li>
 </ul>
+<section id="tracking-a-node-position">
+<h3>Tracking a node position<a class="headerlink" href="#tracking-a-node-position" title="Link to this heading">#</a></h3>
+<p>To track a single node position, open the metadata view, then add a property Tracking with value set to true.</p>
+</section>
 <section id="configuring-message-out">
 <h3>Configuring message out<a class="headerlink" href="#configuring-message-out" title="Link to this heading">#</a></h3>
 <p>Message out are class dependent, and are configured in the OSC Configuration view, accessible in the sidebar.
 Users can select for each class which proeprties to send via OSC, and their order.</p>
 <p><img alt="The view with the OSC message out configuration" src="../../_images/osc-config-view.png" /></p>
+<p>The OSC message composer is divided in two parts for each class: the top part contains all of the available properties for a class, the bottom part the selected properties in order that will be sent to the</p>
 </section>
 </section>
 <section id="message-in">
@@ -478,6 +484,7 @@ Users can select for each class which proeprties to send via OSC, and their orde
 <strong>Example</strong>: <code class="docutils literal notranslate"><span class="pre">/move</span> <span class="pre">node0</span> <span class="pre">x</span> <span class="pre">50.3</span></code></p></li>
 </ul>
 </li>
+<li><p><strong>Real time physics control</strong>: CURRENT DEVELOPMENT</p></li>
 </ul>
 <p>An user can develop and extend these messages by editing the file <code class="docutils literal notranslate"><span class="pre">/src/interaction/control.ts</span></code> and create new mappings.</p>
 </section>
@@ -532,6 +539,7 @@ Users can select for each class which proeprties to send via OSC, and their orde
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-osc-in-the-settings">Configuring OSC in the settings</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#message-out">Message out</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tracking-a-node-position">Tracking a node position</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-message-out">Configuring message out</a></li>
 </ul>
 </li>

@@ -45,7 +45,7 @@ Explore and manipulate networked data.
 :::
 
 :::{grid-item-card}
-:img-top: img/thewing.png
+:img-top: _static/images/thewing.png
 :img-alt: Search interface
 
 **The wing**
@@ -58,3 +58,15 @@ Composition based on trajectories over linked data.
 :::
 
 ::::
+
+---
+
+```{toctree}
+:maxdepth: 2
+:caption: Examples
+
+examples/playing-with-physics
+examples/writing-scores.md
+examples/exploring-data
+examples/the-wing
+```
