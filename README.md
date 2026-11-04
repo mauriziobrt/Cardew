@@ -31,7 +31,7 @@ Extended documentation can be found at [Cardew Docs](https://mauriziobrt.github.
 | **Edit Link Directionality** | October 2026 | X |
 | **Graph commands using Obsidian's hotkeys** | October 2026 | X |
 | **Send continuous position of Node through OSC (toggle)** | October 2026 | X |
-| **Export** | October 2026 | |
+| **Export** | November 2026 | |
 | **Stats View**  | November 2026 | |
 | **Transition Interaction Re-implementation**  | November 2026 | |
 | **Cluster Nodes**  | November 2026 | |
@@ -40,18 +40,10 @@ Extended documentation can be found at [Cardew Docs](https://mauriziobrt.github.
 
 ## Known Bugs and Fixes
 
-- [ ] The rectangle selection is not always working that well. (sometimes it’s not working until I use some other command) → it seems to be linked also to the physics of the system
 - [ ] The canvas has a scrollbar and it shouldn’t
 - [ ] Remove full pass of graph to objects and only pass what is needed
 - [ ] When not clicking and not hovering a node the mouse pointer should be regular pointer
-- [ ] When saving also save the current config
-- [ ] Disable drag when fx and fy are not empty (or just add a disable drag or enabled drag checkbox)
-- [ ] Editing class with multiple selected items doesn’t edit all of their classes
-- [ ] If multiple selected items and I edit property, apply to all of them
-- [ ] Cmd + i should not be active on the canvas but in general on the app, so at the actions level
-- [ ] When I add a property there should be some typescript place that sees it as what it is so it’s not undefined, like add the id: string to NodeObject somehow
 - [ ] When creating a new node, option to start from zero or keeping the last edited node’s class. Config, new node behavior menu keep last or no, also copy paste of single nodes.
-
 
 Checking tsc errors: npx tsc --noEmit > errors.txt
 Use correct node version nvm use node
