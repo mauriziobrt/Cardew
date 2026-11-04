@@ -1,7 +1,7 @@
 # Playing with physics
 
 <figure>
-    <img src="/_static/images/physics-example.png"
+    <img src="_static/images/physics-example.png"
          alt="Physics graph">
     <figcaption>The graph loaded with the physics example.</figcaption>
 </figure>
@@ -18,7 +18,7 @@ To test the environment in folder examples:
 ## Controlling an oscillator bank using a grid model
 
 <figure>
-    <img src="/_static/images/grid.png"
+    <img src="_static/images/grid.png"
          alt="Grid graph">
     <figcaption>The graph loaded with a grid structure and the grid-graph-config file.</figcaption>
 </figure>
