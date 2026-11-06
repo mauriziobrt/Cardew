@@ -1,8 +1,11 @@
 # Cardew
 A graph interface for exploring data and creating interactive scores. Distributed as an Obsidian Plugin.
 
-![alt text](image.png)
-
+<figure>
+    <img src="docs/_static/images/Cardew.png"
+         alt="Cardew with custom shapes">
+    <figcaption>The graph loaded with a co-citaton coupling graph and custom node shapes.</figcaption>
+</figure>
 
 The name is inspired by Cornelius Cardew's graphical scores.
 

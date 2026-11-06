@@ -116,7 +116,7 @@ export class ForceGraphSettingTab extends PluginSettingTab {
                 .onChange(async (value) => {
                     this.plugin.config.updateGraph({ nodeSize: value });
                     await this.plugin.config.save(this.plugin);
-                    this.plugin.graphState.graph?.nodeRelSize(value);
+                    // this.plugin.graphState.graph?.nodeRelSize(value);
                 }));
 
         new Setting(containerEl)

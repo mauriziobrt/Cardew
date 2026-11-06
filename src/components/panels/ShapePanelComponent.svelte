@@ -3,6 +3,7 @@
 	import ShapePopover from "./ShapePopover.svelte";
 	import { untrack } from "svelte";
 	import { Notice } from "obsidian";
+	// import ColorPicker from "svelte-awesome-color-picker";
 
 	//it should save the current state
 	//to save the state and have it working effectively I need to first check the config part
@@ -38,7 +39,7 @@
 	);
 
 	function addMapping() {
-		mappingPool.push({ value: "", shape: "circle", color: "#e66465" });
+		mappingPool.push({ value: "", shape: "circle", color: "#e66465", alpha: 1});
 	}
 
 	async function save() {
@@ -104,6 +105,7 @@
 					bind:value={el.color}
 					style=" border-radius: 100%; inline-size: 30px; block-size: 30px; border-width: 1px; border-style: solid; border-color: rgb(153, 153, 153);"
 				/>
+				<input type="range" min="0" max="1" step="0.01" bind:value={el.alpha} />
 			</div>
 		</div>
 	{/each}

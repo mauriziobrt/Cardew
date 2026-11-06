@@ -33,6 +33,10 @@
 
 		graph = new ForceGraph(container)
 			.autoPauseRedraw(false)
+			.showPointerCursor(false)
+			.onNodeHover((node: MyNode | null) =>
+				graphState.cursor.hover(!!node),
+			)
 			.graphData({ nodes: [], links: [] })
 			.dagMode(null)
 			.nodeId("id")
@@ -41,7 +45,7 @@
 				(node: { id: string | number }) =>
 					graphState.degree[node.id] || 1,
 			) // Default to 1 if no links
-			.nodeRelSize(cfg.nodeSize)
+			// .nodeRelSize(cfg.nodeSize)
 			.d3AlphaDecay(cfg.alphaDecay)
 			.d3VelocityDecay(cfg.velocityDecay)
 			.nodeCanvasObject(
@@ -56,13 +60,16 @@
 						ctx.fillText(
 							node[graphState.config.current.textDisplayProperty],
 							node.x,
-							node.y - 6,
+							node.y - graphState.config.current.graph.nodeSize,
 						); // 6 ≈ node radius + padding
 					}
 				},
 			)
 			.nodePointerAreaPaint(({ id, x, y }, color, ctx) => {
-				const r = 3 + Math.sqrt(graphState.degree[id] || 1) * 2;
+				const r =
+					3 +
+					Math.sqrt(graphState.degree[id] || 1) *
+						graphState.config.current.graph.nodeSize;
 				ctx.fillStyle = color;
 				ctx.beginPath();
 				ctx.arc(x, y, r, 0, 2 * Math.PI);
@@ -113,6 +120,11 @@
 			graphState.updateData(graphState.graphData);
 		}
 
+		function withAlpha(hex: string | undefined, a = 1) {
+			if (!hex) return "#848484";
+			const n = parseInt(hex.slice(1, 7), 16);
+			return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+		}
 		//In nodePaint the shapes and colors are created.
 		//the thing is that graphState.colorScale() is a sort
 		//of map between a property and some data
@@ -124,14 +136,20 @@
 			const { id, openacces, x, y } = node;
 			const prop = graphState.config.current.mappings.property;
 			const rule = graphState.ruleMap.get(String(node[prop]));
-			// console.log("RULE", rule?.color);
-			const radius = 3 + Math.sqrt(graphState.degree[id] || 1) * 2;
+			const radius =
+				3 +
+				Math.sqrt(graphState.degree[id] || 1) *
+					graphState.config.current.graph.nodeSize;
 			const fn =
 				shapes[rule?.shape] ?? shapes[openacces] ?? shapes.unknown;
-			// const fn = shapes[openacces] ?? shapes.unknown;
 			ctx.save();
 			ctx.fillStyle =
-				overrideColor ?? (selectedIds.has(id) ? "red" : rule?.color); //graphState.colorScale(openacces))
+				overrideColor ??
+				(selectedIds.has(id)
+					? "red"
+					: withAlpha(rule?.color, rule?.alpha));
+			// ctx.fillStyle =
+			// 	overrideColor ?? (selectedIds.has(id) ? "red" : rule?.color);
 			fn(x, y, radius, ctx);
 			ctx.restore();
 		}

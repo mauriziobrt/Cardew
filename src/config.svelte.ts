@@ -20,7 +20,7 @@ export interface PluginConfig {
     paths: {
         defaultDataPath: string;
     };
-    mappings: { property: string; rules: { value: string; shape: string; color: string }[] };
+    mappings: { property: string; rules: { value: string; shape: string; color: string; alpha: number }[] };
     colors: {
         gold: string;
         green: string;

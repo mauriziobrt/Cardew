@@ -1,0 +1,248 @@
+{
+  "nodes": [
+    {
+      "id": "nodo1",
+      "x": -97.58371967611777,
+      "y": -2.405376793432342,
+      "name": "nodo1",
+      "__indexColor": "#ec0001",
+      "index": 0,
+      "vx": 0,
+      "vy": 0,
+      "openacces": "gold",
+      "note": "F#4"
+    },
+    {
+      "id": "nodo3",
+      "x": -4.037834876732325,
+      "y": -32.182391845774234,
+      "name": "nodo3",
+      "__indexColor": "#d80002",
+      "index": 1,
+      "vx": 0,
+      "vy": 0,
+      "note": "C4"
+    },
+    {
+      "id": "nodo5",
+      "x": 3.094395701597592,
+      "y": -17.703533358473198,
+      "name": "nodo5",
+      "__indexColor": "#c40003",
+      "index": 2,
+      "vx": 0,
+      "vy": 0,
+      "note": "Bb3"
+    },
+    {
+      "id": "nodo7",
+      "x": -71.20287231671205,
+      "y": -0.5078023392633977,
+      "name": "nodo7",
+      "__indexColor": "#880006",
+      "index": 3,
+      "vx": 0,
+      "vy": 0,
+      "note": "G#3"
+    },
+    {
+      "id": "nodo9",
+      "x": -66.69591812661147,
+      "y": 26.67930842037554,
+      "name": "nodo9",
+      "__indexColor": "#740007",
+      "index": 4,
+      "vx": 0,
+      "vy": 0,
+      "note": "A2"
+    },
+    {
+      "id": "nodo11",
+      "x": -40.09034984311454,
+      "y": 41.363255942961274,
+      "name": "nodo11",
+      "__indexColor": "#600008",
+      "index": 5,
+      "vx": 0,
+      "vy": 0,
+      "note": "B1"
+    },
+    {
+      "id": "nodo13",
+      "x": 0.35172480392917516,
+      "y": 17.665400040174397,
+      "name": "nodo13",
+      "__indexColor": "#4c0009",
+      "index": 6,
+      "vx": 0,
+      "vy": 0,
+      "note": "Bb2"
+    },
+    {
+      "id": "nodo15",
+      "x": -42.12574850961157,
+      "y": 9.669190993221772,
+      "name": "nodo15",
+      "__indexColor": "#38000a",
+      "index": 7,
+      "vx": 0,
+      "vy": 0,
+      "note": "F2"
+    },
+    {
+      "id": "nodo17",
+      "x": 19.778903343776708,
+      "y": 6.874848603737282,
+      "name": "nodo17",
+      "__indexColor": "#d4000f",
+      "index": 8,
+      "vx": 0,
+      "vy": 0,
+      "note": "D3"
+    },
+    {
+      "id": "nodo19",
+      "x": -20.61159340003139,
+      "y": -108.36832620967112,
+      "name": "nodo19",
+      "__indexColor": "#980012",
+      "index": 9,
+      "vx": 0,
+      "vy": 0,
+      "note": "F#6"
+    },
+    {
+      "id": "nodo21",
+      "x": 22.24540064695656,
+      "y": -135.65491939318332,
+      "name": "nodo21",
+      "__indexColor": "#700014",
+      "index": 10,
+      "vx": 0,
+      "vy": 0,
+      "note": "C#7"
+    }
+  ],
+  "links": [
+    {
+      "source": "nodo1",
+      "target": "nodo3",
+      "__indexColor": "#b00004",
+      "index": 0,
+      "__controlPoints": [
+        -56.76618028689342,
+        -36.00306127948038
+      ]
+    },
+    {
+      "source": "nodo1",
+      "target": "nodo5",
+      "__indexColor": "#9c0005",
+      "index": 1,
+      "__controlPoints": [
+        -50.304293300268256,
+        -30.190078151495843
+      ]
+    },
+    {
+      "source": "nodo15",
+      "target": "nodo1",
+      "__indexColor": "#24000b",
+      "index": 2,
+      "__controlPoints": [
+        -72.26964765019551,
+        14.723501333195953
+      ]
+    },
+    {
+      "source": "nodo9",
+      "target": "nodo7",
+      "__indexColor": "#10000c",
+      "index": 3,
+      "__controlPoints": [
+        -74.38681737358955,
+        13.987143878576184
+      ]
+    },
+    {
+      "source": "nodo11",
+      "target": "nodo9",
+      "__indexColor": "#fc000d",
+      "index": 4,
+      "__controlPoints": [
+        -56.32992348938016,
+        39.3423958383678
+      ]
+    },
+    {
+      "source": "nodo13",
+      "target": "nodo11",
+      "__indexColor": "#e8000e",
+      "index": 5,
+      "__controlPoints": [
+        -15.12974133903531,
+        37.60274292097658
+      ]
+    },
+    {
+      "source": "nodo17",
+      "target": "nodo13",
+      "__indexColor": "#c00010",
+      "index": 6,
+      "__controlPoints": [
+        12.223424361140365,
+        16.155560029925347
+      ]
+    },
+    {
+      "source": "nodo15",
+      "target": "nodo13",
+      "__indexColor": "#ac0011",
+      "index": 7,
+      "__controlPoints": [
+        -19.28777004345067,
+        5.171800853989936
+      ]
+    },
+    {
+      "source": "nodo13",
+      "target": "nodo19",
+      "__indexColor": "#840013",
+      "index": 8,
+      "__controlPoints": [
+        -35.336679548020214,
+        -41.15879944395624
+      ]
+    },
+    {
+      "source": "nodo3",
+      "target": "nodo21",
+      "__indexColor": "#5c0015",
+      "index": 9,
+      "__controlPoints": [
+        -11.590722624369704,
+        -89.17530272421656
+      ]
+    },
+    {
+      "source": "nodo5",
+      "target": "nodo3",
+      "__indexColor": "#480016",
+      "index": 10,
+      "__controlPoints": [
+        -3.3674912850275738,
+        -23.516516486457732
+      ]
+    },
+    {
+      "source": "nodo17",
+      "target": "nodo5",
+      "__indexColor": "#340017",
+      "index": 11,
+      "__controlPoints": [
+        6.5209731302450535,
+        -2.077440848932134
+      ]
+    }
+  ]
+}

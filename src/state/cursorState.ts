@@ -6,7 +6,8 @@ export class CursorState {
         if (!canvas) return;
         canvas.style.cursor = style;
     }
-    
+    private hovering = false;
+
     private pencilCursorCSS =
         `url("data:image/svg+xml;utf8,` +
         encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'>
@@ -15,6 +16,14 @@ export class CursorState {
 
     pencilCursor() { this.mode = "pencil"; this.setCursor(this.pencilCursorCSS); }
     crossCursor() { this.mode = "cross"; this.setCursor("crosshair"); }
-    resetCursor() { this.mode = "default"; this.setCursor(""); }
+    hover(on: boolean) {
+        this.hovering = on;
+        if (this.mode === "default") this.setCursor(on ? "pointer" : "");
+    }
+    resetCursor() {
+        this.mode = "default";
+        this.setCursor(this.hovering ? "pointer" : "");
+    }
+    // resetCursor() { this.mode = "default"; this.setCursor(""); }
     get current() { return this.mode }
 }
