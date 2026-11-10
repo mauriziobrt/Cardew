@@ -8,6 +8,7 @@ export interface MyNode extends NodeObject {
   openacces?: string;
   highlighted?: boolean;
   [key: string]: any;
+  axisColor?: string
 }
 
 export interface MyLink extends LinkObject<MyNode> {

@@ -37,16 +37,15 @@ Extended documentation can be found at [Cardew Docs](https://mauriziobrt.github.
 | **Export** | November 2026 | |
 | **Stats View**  | November 2026 | |
 | **Transition Interaction Re-implementation**  | November 2026 | |
+| **Improve Node Creation Behaviour**  | November 2026 | |
 | **Cluster Nodes**  | November 2026 | |
 | **Link Interaction**  | November 2026 | |
 | **Examples in Docs**  | November 2026 | *Development* |
 
 ## Known Bugs and Fixes
 
-- [ ] The canvas has a scrollbar and it shouldn’t
 - [ ] Remove full pass of graph to objects and only pass what is needed
-- [ ] When not clicking and not hovering a node the mouse pointer should be regular pointer
-- [ ] When creating a new node, option to start from zero or keeping the last edited node’s class. Config, new node behavior menu keep last or no, also copy paste of single nodes.
+- [ ] Typescript usage is not consistent and errrors should be fixed before distribution
 
 Checking tsc errors: npx tsc --noEmit > errors.txt
 Use correct node version nvm use node

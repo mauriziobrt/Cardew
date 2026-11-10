@@ -1,0 +1,245 @@
+{
+  "nodes": [
+    {
+      "id": "nodo1",
+      "x": -268.2146156778715,
+      "y": -137.12417922427863,
+      "name": "nodo1",
+      "__indexColor": "#440623",
+      "className": "axis",
+      "axis": true,
+      "index": 0,
+      "fx": -268.2146156778715,
+      "fy": -137.12417922427863,
+      "vx": 0,
+      "vy": 0,
+      "ghost": "true",
+      "physics": "true",
+      "angle": 90,
+      "length": 600,
+      "strength": -5000,
+      "range": 300,
+      "axisColor": "#4393B0"
+    },
+    {
+      "id": "nodo3",
+      "x": 188.4900544151132,
+      "y": 145.21130581821924,
+      "name": "nodo3",
+      "__indexColor": "#300624",
+      "className": "axis",
+      "axis": true,
+      "index": 1,
+      "fx": 188.4900544151132,
+      "fy": 145.21130581821924,
+      "vx": 0,
+      "vy": 0,
+      "ghost": true,
+      "strength": -2000,
+      "length": 600,
+      "angle": 90,
+      "physics": "true",
+      "range": 500,
+      "axisColor": "#4393B0"
+    },
+    {
+      "id": "nodo5",
+      "x": -175.85247887133198,
+      "y": -77.93361242919867,
+      "name": "nodo5",
+      "__indexColor": "#1c0625",
+      "index": 2,
+      "vx": -0.5054765250739094,
+      "vy": 1.115257239995212,
+      "className": "notes",
+      "pitch": 220,
+      "velocity": 0
+    },
+    {
+      "id": "nodo7",
+      "x": -78.50339938549438,
+      "y": -56.605009311915246,
+      "name": "nodo7",
+      "__indexColor": "#080626",
+      "index": 3,
+      "vx": -0.4500511085210646,
+      "vy": 1.0978578736081166,
+      "className": "notes",
+      "pitch": 60,
+      "velocity": 0
+    },
+    {
+      "id": "nodo9",
+      "x": -142.74225296867453,
+      "y": -84.08593080935691,
+      "name": "nodo9",
+      "__indexColor": "#f40627",
+      "index": 4,
+      "vx": -0.5897395051369744,
+      "vy": 1.2696625657951968,
+      "className": "notes",
+      "pitch": 250,
+      "velocity": 0
+    },
+    {
+      "id": "nodo11",
+      "x": -0.33420071008229707,
+      "y": 193.70054239779287,
+      "name": "nodo11",
+      "__indexColor": "#e00628",
+      "index": 5,
+      "vx": 0,
+      "vy": 0,
+      "className": "notes",
+      "fx": -0.33420071008229707,
+      "fy": 193.70054239779287,
+      "pitch": 380,
+      "velocity": 0
+    },
+    {
+      "id": "nodo13",
+      "x": 127.04529175500954,
+      "y": 38.88141576208646,
+      "name": "nodo13",
+      "__indexColor": "#cc0629",
+      "index": 6,
+      "vx": -0.6362241649157673,
+      "vy": 1.1179143274475132,
+      "Tracking": "true",
+      "className": "notes",
+      "pitch": 450,
+      "velocity": 0
+    },
+    {
+      "id": "nodo15",
+      "x": 130.31966406922274,
+      "y": -16.267839608127147,
+      "name": "nodo15",
+      "__indexColor": "#b8062a",
+      "index": 7,
+      "vx": 2.468456106367229,
+      "vy": 1.164134955223226,
+      "className": "notes",
+      "pitch": 180,
+      "velocity": 0
+    },
+    {
+      "id": "nodo17",
+      "x": 153.05497570168208,
+      "y": -4.968680082374482,
+      "name": "nodo17",
+      "__indexColor": "#a4062b",
+      "index": 8,
+      "vx": 3.675155812442044,
+      "vy": 0.8460441987136413,
+      "Tracking": "true",
+      "className": "notes",
+      "pitch": 130,
+      "velocity": 0
+    },
+    {
+      "id": "nodo2",
+      "x": 67.47450602500973,
+      "y": -319.50130013480145,
+      "name": "nodo2",
+      "__indexColor": "#180632",
+      "className": "axis",
+      "axis": true,
+      "ghost": true,
+      "index": 9,
+      "fx": 67.47450602500973,
+      "fy": -319.50130013480145,
+      "vx": 0,
+      "vy": 0,
+      "strength": -2000,
+      "length": 600,
+      "angle": 30,
+      "physics": "true",
+      "range": 500,
+      "axisColor": "#4393B0"
+    },
+    {
+      "id": "nodo4",
+      "x": -0.312115171352513,
+      "y": 330.53887107310146,
+      "name": "nodo4",
+      "__indexColor": "#040633",
+      "className": "axis",
+      "axis": true,
+      "ghost": true,
+      "index": 10,
+      "fx": -0.312115171352513,
+      "fy": 330.53887107310146,
+      "vx": 0,
+      "vy": 0,
+      "strength": -2000,
+      "length": 600,
+      "angle": 30,
+      "physics": "true",
+      "range": 500,
+      "axisColor": "#4393B0"
+    }
+  ],
+  "links": [
+    {
+      "source": "nodo7",
+      "target": "nodo9",
+      "__indexColor": "#90062c",
+      "index": 0,
+      "__controlPoints": [
+        -116.11901047657278,
+        -57.49769934400004
+      ]
+    },
+    {
+      "source": "nodo5",
+      "target": "nodo7",
+      "__indexColor": "#7c062d",
+      "index": 1,
+      "__controlPoints": [
+        -122.9122185049565,
+        -86.73912676772449
+      ]
+    },
+    {
+      "source": "nodo13",
+      "target": "nodo7",
+      "__indexColor": "#68062e",
+      "index": 2,
+      "__controlPoints": [
+        5.173661169957224,
+        32.2479414531864
+      ]
+    },
+    {
+      "source": "nodo13",
+      "target": "nodo15",
+      "__indexColor": "#54062f",
+      "index": 3,
+      "__controlPoints": [
+        117.65262683807343,
+        10.651913614137014
+      ]
+    },
+    {
+      "source": "nodo13",
+      "target": "nodo17",
+      "__indexColor": "#400630",
+      "index": 4,
+      "__controlPoints": [
+        131.28011455945364,
+        11.754431050521482
+      ]
+    },
+    {
+      "source": "nodo13",
+      "target": "nodo11",
+      "__indexColor": "#2c0631",
+      "index": 5,
+      "__controlPoints": [
+        94.18239674892187,
+        141.82166721323125
+      ]
+    }
+  ]
+}

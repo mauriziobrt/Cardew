@@ -84,6 +84,11 @@
 		}
 	}
 
+	function copyPropertyValue(name: string, value: string) {
+		console.log("in panel component", name, value);
+		graphState.copyNodePropertyValue(name,value);
+	}
+
 	const saveClass = () => {
 		new ExampleModal(this.app, (result) => {
 			new Notice(`Saved new class: ${result}!`);
@@ -147,6 +152,7 @@
 									allProperties={allProps}
 									allPropertyValues={() =>
 										graphState.allValuesAtProperty(key)}
+									onCopyPropertyValue={copyPropertyValue}
 								/>
 							{/each}
 							<datalist id="all-properties-no-reserved">

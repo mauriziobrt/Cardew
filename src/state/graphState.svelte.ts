@@ -358,6 +358,16 @@ export class GraphState {
         this.metadataState.retrieveNodeClass(this.selectionState.selectedNodes[0])
     }
 
+    copyNodePropertyValue(name: string, value: string) {
+        if (!this.selectionState.selectedNodes[0]) return;
+        if (this.selectionState.selectedNodes.length > 1) {
+            new Notice("Only one element can be copied");
+            return
+        }
+        console.log("In graphstate", name, value);
+        this.metadataState.copyNodePropertyValue(name, value)
+    }
+
     retrieveNodeCleanMetadata() {
         if (!this.selectionState.selectedNodes[0]) return;
         if (this.selectionState.selectedNodes.length > 1) {
@@ -365,6 +375,14 @@ export class GraphState {
             return
         }
         this.metadataState.retrieveNodeCleanMetadata(this.selectionState.selectedNodes[0])
+    }
+
+    applyNodePropertyValue() {
+        if (!this.selectionState.selectedNodes[0]) return;
+        for (const n of this.selectionState.selectedNodes) {
+            this.metadataState.applyNodePropertyValue(n)
+        }
+        this.updateGraphData();
     }
 
     applyRetrievedNodeClass() {
@@ -572,7 +590,8 @@ export class GraphState {
 
     toggleMultiselect(toggle: boolean) {
         this.multiSelect = toggle;
-        // console.log(this.multiSelect)
+        this.selectionState.multiSelect = toggle;
+        console.log("multiselect state", this.multiSelect)
     }
 
     selectAll() {
@@ -613,6 +632,14 @@ export class GraphState {
     drawOverlay(ctx: CanvasRenderingContext2D, globalScale: number) {
         // this.selectionState.drawOverlay(ctx, globalScale, this.graphData, this.graph);
         this.checkTrackedNodes();
+        //check whether crossing appears
+        if (this.graph && this.graphData) {
+            this.selectionState.updateCrossings(
+                this.graph.graphData().nodes as MyNode[],
+                this.graph,
+                n => this.getRadius(n),
+            );
+        }
         // Function to draw on top of the canvas
         this.ctx = ctx;
         // globalScale is the zoom value but not necessary at the moment
@@ -686,6 +713,8 @@ export class GraphState {
                 if (Math.abs(t.y - n.fy) < 0.1) { n.fy = t.y; delete t.y; }
                 else active = true;
             }
+            if (n.fx != null) n.x = n.fx;
+            if (n.fy != null) n.y = n.fy;
             if (t.x === undefined && t.y === undefined) this.targets.delete(id);
         }
 
@@ -775,6 +804,10 @@ export class GraphState {
     //=======================================================================================
     // Creative Mode Components
     //=======================================================================================
+
+    getRadius(node: MyNode) {
+        return 3 + Math.sqrt(this.degree[node.id] || 1) * this.config.current.graph.nodeSize;
+    }
 
     setupCreativeConfig() {
         // TODO: function to enable creative mode, which causes the graph to be more static

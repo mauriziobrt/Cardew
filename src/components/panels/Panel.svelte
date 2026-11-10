@@ -8,6 +8,7 @@
 		onKeydown,
 		allProperties,
 		allPropertyValues,
+		onCopyPropertyValue
 	} = $props();
 
 	// let currentType = $state("text");
@@ -53,6 +54,12 @@
 		// console.log(dict[name]);
 		dict[name].remove(item);
 		// console.log(dict[name]);
+	}
+
+	function copyProperty() {
+		console.log(name, dict[name])
+		// valueAtProperty = dict[name];
+		onCopyPropertyValue(name, dict[name] )
 	}
 
 	// Contextual Menu when Clicking on Icon to change property, copy/paste properties, maybe also delete should be here
@@ -109,6 +116,13 @@
 				.setTitle("GetType")
 				.setIcon("trash")
 				.onClick(() => console.log(currentType)),
+		);
+
+		menu.addItem((item) =>
+			item
+				.setTitle("Copy Property")
+				.setIcon("copy")
+				.onClick(() => copyProperty()),
 		);
 
 		menu.addSeparator();

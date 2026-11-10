@@ -21,6 +21,15 @@ export function showNodeMenu(node: any, event: MouseEvent, graphState: GraphStat
             }
             ),
     );
+
+    menu.addItem((item) =>
+        item.setTitle("Paste Property Value").setIcon("paste")
+            .onClick(() => {
+                new Notice("Pasted")
+                graphState.applyNodePropertyValue();
+            }
+            ),
+    );
     menu.addSeparator();
     menu.addItem((item) =>
         item.setTitle("Copy Class").setIcon("documents")

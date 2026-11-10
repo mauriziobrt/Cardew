@@ -6,7 +6,7 @@
 		registerOSCcontrols,
 	} from "src/interaction/control";
 	import { createGraphActions } from "../interaction/graphActions";
-	import ForceGraph from "force-graph";
+	import ForceGraph, { type NodeObject } from "force-graph";
 	import type { MyNode } from "src/types/graph";
 	import { showNodeMenu } from "src/ui/NodeMenu";
 	// import { parseSvg, drawSvg } from "src/utils/svgUtils";
@@ -23,10 +23,104 @@
 	let cleanupControls: () => void;
 	let cleanupOSCControls: () => void;
 	let resizeObserver: any;
+	function getRadius(node: MyNode) {
+		const radius =
+			3 +
+			Math.sqrt(graphState.degree[node.id] || 1) *
+				graphState.config.current.graph.nodeSize;
+		return radius;
+	}
+
+	function withAlpha(hex: string | undefined, a = 1) {
+		if (!hex) return "#848484";
+		const n = parseInt(hex.slice(1, 7), 16);
+		return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+	}
+
+	function axisColor(n: MyNode) {
+		if (n.axisColor) return n.axisColor;
+		const prop = graphState.config.current.mappings.property;
+		const rule = graphState.ruleMap.get(String(n[prop]));
+		return rule?.color ? withAlpha(rule.color, rule.alpha) : "black";
+	}
 
 	const selectedIds = $derived(
 		new Set(graphState.selectionState.selectedNodes.map((n) => n.id)),
 	);
+
+	// Force setup for axis line
+	function forceGhostLine() {
+		let ns: any, axes: any;
+		const f = (alpha: number) => {
+			for (const a of axes) {
+				const half = a.length / 2,
+					r = (a.angle * Math.PI) / 180;
+				const cos = Math.cos(r),
+					sin = Math.sin(r);
+				for (const n of ns) {
+					if (n.ghost) continue;
+					const rx = n.x - (a.fx ?? a.x),
+						ry = n.y - (a.fy ?? a.y);
+					const u = rx * cos + ry * sin; // along the line
+					const v = -rx * sin + ry * cos; // perpendicular
+					if (!a.physics) continue;
+					const lx = u - Math.max(-half, Math.min(half, u));
+					const dist = Math.hypot(lx, v);
+					if (dist > a.range) continue;
+					const ulx = dist ? lx / dist : 0;
+					const uly = dist ? v / dist : Math.random() < 0.5 ? -1 : 1;
+					const k = (a.strength * alpha) / Math.max(dist, 1);
+					n.vx += (ulx * cos - uly * sin) * k;
+					n.vy += (ulx * sin + uly * cos) * k;
+				}
+			}
+		};
+		f.initialize = (arr: any[]) => {
+			ns = arr;
+			axes = arr.filter((n) => n.axis);
+		};
+		return f;
+	}
+
+	// Creatte the axis object if node has axis property set to true
+	function axisObject(
+		n: MyNode,
+		ctx: CanvasRenderingContext2D,
+		scale: number,
+	) {
+		if (!n.axis) return;
+		ctx.beginPath();
+		const h = n.length / 2,
+			r = (n.angle * Math.PI) / 180;
+		const dx = Math.cos(r) * h,
+			dy = Math.sin(r) * h;
+		const cx = n.fx ?? n.x,
+			cy = n.fy ?? n.y;
+		if (cx == null || cy == null) return;
+		ctx.moveTo(cx - dx, cy - dy);
+		ctx.lineTo(cx + dx, cy + dy);
+		ctx.strokeStyle = axisColor(n);
+		ctx.lineWidth = 1 / scale;
+		ctx.stroke();
+	}
+
+	// Draw the axis if node has axis property set to true
+	function axisDraw(n: MyNode, color: string, ctx: CanvasRenderingContext2D) {
+		if (!n.axis) return;
+		ctx.strokeStyle = color;
+		ctx.lineWidth = 80;
+		ctx.beginPath();
+		const h = n.length / 2,
+			r = (n.angle * Math.PI) / 180;
+		const dx = Math.cos(r) * h,
+			dy = Math.sin(r) * h;
+		const cx = n.fx ?? n.x,
+			cy = n.fy ?? n.y;
+		if (cx == null || cy == null) return;
+		ctx.moveTo(cx - dx, cy - dy);
+		ctx.lineTo(cx + dx, cy + dy);
+		ctx.stroke();
+	}
 
 	onMount(() => {
 		const cfg = graphState.config.current.graph;
@@ -50,30 +144,39 @@
 			.d3VelocityDecay(cfg.velocityDecay)
 			.nodeCanvasObject(
 				(node, ctx: CanvasRenderingContext2D, globalScale) => {
-					nodePaint(node, ctx);
-					const fontSize = 12 / globalScale;
-					ctx.font = `${fontSize}px Sans-Serif`;
-					ctx.textAlign = "center";
-					ctx.textBaseline = "bottom";
-					ctx.fillStyle = "#222";
-					if (graphState.config.current.textOverlay) {
-						ctx.fillText(
-							node[graphState.config.current.textDisplayProperty],
-							node.x,
-							node.y - graphState.config.current.graph.nodeSize,
-						); // 6 ≈ node radius + padding
+					if (node.axis) {
+						axisObject(node, ctx, globalScale);
+					} else {
+						nodePaint(node, ctx);
+						const fontSize = 12 / globalScale;
+						ctx.font = `${fontSize}px Sans-Serif`;
+						ctx.textAlign = "center";
+						ctx.textBaseline = "bottom";
+						ctx.fillStyle = "#222";
+						if (graphState.config.current.textOverlay) {
+							ctx.fillText(
+								node[
+									graphState.config.current
+										.textDisplayProperty
+								],
+								node.x,
+								node.y -
+									graphState.config.current.graph.nodeSize,
+							); // 6 ≈ node radius + padding
+						}
 					}
 				},
 			)
-			.nodePointerAreaPaint(({ id, x, y }, color, ctx) => {
-				const r =
-					3 +
-					Math.sqrt(graphState.degree[id] || 1) *
-						graphState.config.current.graph.nodeSize;
-				ctx.fillStyle = color;
-				ctx.beginPath();
-				ctx.arc(x, y, r, 0, 2 * Math.PI);
-				ctx.fill();
+			.nodePointerAreaPaint((node, color, ctx) => {
+				if (node.axis) {
+					axisDraw(node, color, ctx);
+				} else {
+					const r = getRadius(node);
+					ctx.fillStyle = color;
+					ctx.beginPath();
+					ctx.arc(node.x, node.y, r, 0, 2 * Math.PI);
+					ctx.fill();
+				}
 			})
 			.cooldownTicks(1000)
 			.cooldownTime(10000)
@@ -81,7 +184,6 @@
 				(node: { weight: number }) => node.weight / cfg.linkWidth,
 			)
 			.linkDirectionalArrowLength(12)
-			// .linkDirectionalParticleWidth(2)
 			.width(container.clientWidth)
 			.height(container.clientHeight)
 			.backgroundColor("rgba(0, 0, 0, 0)")
@@ -112,7 +214,10 @@
 			})
 			.onNodeClick((node: MyNode) => {
 				graphState.selectNode(node);
-			});
+			})
+			.d3Force("ghostLine", forceGhostLine());
+
+		graph.d3Force("charge")?.strength((n: any) => (n.ghost ? 0 : -30));
 
 		graphState.theGraph(graph);
 
@@ -120,11 +225,6 @@
 			graphState.updateData(graphState.graphData);
 		}
 
-		function withAlpha(hex: string | undefined, a = 1) {
-			if (!hex) return "#848484";
-			const n = parseInt(hex.slice(1, 7), 16);
-			return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
-		}
 		//In nodePaint the shapes and colors are created.
 		//the thing is that graphState.colorScale() is a sort
 		//of map between a property and some data
@@ -136,10 +236,7 @@
 			const { id, openacces, x, y } = node;
 			const prop = graphState.config.current.mappings.property;
 			const rule = graphState.ruleMap.get(String(node[prop]));
-			const radius =
-				3 +
-				Math.sqrt(graphState.degree[id] || 1) *
-					graphState.config.current.graph.nodeSize;
+			const radius = getRadius(node);
 			const fn =
 				shapes[rule?.shape] ?? shapes[openacces] ?? shapes.unknown;
 			ctx.save();
@@ -175,8 +272,8 @@
 				onMouseDown: actions.mouseDown,
 				onMouseDrag: actions.mouseDrag,
 				onMouseUp: actions.mouseUp,
-				onCmdMouseDown: actions.onMultiSelect,
-				onCmdMouseUp: actions.offMultiSelect,
+				onShiftMouseDown: actions.onMultiSelect,
+				onShiftUp: actions.offMultiSelect,
 				onAltMouseDown: actions.rectangleSelectionStart,
 				onAltMouseUp: actions.clearSelection,
 				onAltMouseDrag: actions.rectangleSelectionEnd,

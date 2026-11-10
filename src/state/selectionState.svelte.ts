@@ -54,7 +54,72 @@ export class SelectionState {
         {
             const oscMsg = [node.id, node.x, node.y];
             // console.log(oscMsg);
-            this.getOsc().sendMessage('/control', oscMsg);
+            this.getOsc().sendMessage('/pos', oscMsg);
+        }
+    }
+
+
+    //====================================================================================
+    // Claude generated - crossing axis 
+    //====================================================================================
+
+    // fields
+    private crossings = new Map<string, MyNode>();   // "nodeId|axisId" -> node currently on an axis
+    private autoSelected = new Set<string | number>(); // ids selected by an axis, not by the user
+
+    // call once per frame
+    updateCrossings(nodes: MyNode[], graph: ForceGraph, getRadius: (n: MyNode) => number) {
+        const axes = nodes.filter((n: any) => n.axis) as any[];
+        if (!axes.length && !this.crossings.size) return;
+
+        const now = new Map<string, MyNode>();
+        const entered: MyNode[] = [];
+
+        for (const a of axes) {
+            const ax = a.fx ?? a.x, ay = a.fy ?? a.y;
+            if (ax == null || ay == null) continue;
+            const half = a.length / 2, r = (a.angle * Math.PI) / 180;
+            const cos = Math.cos(r), sin = Math.sin(r);
+
+            for (const n of nodes as any[]) {
+                if (n.ghost || n.x == null || n.y == null) continue;
+                const rx = n.x - ax, ry = n.y - ay;
+                const u = rx * cos + ry * sin;    // along the axis
+                const v = -rx * sin + ry * cos;   // perpendicular
+                if (Math.abs(v) <= getRadius(n) && Math.abs(u) <= half) {
+                    const key = `${n.id}|${a.id}`;
+                    now.set(key, n);
+                    if (!this.crossings.has(key)) entered.push(n);   // rising edge
+                }
+            }
+        }
+
+        // nodes that left every axis
+        const stillOn = new Set([...now.values()].map(n => n.id));
+        const left = new Set<string | number>();
+        for (const n of this.crossings.values()) if (!stillOn.has(n.id)) left.add(n.id);
+
+        this.crossings = now;
+
+        // select entering nodes (additive)
+        if (entered.length) {
+            const prev = this.multiSelect;
+            this.multiSelect = true;
+            for (const n of entered) {
+                if (!this.selectedNodes.some(s => s.id === n.id)) this.autoSelected.add(n.id);
+                this.selectNode(n, graph, nodes);
+                if (n.className) this.sendOSCMessage(n);   // same message a click sends
+            }
+            this.multiSelect = prev;
+        }
+
+        // deselect only what the axis selected (remove this block if you want selection to persist)
+        const toDrop = [...left].filter(id => this.autoSelected.has(id));
+        if (toDrop.length) {
+            this.selectedNodes = this.selectedNodes.filter(n => !toDrop.includes(n.id));
+            toDrop.forEach(id => this.autoSelected.delete(id));
+            graph.nodeColor((n: any) =>
+                this.selectedNodes.some(s => s.id === n.id) ? 'red' : this.getColorScale()(n.openacces));
         }
     }
 

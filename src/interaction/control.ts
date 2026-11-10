@@ -21,6 +21,8 @@ export function registerControls(handlers: {
     onCtrlMouseDown?: (e: MouseEvent) => void;
     onCmdMouseDown?: (e: MouseEvent) => void;
     onCmdMouseUp?: (e: MouseEvent) => void;
+    onShiftMouseDown?: (e: MouseEvent) => void;
+    onShiftUp?: () => void;
     onAltMouseDown?: (e: MouseEvent) => void;
     onAltMouseUp?: (e: MouseEvent) => void;
     onAltMouseDrag?: (e: MouseEvent) => void;
@@ -64,6 +66,7 @@ export function registerControls(handlers: {
     function handleKeyup(e: KeyboardEvent) {
         if (e.key === 'Control') handlers.onCmdUp?.();
         if (e.key === 'Alt') handlers.onAltUp?.();
+        if (e.key === 'Shift') handlers.onShiftUp?.();
     }
 
 
@@ -82,12 +85,16 @@ export function registerControls(handlers: {
             handlers.onAltMouseDown?.(e)
         };
         if (e.metaKey && e.button === 0) {
-            // e.stopPropagation();
+            e.stopPropagation();
             handlers.onCmdMouseDown?.(e)
         };
         if (e.ctrlKey && e.button === 0) {
             e.stopPropagation();
             handlers.onCtrlMouseDown?.(e)
+        };
+        if (e.shiftKey && e.button === 0) {
+            e.stopPropagation();
+            handlers.onShiftMouseDown?.(e)
         };
 
     }

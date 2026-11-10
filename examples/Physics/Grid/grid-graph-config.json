@@ -103,6 +103,15 @@
       "pitch": null,
       "velocity": null,
       "gianni": null
+    },
+     "axis": {
+      "axis": true,
+      "ghost": true,
+      "physics": true,
+      "angle": 0,
+      "length": 100,
+      "strength": 0,
+      "range": 100
     }
   },
   "oscConfig": {

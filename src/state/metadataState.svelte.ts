@@ -4,6 +4,7 @@ import { Notice } from 'obsidian';
 export class MetadataState {
     // selectedNode: Node | undefined;
     copyMetatada = <Record<string, any>>({});
+    copyProperty = <Record<string, any>>({});
     copyClass: string = "";
 
     private reservedKeys = new Set([
@@ -64,6 +65,35 @@ export class MetadataState {
         this.copyMetatada = localNode;
     }
 
+    copyNodePropertyValue(name: string, value: string) {
+        // Source - https://stackoverflow.com/a/15089643
+        // Posted by Wytze, modified by community. See post 'Timeline' for change history
+        // Retrieved 2026-11-09, License - CC BY-SA 3.0
+        for (var member in this.copyProperty) delete this.copyProperty[member];
+        this.copyProperty[name] = value;
+        console.log(this.copyProperty);
+    }
+
+    applyNodePropertyValue(selectedNode: MyNode) {
+        if (!selectedNode || !this.copyProperty) return;
+        console.log("APPLYING!!")
+        const isEmpty = (val: any) =>
+            val === undefined ||
+            val === null ||
+            val === '' ||
+            (Array.isArray(val) && val.filter((item) => item !== '' && item !== null && item !== undefined).length === 0);
+        for (const key of Object.keys(selectedNode)) {
+            if (!this.reservedKeys.has(key) && isEmpty(selectedNode[key])) {
+                delete selectedNode[key];
+            }
+        }
+        for (const key of Object.keys(this.copyProperty)) {
+            if (this.reservedKeys.has(key)) continue;
+            console.log(key);
+            selectedNode[key] = this.copyProperty[key];
+        }
+    }
+
     applyMetadata(selectedNode: MyNode) {
         if (!selectedNode) return;
         console.log("SELECTED", selectedNode)
@@ -84,7 +114,7 @@ export class MetadataState {
         }
     }
 
-    applyRetrievedNodeClass(selectedNode: MyNode, template: Record<string, any>){
+    applyRetrievedNodeClass(selectedNode: MyNode, template: Record<string, any>) {
         if (!this.copyClass) return;
         this.applyNodeClass(selectedNode, this.copyClass, template[this.copyClass])
     }
