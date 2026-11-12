@@ -477,6 +477,41 @@ export class GraphState {
         }
     }
 
+    linkAllSelectedNodes() {
+        if (!this.graphData || !this.selectionState.selectedNodes[0]) return;
+        console.log()
+        for (const el of this.selectionState.selectedNodes) {
+            const targetId = el.id;
+            //to add a link I need to get the link ID  and a targetId that has to be a node existing in the graph
+            const sourceId = this.selectionState.selectedNodes[0].id;
+            // Normalize both to the same type — match whatever type your node.id actually is
+            const normalizedTarget = typeof sourceId === 'number' ? Number(targetId) : String(targetId);
+
+            // I remove if they are the same maybe here I can throw an error later
+            if (sourceId === normalizedTarget) {
+                console.warn(`addLink: target is the same as source`);
+                continue;
+            };
+
+            // Make sure the target actually exists in the current node set
+            const targetExists = this.graphData.nodes.some(n => n.id === normalizedTarget);
+            if (!targetExists) {
+                console.warn(`addLink: no node with id ${normalizedTarget}`);
+                continue;
+            }
+            const exists = this.graphData.links.some(link => {
+                const s = idOf(link.source) ?? link.source;
+                const t = idOf(link.target) ?? link.target;
+                return (s === sourceId && t === normalizedTarget) || (s === normalizedTarget && t === sourceId);
+            });
+            if (exists) continue;
+            this.pushUndo();
+            // here I push the new link but I have to check if targetId exists, when is this created?
+            this.graphData.links.push({ source: sourceId, target: normalizedTarget });
+        }
+        this.updateGraphData();
+    }
+
     editLinkDirection(link: MyLink) {
         if (!this.graphData || !this.selectionState.selectedNodes[0]) return;
         this.pushUndo();

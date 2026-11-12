@@ -17,6 +17,7 @@ export function createGraphActions(graphState: GraphState) {
     mouseUp: () => null,
     mouseDrag: () => null,
     // toggleMetadataView: () => graphState.toggleMetadata(),
+    linkAllSelectedNodes: () => graphState.linkAllSelectedNodes(),
     onMultiSelect: (e: MouseEvent) => graphState.toggleMultiselect(true),
     offMultiSelect: () => graphState.toggleMultiselect(false),
     rectangleSelectionStart: (e: MouseEvent) => graphState.selectionStart(e),

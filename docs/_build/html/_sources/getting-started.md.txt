@@ -6,20 +6,36 @@
     <figcaption>The graph loaded with a co-citaton coupling graph and custom node shapes.</figcaption>
 </figure>
 
-## Creating Nodes
-New nodes can be created by clicking <kbd>control/ctrl</kbd> key, you will see a pencil symbol as pointer. It is recommended to turn off physics when creating new nodes, as they may be hard to find and edit once they are in the graph. 
-The default name for the node can be edited in Cardew settings.
+When opening Cardew for the first time you'll see a force graph network of bibliometric data opening up. All of the panels will be visible to the user. The panels can be dinamycally moved and closed. 
 
-## Deleting Nodes
-Any node can be deleted by using the <kbd>⌫/delete</kbd> key.
+By default they are organised as follows:
 
-## Selecting Multiple Nodes
-Multiple nodes can be selected by clicking <kbd>alt/option</kbd> and dragging. Selected nodes will turn red. When selecting multiple nodes only the class for all elements can be edited in the metadata.
+- Left side panel:
+    - Top: **quick settings** and actions (save, load, display directional arrows)
+    - Bottom: **filter** and search nodes by properties (only work with string properties)
+- Center panel:
+    - Top: the **Force-layout Graph**, where users can edit and explore the data
+    - Bottom: the **Graph Link Edit Panel**. When a node is selected users can see all of its connections and add new ones
+- Right panel: **Metadata Edit Panel**. When a node is selected users can edit its properties. If multiple nodes are selected users can change their classes.
+
+![The plugin as it is when opened](./_static/images/screen.png)
+
+
+```{toctree}
+:maxdepth: 2
+:caption: Interaction and Control
+
+getting-started/controls/selecting-nodes
+getting-started/controls/interaction-modes
+getting-started/controls/filtering
+getting-started/controls/osc
+```
 
 ```{toctree}
 :maxdepth: 2
 :caption: Editing Data
 
+getting-started/editing/creating
 getting-started/editing/metadata
 getting-started/editing/link-edit
 getting-started/editing/shape-edit
@@ -27,8 +43,8 @@ getting-started/editing/shape-edit
 
 ```{toctree}
 :maxdepth: 2
-:caption: Interaction and Control
+:caption: Settings
 
-getting-started/controls/interaction-modes
-getting-started/controls/osc
+getting-started/settings/quick-settings
+getting-started/settings/settings
 ```

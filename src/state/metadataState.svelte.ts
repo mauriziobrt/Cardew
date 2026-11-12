@@ -88,7 +88,8 @@ export class MetadataState {
             }
         }
         for (const key of Object.keys(this.copyProperty)) {
-            if (this.reservedKeys.has(key)) continue;
+            // if (this.reservedKeys.has(key)) continue;
+            if (this.reservedKeys.has(key) && key !== "fx" && key !== "fy") continue;
             console.log(key);
             selectedNode[key] = this.copyProperty[key];
         }

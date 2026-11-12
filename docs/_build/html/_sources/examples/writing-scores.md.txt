@@ -1,9 +1,17 @@
 # Writing Scores
 
-https://dl.acm.org/doi/pdf/10.1145/1180639.1180797
-
 ## Static Scores
 
-![Cassiopea](../_static/images/cassiopea.png)
+<figure>
+    <img src="../_static/images/Treatise-18.png"
+         alt="Physics graph">
+    <figcaption>Cornelius Cardew - Treatise page 18 recreated in Cardew.</figcaption>
+</figure>
 
-https://monoskop.org/images/9/92/Cage_John_Notations.pdf
+The score can be played interactively (see {doc}`../getting-started/controls/interaction-modes`) or using the axes reading it from any direction. 
+
+<figure>
+    <img src="../_static/images/treatise-18.gif"
+         alt="Physics graph">
+    <figcaption>Cornelius Cardew - Treatise page 18 recreated in Cardew.</figcaption>
+</figure>

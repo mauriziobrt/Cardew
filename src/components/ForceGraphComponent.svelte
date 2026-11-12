@@ -37,7 +37,14 @@
 		return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
 	}
 
+	// function axisColor(n: MyNode) {
+	// 	if (n.axisColor) return n.axisColor;
+	// 	const prop = graphState.config.current.mappings.property;
+	// 	const rule = graphState.ruleMap.get(String(n[prop]));
+	// 	return rule?.color ? withAlpha(rule.color, rule.alpha) : "black";
+	// }
 	function axisColor(n: MyNode) {
+		if (selectedIds.has(n.id)) return "red";
 		if (n.axisColor) return n.axisColor;
 		const prop = graphState.config.current.mappings.property;
 		const rule = graphState.ruleMap.get(String(n[prop]));
@@ -188,7 +195,7 @@
 			.height(container.clientHeight)
 			.backgroundColor("rgba(0, 0, 0, 0)")
 			.linkColor(() => linkStaticColor)
-			.linkCurvature(0.2)
+			.linkCurvature(cfg.linkCurvature)
 			.onEngineStop(() => {
 				console.log("Physics stopped");
 			})
@@ -278,6 +285,7 @@
 				onAltMouseUp: actions.clearSelection,
 				onAltMouseDrag: actions.rectangleSelectionEnd,
 				onCmdA: actions.selectAll,
+				onL: actions.linkAllSelectedNodes,
 				// onCmdI: actions.toggleMetadataView,
 				undo: actions.undo,
 				redo: actions.redo,

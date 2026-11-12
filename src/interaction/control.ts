@@ -27,6 +27,7 @@ export function registerControls(handlers: {
     onAltMouseUp?: (e: MouseEvent) => void;
     onAltMouseDrag?: (e: MouseEvent) => void;
     onCmdA: () => void;
+    onL: () => void;
     // onCmdI: () => void;
     undo: () => void;
     redo: () => void;
@@ -38,6 +39,7 @@ export function registerControls(handlers: {
         if (e.key === 'a' || e.key === 'ArrowLeft') handlers.onLeft();
         if (e.key === 's' || e.key === 'ArrowDown') handlers.onDown();
         if (e.key === 'd' || e.key === 'ArrowRight') handlers.onRight();
+        if (e.key === 'l') handlers.onL();
         if (e.key === ' ') handlers.onSpace?.();
         if (e.key === 'Backspace') handlers.onBackspace?.();
         if (e.key === 'Control') handlers.onCmd?.();

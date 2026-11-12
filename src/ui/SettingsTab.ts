@@ -133,6 +133,19 @@ export class ForceGraphSettingTab extends PluginSettingTab {
                 }));
 
         new Setting(containerEl)
+            .setName('Link Curvature')
+            .setDesc('Determines the curvature of connection lines')
+            .addSlider(slider => slider
+                .setLimits(0.0, 10.0, 0.001)
+                .setValue(this.plugin.config.current.graph.linkCurvature)
+                .setDynamicTooltip()
+                .onChange(async (value) => {
+                    this.plugin.config.updateGraph({ linkCurvature: value });
+                    await this.plugin.config.save(this.plugin);
+                    this.plugin.graphState.graph?.linkCurvature(this.plugin.config.current.graph.linkCurvature);
+                }));
+
+        new Setting(containerEl)
             .setName('Alpha Decay')
             .setDesc('Speed of physics simulation cooldown (higher = faster)')
             .addSlider(slider => slider
@@ -175,37 +188,37 @@ export class ForceGraphSettingTab extends PluginSettingTab {
                 }));
 
         // Colors Section
-        containerEl.createEl('h2', { text: 'Open Access Colors' });
+        // containerEl.createEl('h2', { text: 'Open Access Colors' });
 
-        const colorSettings = [
-            { key: 'gold', name: 'Gold OA', desc: 'Color for gold open access' },
-            { key: 'green', name: 'Green OA', desc: 'Color for green open access' },
-            { key: 'diamond', name: 'Diamond OA', desc: 'Color for diamond open access' },
-            { key: 'closed', name: 'Closed', desc: 'Color for closed access' },
-            { key: 'hybrid', name: 'Hybrid', desc: 'Color for hybrid access' }
-        ];
+        // const colorSettings = [
+        //     { key: 'gold', name: 'Gold OA', desc: 'Color for gold open access' },
+        //     { key: 'green', name: 'Green OA', desc: 'Color for green open access' },
+        //     { key: 'diamond', name: 'Diamond OA', desc: 'Color for diamond open access' },
+        //     { key: 'closed', name: 'Closed', desc: 'Color for closed access' },
+        //     { key: 'hybrid', name: 'Hybrid', desc: 'Color for hybrid access' }
+        // ];
 
-        colorSettings.forEach(({ key, name, desc }) => {
-            new Setting(containerEl)
-                .setName(name)
-                .setDesc(desc)
-                .addText(text => text
-                    .setPlaceholder('#ffffffff')
-                    .setValue(this.plugin.config.current.colors[key as keyof typeof this.plugin.config.current.colors])
-                    .onChange(async (value) => {
-                        this.plugin.config.update({
-                            colors: {
-                                ...this.plugin.config.current.colors,
-                                [key]: value
-                            }
-                        });
-                        await this.plugin.config.save(this.plugin);
-                        // Trigger graph color update
-                        if (this.plugin.graphState.graphData) {
-                            this.plugin.graphState.updateData(this.plugin.graphState.graphData);
-                        }
-                    }));
-        });
+        // colorSettings.forEach(({ key, name, desc }) => {
+        //     new Setting(containerEl)
+        //         .setName(name)
+        //         .setDesc(desc)
+        //         .addText(text => text
+        //             .setPlaceholder('#ffffffff')
+        //             .setValue(this.plugin.config.current.colors[key as keyof typeof this.plugin.config.current.colors])
+        //             .onChange(async (value) => {
+        //                 this.plugin.config.update({
+        //                     colors: {
+        //                         ...this.plugin.config.current.colors,
+        //                         [key]: value
+        //                     }
+        //                 });
+        //                 await this.plugin.config.save(this.plugin);
+        //                 // Trigger graph color update
+        //                 if (this.plugin.graphState.graphData) {
+        //                     this.plugin.graphState.updateData(this.plugin.graphState.graphData);
+        //                 }
+        //             }));
+        // });
         // Creative Mode
 
         // Creative Mode
@@ -234,8 +247,8 @@ export class ForceGraphSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.config.current.newName)
                 .onChange(async (value) => {
                     this.plugin.config.update
-                        this.plugin.config.current.newName = value;
-                        await this.plugin.config.save(this.plugin);
+                    this.plugin.config.current.newName = value;
+                    await this.plugin.config.save(this.plugin);
                 }));
         // Creative Mode
         containerEl.createEl('h2', { text: 'Reset' });

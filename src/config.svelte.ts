@@ -13,6 +13,7 @@ export interface PluginConfig {
     graph: {
         nodeSize: number;
         linkWidth: number;
+        linkCurvature: number;
         alphaDecay: number;
         velocityDecay: number;
         cooldownTicks: number;
@@ -53,6 +54,7 @@ export const DEFAULT_CONFIG: PluginConfig = {
     graph: {
         nodeSize: 6,
         linkWidth: 4.0,
+        linkCurvature: 0.2,
         alphaDecay: 0.02,
         velocityDecay: 0.3,
         cooldownTicks: 200

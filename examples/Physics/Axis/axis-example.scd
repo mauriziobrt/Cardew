@@ -26,7 +26,7 @@ thisProcess.openUDPPort(57121);
 (
 OSCdef(\control, { arg msg;
 	var vals = msg[2..];   // [0, -131.158, 0, 1, -131.158]
-	{ SinOsc.ar(msg[2]+500) * EnvGen.ar(Env.perc(0.01, 0.2), doneAction: 2) * 0.2 ! 2 }.play;
+	{ SinOsc.ar(msg[2]+150) * EnvGen.ar(Env.perc(0.001, 0.03), doneAction: 2) * 0.1 ! 2 }.play;
 	//vals.postln;
    /* x.set(
         \t_trig, 1,
