@@ -3,7 +3,7 @@
   "id": "cardew-force-graph",
   "name": "Cardew",
   "version": "0.0.1",
-  "minAppVersion": "0.15.0",
+  "minAppVersion": "1.14.4",
   "description": "An interactive force graph for creating rhizomatic music scores and exploring networked data.",
   "author": "Maurizio Berta",
   "authorUrl": "https://mauriziobrt.github.io/",

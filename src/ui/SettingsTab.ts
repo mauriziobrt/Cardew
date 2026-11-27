@@ -15,7 +15,8 @@ export class ForceGraphSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		// OSC Settings Section
-		containerEl.createEl("h2", { text: "OSC Settings" });
+		// containerEl.createEl("h2", { text: "OSC Settings" });
+		new Setting(containerEl).setName("OSC Settings").setHeading();
 
 		new Setting(containerEl)
 			.setName("Local Port")
@@ -94,7 +95,8 @@ export class ForceGraphSettingTab extends PluginSettingTab {
 			);
 
 		// Graph Settings Section
-		containerEl.createEl("h2", { text: "Graph Settings" });
+		new Setting(containerEl).setName("Graph Settings").setHeading();
+		// containerEl.createEl("h2", { text: "Graph Settings" });
 
 		new Setting(containerEl)
 			.setName("Graph Mode")
@@ -247,7 +249,8 @@ export class ForceGraphSettingTab extends PluginSettingTab {
 			);
 
 		// Paths Section
-		containerEl.createEl("h2", { text: "Paths" });
+		// containerEl.createEl("h2", { text: "Paths" });
+		new Setting(containerEl).setName("Paths").setHeading();
 
 		new Setting(containerEl)
 			.setName("Default Data Path")
@@ -299,7 +302,8 @@ export class ForceGraphSettingTab extends PluginSettingTab {
 		// Creative Mode
 
 		// Creative Mode
-		containerEl.createEl("h2", { text: "Creative Mode" });
+		// containerEl.createEl("h2", { text: "Creative Mode" });
+		new Setting(containerEl).setName("Creative Mode").setHeading();
 		// Enable Creative Mode
 		new Setting(containerEl)
 			.setName("Enable Creative Mode")
@@ -334,7 +338,8 @@ export class ForceGraphSettingTab extends PluginSettingTab {
 					}),
 			);
 		// Creative Mode
-		containerEl.createEl("h2", { text: "Reset" });
+		// containerEl.createEl("h2", { text: "Reset" });
+		new Setting(containerEl).setName("Reset").setHeading();
 
 		// Reset to defaults button
 		new Setting(containerEl)

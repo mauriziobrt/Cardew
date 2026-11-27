@@ -878,11 +878,11 @@ export default class ExamplePlugin extends Plugin {
 		document.head
 			.querySelectorAll('style[id^="svelte-"]')
 			.forEach((el) => el.remove());
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_FORCE_GRAPH);
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_INFO_PANEL);
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_FILTER_PANEL);
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_METADATA_PANEL);
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_LINK_PANEL);
+		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_FORCE_GRAPH);
+		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_INFO_PANEL);
+		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_FILTER_PANEL);
+		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_METADATA_PANEL);
+		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_LINK_PANEL);
 		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_OSREPL);
 
 		if (this.graphState) {
