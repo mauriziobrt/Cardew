@@ -10,7 +10,7 @@
 		right: "Right only",
 	};
 
-	const states = ["left",  "right"];
+	const states = ["left", "right"];
 	const icons = { left: "←", right: "→" };
 
 	function cycle() {
@@ -58,29 +58,29 @@
 -->
 
 <div
-  class="tri-toggle"
-  data-state={value}
-  role="radiogroup"
-  aria-label="direction toggle"
-  tabindex="0"
-  onkeydown={handleKeydown}
+	class="tri-toggle"
+	data-state={value}
+	role="radiogroup"
+	aria-label="direction toggle"
+	tabindex="0"
+	onkeydown={handleKeydown}
 >
-  <div class="tri-toggle-track">
-    <div class="tri-toggle-thumb"></div>
-    {#each states as s}
-      <button
-        type="button"
-        class="tri-toggle-segment"
-        class:active={value === s}
-        role="radio"
-        aria-checked={value === s}
-        title={labels[s]}
-        onclick={() => setState(s)}
-      >
-        {icons[s]}
-      </button>
-    {/each}
-  </div>
+	<div class="tri-toggle-track">
+		<div class="tri-toggle-thumb"></div>
+		{#each states as s}
+			<button
+				type="button"
+				class="tri-toggle-segment"
+				class:active={value === s}
+				role="radio"
+				aria-checked={value === s}
+				title={labels[s]}
+				onclick={() => setState(s)}
+			>
+				{icons[s]}
+			</button>
+		{/each}
+	</div>
 </div>
 
 <style>

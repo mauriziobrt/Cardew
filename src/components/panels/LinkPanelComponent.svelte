@@ -13,7 +13,7 @@
 	let { graphState }: Props = $props();
 
 	function handleAdd(targetId: MyNode["id"]) {
-		if(targetId) graphState.addLink(targetId);
+		if (targetId) graphState.addLink(targetId);
 	}
 
 	function handleDelete(link: MyLink) {
@@ -60,24 +60,33 @@ So what is needed:
 		also on // the other end -->
 						{#each graphState.selectedNodeRawLinks as link (link)}
 							{@const otherNode =
-								idOf(link.source) === graphState.selectionState.selectedNodes[0].id
+								idOf(link.source) ===
+								graphState.selectionState.selectedNodes[0].id
 									? link.target
 									: link.source}
 							<PanelLink
 								links={link}
-								otherNode={otherNode}
+								{otherNode}
 								onDelete={handleDelete}
 								// onEdit at the moment is unused
 								// onEdit={(newTargetId: MyNode["id"]) =>
 								// 	{if(newTargetId) graphState.editLink(link, newTargetId)}}
 								// bind:nodes={graphState.allNodeIds}
 								onClick={() => graphState.highlightLink(link)}
-								onLeave={() => graphState.selectNode(graphState.selectionState.selectedNodes[0])}
+								onLeave={() =>
+									graphState.selectNode(
+										graphState.selectionState
+											.selectedNodes[0],
+									)}
 								selectNode={(node: MyNode) =>
 									graphState.selectNode(node)}
 								degree={graphState.degree[otherNode.id]}
-								direction={graphState.getLinkDirection(graphState.selectionState.selectedNodes[0], link)}
-								editDirection={() => graphState.editLinkDirection(link)}
+								direction={graphState.getLinkDirection(
+									graphState.selectionState.selectedNodes[0],
+									link,
+								)}
+								editDirection={() =>
+									graphState.editLinkDirection(link)}
 							/>
 						{/each}
 					{/if}

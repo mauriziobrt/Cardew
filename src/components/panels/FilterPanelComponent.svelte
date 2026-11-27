@@ -98,7 +98,10 @@
 							onkeydown={(e) =>
 								e.key === "Enter" && highlightNode?.(id)}
 						>
-							<div class="setting-item-info" style="padding: 1px;">
+							<div
+								class="setting-item-info"
+								style="padding: 1px;"
+							>
 								<div class="setting-item-name">
 									<b>{id}</b> ~ <em>{item}</em>
 								</div>

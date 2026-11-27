@@ -1,188 +1,211 @@
 import type { MyNode } from "src/types/graph";
-import { Notice } from 'obsidian';
+import { Notice } from "obsidian";
 
 export class MetadataState {
-    // selectedNode: Node | undefined;
-    copyMetatada = <Record<string, any>>({});
-    copyProperty = <Record<string, any>>({});
-    copyClass: string = "";
+	// selectedNode: Node | undefined;
+	copyMetatada = <Record<string, any>>{};
+	copyProperty = <Record<string, any>>{};
+	copyClass: string = "";
 
-    private reservedKeys = new Set([
-        "id",
-        "name",
-        "x",
-        "y",
-        "vx",
-        "vy",
-        "index",
-        "__indexColor",
-        "vx",
-        "vy",
-        "fx",
-        "fy",
-        "__initialDragPos",
-        "__dragged",
-    ]);
+	private reservedKeys = new Set([
+		"id",
+		"name",
+		"x",
+		"y",
+		"vx",
+		"vy",
+		"index",
+		"__indexColor",
+		"vx",
+		"vy",
+		"fx",
+		"fy",
+		"__initialDragPos",
+		"__dragged",
+	]);
 
-    constructor(private getSelectedNode: () => MyNode | null) {
-        // this.getSelectedNode;
-    }
-    // get selectedNode() { return this.getSelectedNode; }
+	constructor(private getSelectedNode: () => MyNode | null) {
+		// this.getSelectedNode;
+	}
+	// get selectedNode() { return this.getSelectedNode; }
 
-    //================================================================
-    // Functions
-    //================================================================
+	//================================================================
+	// Functions
+	//================================================================
 
-    retrieveNodeClass(selectedNode: MyNode) {
-        if (!selectedNode) return;
-        if (!selectedNode.className) {
-            new Notice("Element doesn't have a class yet");
-            return
-        }
-        this.copyClass = selectedNode.className;
-    }
+	retrieveNodeClass(selectedNode: MyNode) {
+		if (!selectedNode) return;
+		if (!selectedNode.className) {
+			new Notice("Element doesn't have a class yet");
+			return;
+		}
+		this.copyClass = selectedNode.className;
+	}
 
-    retrieveNodeCleanMetadata(selectedNode: MyNode) {
-        if (!selectedNode) return;
-        //Check ReservedKeys and remove
-        // Helper to check for empty values, including empty arrays
-        const isEmpty = (val: any) =>
-            val === undefined ||
-            val === null ||
-            val === '' ||
-            (Array.isArray(val) && val.filter((item) => item !== '' && item !== null && item !== undefined).length === 0); //fix this now I have array with length 1
-        // but the value contained is "" so [""] and then I get 1
+	retrieveNodeCleanMetadata(selectedNode: MyNode) {
+		if (!selectedNode) return;
+		//Check ReservedKeys and remove
+		// Helper to check for empty values, including empty arrays
+		const isEmpty = (val: any) =>
+			val === undefined ||
+			val === null ||
+			val === "" ||
+			(Array.isArray(val) &&
+				val.filter(
+					(item) =>
+						item !== "" && item !== null && item !== undefined,
+				).length === 0); //fix this now I have array with length 1
+		// but the value contained is "" so [""] and then I get 1
 
-        // Remove empty non-reserved keys from selectedNode
-        // I need to make a copy though
-        const localNode: MyNode = { ...selectedNode };
-        for (const key of Object.keys(selectedNode)) {
-            if (!this.reservedKeys.has(key) && isEmpty(localNode[key])) {
-                delete localNode[key];
-            }
-        }
-        //Save this somewhere no? maybe 
-        this.copyMetatada = localNode;
-    }
+		// Remove empty non-reserved keys from selectedNode
+		// I need to make a copy though
+		const localNode: MyNode = { ...selectedNode };
+		for (const key of Object.keys(selectedNode)) {
+			if (!this.reservedKeys.has(key) && isEmpty(localNode[key])) {
+				delete localNode[key];
+			}
+		}
+		//Save this somewhere no? maybe
+		this.copyMetatada = localNode;
+	}
 
-    copyNodePropertyValue(name: string, value: string) {
-        // Source - https://stackoverflow.com/a/15089643
-        // Posted by Wytze, modified by community. See post 'Timeline' for change history
-        // Retrieved 2026-11-09, License - CC BY-SA 3.0
-        for (var member in this.copyProperty) delete this.copyProperty[member];
-        this.copyProperty[name] = value;
-        console.log(this.copyProperty);
-    }
+	copyNodePropertyValue(name: string, value: string) {
+		// Source - https://stackoverflow.com/a/15089643
+		// Posted by Wytze, modified by community. See post 'Timeline' for change history
+		// Retrieved 2026-11-09, License - CC BY-SA 3.0
+		for (var member in this.copyProperty) delete this.copyProperty[member];
+		this.copyProperty[name] = value;
+		console.log(this.copyProperty);
+	}
 
-    applyNodePropertyValue(selectedNode: MyNode) {
-        if (!selectedNode || !this.copyProperty) return;
-        console.log("APPLYING!!")
-        const isEmpty = (val: any) =>
-            val === undefined ||
-            val === null ||
-            val === '' ||
-            (Array.isArray(val) && val.filter((item) => item !== '' && item !== null && item !== undefined).length === 0);
-        for (const key of Object.keys(selectedNode)) {
-            if (!this.reservedKeys.has(key) && isEmpty(selectedNode[key])) {
-                delete selectedNode[key];
-            }
-        }
-        for (const key of Object.keys(this.copyProperty)) {
-            // if (this.reservedKeys.has(key)) continue;
-            if (this.reservedKeys.has(key) && key !== "fx" && key !== "fy") continue;
-            console.log(key);
-            selectedNode[key] = this.copyProperty[key];
-        }
-    }
+	applyNodePropertyValue(selectedNode: MyNode) {
+		if (!selectedNode || !this.copyProperty) return;
+		console.log("APPLYING!!");
+		const isEmpty = (val: any) =>
+			val === undefined ||
+			val === null ||
+			val === "" ||
+			(Array.isArray(val) &&
+				val.filter(
+					(item) =>
+						item !== "" && item !== null && item !== undefined,
+				).length === 0);
+		for (const key of Object.keys(selectedNode)) {
+			if (!this.reservedKeys.has(key) && isEmpty(selectedNode[key])) {
+				delete selectedNode[key];
+			}
+		}
+		for (const key of Object.keys(this.copyProperty)) {
+			// if (this.reservedKeys.has(key)) continue;
+			if (this.reservedKeys.has(key) && key !== "fx" && key !== "fy")
+				continue;
+			console.log(key);
+			selectedNode[key] = this.copyProperty[key];
+		}
+	}
 
-    applyMetadata(selectedNode: MyNode) {
-        if (!selectedNode) return;
-        console.log("SELECTED", selectedNode)
-        console.log(this.copyMetatada)
-        const isEmpty = (val: any) =>
-            val === undefined ||
-            val === null ||
-            val === '' ||
-            (Array.isArray(val) && val.filter((item) => item !== '' && item !== null && item !== undefined).length === 0);
-        for (const key of Object.keys(selectedNode)) {
-            if (!this.reservedKeys.has(key) && isEmpty(selectedNode[key])) {
-                delete selectedNode[key];
-            }
-        }
-        for (const key of Object.keys(this.copyMetatada)) {
-            if (this.reservedKeys.has(key)) continue;
-            selectedNode[key] = this.copyMetatada[key];
-        }
-    }
+	applyMetadata(selectedNode: MyNode) {
+		if (!selectedNode) return;
+		console.log("SELECTED", selectedNode);
+		console.log(this.copyMetatada);
+		const isEmpty = (val: any) =>
+			val === undefined ||
+			val === null ||
+			val === "" ||
+			(Array.isArray(val) &&
+				val.filter(
+					(item) =>
+						item !== "" && item !== null && item !== undefined,
+				).length === 0);
+		for (const key of Object.keys(selectedNode)) {
+			if (!this.reservedKeys.has(key) && isEmpty(selectedNode[key])) {
+				delete selectedNode[key];
+			}
+		}
+		for (const key of Object.keys(this.copyMetatada)) {
+			if (this.reservedKeys.has(key)) continue;
+			selectedNode[key] = this.copyMetatada[key];
+		}
+	}
 
-    applyRetrievedNodeClass(selectedNode: MyNode, template: Record<string, any>) {
-        if (!this.copyClass) return;
-        this.applyNodeClass(selectedNode, this.copyClass, template[this.copyClass])
-    }
+	applyRetrievedNodeClass(
+		selectedNode: MyNode,
+		template: Record<string, any>,
+	) {
+		if (!this.copyClass) return;
+		this.applyNodeClass(
+			selectedNode,
+			this.copyClass,
+			template[this.copyClass],
+		);
+	}
 
-    applyNodeClass(selectedNode: MyNode, className: string | number, template: Record<string, any>) {
-        if (!selectedNode) return;
-        // console.log("This is the node!!", selectedNode)
-        // const template = this.nodeClasses[className];
-        // Add any other immutable system keys here
+	applyNodeClass(
+		selectedNode: MyNode,
+		className: string | number,
+		template: Record<string, any>,
+	) {
+		if (!selectedNode) return;
+		// console.log("This is the node!!", selectedNode)
+		// const template = this.nodeClasses[className];
+		// Add any other immutable system keys here
 
-        // Helper to check for empty values, including empty arrays
-        const isEmpty = (val: any) =>
-            val === undefined ||
-            val === null ||
-            val === '' ||
-            (Array.isArray(val) && val.length === 0);
+		// Helper to check for empty values, including empty arrays
+		const isEmpty = (val: any) =>
+			val === undefined ||
+			val === null ||
+			val === "" ||
+			(Array.isArray(val) && val.length === 0);
 
-        // Remove empty non-reserved keys from selectedNode
-        for (const key of Object.keys(selectedNode)) {
-            if (!this.reservedKeys.has(key) && isEmpty(selectedNode[key])) {
-                delete selectedNode[key];
-            }
-        }
+		// Remove empty non-reserved keys from selectedNode
+		for (const key of Object.keys(selectedNode)) {
+			if (!this.reservedKeys.has(key) && isEmpty(selectedNode[key])) {
+				delete selectedNode[key];
+			}
+		}
 
-        // Assign template values for missing keys
-        for (const key of Object.keys(template)) {
-            if (this.reservedKeys.has(key)) continue;
+		// Assign template values for missing keys
+		for (const key of Object.keys(template)) {
+			if (this.reservedKeys.has(key)) continue;
 
-            if (!(key in selectedNode)) {
-                selectedNode[key] = template[key];
-            }
-        }
-        selectedNode.className = className;
-        // console.log("This is the node!!", selectedNode)
-    }
+			if (!(key in selectedNode)) {
+				selectedNode[key] = template[key];
+			}
+		}
+		selectedNode.className = String(className);
+		// console.log("This is the node!!", selectedNode)
+	}
 
-    getEmptyFields(selectedNode: MyNode) {
-        // if overwrite on I can saveToExistingClas
-        if (!selectedNode) return [];
-        const fields = { ...selectedNode };
-        for (const reservedKey of this.reservedKeys) {
-            delete fields[reservedKey];
-        }
-        //make all fields empty
-        for (const key of Object.keys(fields)) {
-            // here depending on the type I should empty them
-            fields[key] = null;
-        }
-        // console.log("New class",className);
-        // console.log(fields);
-        // nodeClasses[className] = fields;
-        return fields;
-        // delete RESERVED/RESERVEDEXTRA fields.className. 
-        // If !overwrite && this.nodeClasses[className] exists
-        // return early (or confirm()). 
-        // this.nodeClasses[className] = fields; 
-        // await fileLoader.saveNodeClasses(filePath, this.nodeClasses);
-    }
+	getEmptyFields(selectedNode: MyNode) {
+		// if overwrite on I can saveToExistingClas
+		if (!selectedNode) return [];
+		const fields = { ...selectedNode };
+		for (const reservedKey of this.reservedKeys) {
+			delete fields[reservedKey];
+		}
+		//make all fields empty
+		for (const key of Object.keys(fields)) {
+			// here depending on the type I should empty them
+			fields[key] = null;
+		}
+		// console.log("New class",className);
+		// console.log(fields);
+		// nodeClasses[className] = fields;
+		return fields;
+		// delete RESERVED/RESERVEDEXTRA fields.className.
+		// If !overwrite && this.nodeClasses[className] exists
+		// return early (or confirm()).
+		// this.nodeClasses[className] = fields;
+		// await fileLoader.saveNodeClasses(filePath, this.nodeClasses);
+	}
 
-    removeMetadata(metaName: any) {
-        if (!this.graphData) return;
-        // this.pushUndo();
-        // here I have to pass the exact instance of link: {source: ...; target: ...}
-        if (!this.selectedNode) return;
-        console.log(this.selectedNode[metaName]);
-        delete this.selectedNode[metaName];
+	removeMetadata(selectedNode: MyNode, metaName: any) {
+		// if (!this.graphData) return;
+		// this.pushUndo();
+		// here I have to pass the exact instance of link: {source: ...; target: ...}
+		if (!selectedNode) return;
+		delete selectedNode[metaName];
 
-        // this.updateGraphData();
-    }
+		// this.updateGraphData();
+	}
 }

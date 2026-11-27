@@ -21,6 +21,7 @@
 		"builtin-modules": "^5.4.0",
 		"esbuild": "^0.28.2",
 		"esbuild-svelte": "^0.9.5",
+		"knip": "^6.45.1",
 		"obsidian": "latest",
 		"svelte": "^5.57.2",
 		"svelte-awesome-color-picker": "^4.1.3",

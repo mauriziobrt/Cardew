@@ -23,6 +23,61 @@
 	let cleanupControls: () => void;
 	let cleanupOSCControls: () => void;
 	let resizeObserver: any;
+
+	// claude bloat to fix flickering
+	let lastW = 0;
+	let lastH = 0;
+	let snap: HTMLCanvasElement | null = null;
+
+	function resizeGraph() {
+		if (!graph || !container) return;
+
+		const w = container.clientWidth;
+		const h = container.clientHeight;
+		if (w === lastW && h === lastH) return;
+
+		const canvas = container.querySelector(
+			"canvas",
+		) as HTMLCanvasElement | null;
+
+		// 1. graph coordinate currently at the center of the OLD viewport
+		const center = graph.screen2GraphCoords(lastW / 2, lastH / 2);
+
+		// 2. snapshot the current frame
+		if (canvas && canvas.width > 0 && canvas.height > 0) {
+			snap ??= document.createElement("canvas");
+			if (snap.width !== canvas.width || snap.height !== canvas.height) {
+				snap.width = canvas.width;
+				snap.height = canvas.height;
+			}
+			snap.getContext("2d")!.drawImage(canvas, 0, 0);
+		}
+
+		const oldCanvasW = canvas?.width ?? 0;
+		const oldCanvasH = canvas?.height ?? 0;
+
+		// 3. resize, then re-center on the same graph point (no animation)
+		graph.width(w).height(h);
+		graph.centerAt(center.x, center.y);
+
+		// 4. paint the old frame back, shifted by half the size change,
+		//    so the placeholder is also centered
+		if (canvas && snap) {
+			const ctx = canvas.getContext("2d")!;
+			const dx = (canvas.width - oldCanvasW) / 2;
+			const dy = (canvas.height - oldCanvasH) / 2;
+			ctx.save();
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			ctx.drawImage(snap, dx, dy);
+			ctx.restore();
+		}
+
+		lastW = w;
+		lastH = h;
+	}
+
+	// End Of CLAUDE BLOAT
+
 	function getRadius(node: MyNode) {
 		const radius =
 			3 +
@@ -140,6 +195,11 @@
 			)
 			.graphData({ nodes: [], links: [] })
 			.dagMode(null)
+			.onNodeDragEnd(() => {
+				if (!graphState.physicsOn) {
+					graphState.bridge.sendSnapshot();
+				}
+			})
 			.nodeId("id")
 			.nodeLabel("user")
 			.nodeVal(
@@ -185,8 +245,8 @@
 					ctx.fill();
 				}
 			})
-			.cooldownTicks(1000)
-			.cooldownTime(10000)
+			.cooldownTicks(0)
+			.cooldownTime(0)
 			.linkWidth(
 				(node: { weight: number }) => node.weight / cfg.linkWidth,
 			)
@@ -198,6 +258,7 @@
 			.linkCurvature(cfg.linkCurvature)
 			.onEngineStop(() => {
 				console.log("Physics stopped");
+				graphState.bridge.sendSnapshot();
 			})
 			.onBackgroundClick(() => {
 				graphState.setupBackgroundClick();
@@ -307,15 +368,17 @@
 			},
 			graphState.oscManager,
 		);
+		resizeObserver = new ResizeObserver(resizeGraph); // no throttle, no settle timer
+		resizeObserver.observe(container);
 
 		// Handle resize
-		resizeObserver = new ResizeObserver(() => {
-			if (graph && container) {
-				graph.width(container.clientWidth);
-				graph.height(container.clientHeight);
-			}
-		});
-		resizeObserver.observe(container);
+		// resizeObserver = new ResizeObserver(() => {
+		// 	if (graph && container) {
+		// 		graph.width(container.clientWidth);
+		// 		graph.height(container.clientHeight);
+		// 	}
+		// });
+		// resizeObserver.observe(container);
 
 		if (graphState.config.current.creative.modeEnabled) {
 			graphState.setupCreativeConfig();
@@ -330,6 +393,7 @@
 		cleanupControls?.();
 		cleanupOSCControls?.();
 		resizeObserver.disconnect();
+		clearTimeout(settleTimer);
 		// clearTimeout(timeoutId);
 		graph?.pauseAnimation?.(); // stops the internal RAF loop
 		if (graph) graph = null;
@@ -342,5 +406,7 @@
 	.force-graph-container {
 		width: 100%;
 		height: 100%;
+		position: relative;
+		overflow: hidden;
 	}
 </style>

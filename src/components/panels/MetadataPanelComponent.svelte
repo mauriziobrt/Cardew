@@ -86,7 +86,7 @@
 
 	function copyPropertyValue(name: string, value: string) {
 		console.log("in panel component", name, value);
-		graphState.copyNodePropertyValue(name,value);
+		graphState.copyNodePropertyValue(name, value);
 	}
 
 	const saveClass = () => {

@@ -1,33 +1,35 @@
-import { Plugin, ItemView, WorkspaceLeaf, Modal, App, Notice } from 'obsidian';
-import type { Component } from 'svelte';
-import ForceGraphComponent from './components/ForceGraphComponent.svelte';
-import InfoPanelComponent from './components/panels/InfoPanelComponent.svelte';
-import FilterPanelComponent from './components/panels/FilterPanelComponent.svelte';
-import MetadataPanelComponent from './components/panels/MetadataPanelComponent.svelte';
-import ShapePanelComponent from './components/panels/ShapePanelComponent.svelte';
-import LinkPanelComponent from './components/panels/LinkPanelComponent.svelte';
-import { mount, unmount } from 'svelte';
-import { createGraphState, GraphState } from './state/graphState.svelte';
+import { Plugin, ItemView, WorkspaceLeaf, Modal, App, Notice } from "obsidian";
+// import type { Component } from "svelte";
+import ForceGraphComponent from "./components/ForceGraphComponent.svelte";
+import InfoPanelComponent from "./components/panels/InfoPanelComponent.svelte";
+import FilterPanelComponent from "./components/panels/FilterPanelComponent.svelte";
+import MetadataPanelComponent from "./components/panels/MetadataPanelComponent.svelte";
+import ShapePanelComponent from "./components/panels/ShapePanelComponent.svelte";
+import LinkPanelComponent from "./components/panels/LinkPanelComponent.svelte";
+import { mount, unmount } from "svelte";
+import { createGraphState, GraphState } from "./state/graphState.svelte";
 // import * as fs from 'fs';
 // import * as path from 'path';
-import FileListModal from './components/FileListModal.svelte';
-import OSCMetadataPanelComponentSvelte from './components/panels/OSCMetadataPanelComponent.svelte';
-import { FileLoader } from './io/FileLoader'
-import { OSCManager } from 'src/osc/osc';
-import { Config, DEFAULT_CONFIG } from 'src/config.svelte';
-import { ForceGraphSettingTab } from './ui/SettingsTab';
-import { OSReplView, VIEW_TYPE_OSREPL } from './osrepl/OSReplView';
-import { createOSReplState, OSReplState } from './osrepl/osreplState.svelte';
+import FileListModal from "./components/FileListModal.svelte";
+import OSCMetadataPanelComponentSvelte from "./components/panels/OSCMetadataPanelComponent.svelte";
+import { FileLoader } from "./io/FileLoader";
+import { OSCManager } from "src/osc/osc";
+import { Config, DEFAULT_CONFIG } from "src/config.svelte";
+import { ForceGraphSettingTab } from "./ui/SettingsTab";
+// import { OSReplView, VIEW_TYPE_OSREPL } from "./osrepl/OSReplView";
+// import { createOSReplState, OSReplState } from "./osrepl/osreplState.svelte";
+import { Bridge } from "./bridge/bridge";
 // import data from "../src/data/metadataFields.json"
 
 //================================================================================================
 // Node Shapes and Color Panel
 //================================================================================================
 class ShapeConfigModal extends Modal {
-	component: ShapePanelComponent | undefined;
+	component: ReturnType<typeof mount> | undefined;
+	// component: ShapePanelComponent | undefined;
 	plugin: ExamplePlugin;
 
-	constructor(app: App, plugin: ExamplePlugin,) {
+	constructor(app: App, plugin: ExamplePlugin) {
 		super(app);
 		this.plugin = plugin;
 	}
@@ -42,11 +44,15 @@ class ShapeConfigModal extends Modal {
 				allValuesAtProperty: this.plugin.graphState.allValuesAtProperty,
 				onSave: async () => {
 					await this.plugin.config.save(this.plugin);
-					this.plugin.graphState.updateData(this.plugin.graphState.graphData);
+					const data = this.plugin.graphState.graphData;
+					if (data) this.plugin.graphState.updateData(data);
+					// this.plugin.graphState.updateData(
+					// 	this.plugin.graphState.graphData,
+					// );
 				},
 				onClose: () => this.close(),
 				graphState: this.plugin.graphState,
-			}
+			},
 		});
 	}
 
@@ -63,10 +69,11 @@ class ShapeConfigModal extends Modal {
 //================================================================================================
 
 class OSCConfigModal extends Modal {
-	component: OSCMetadataPanelComponentSvelte | undefined;
+	component: ReturnType<typeof mount> | undefined;
+	// component: OSCMetadataPanelComponentSvelte | undefined;
 	plugin: ExamplePlugin;
 
-	constructor(app: App, plugin: ExamplePlugin,) {
+	constructor(app: App, plugin: ExamplePlugin) {
 		super(app);
 		this.plugin = plugin;
 	}
@@ -79,9 +86,13 @@ class OSCConfigModal extends Modal {
 			props: {
 				graphState: this.plugin.graphState,
 				oscConfig: this.plugin.graphState.oscConfig,
-				onSave: async () => this.plugin.saveData({ ...(await this.plugin.loadData()), oscConfig: this.plugin.graphState.oscConfig }),
-				onClose: () => this.close()
-			}
+				onSave: async () =>
+					this.plugin.saveData({
+						...(await this.plugin.loadData()),
+						oscConfig: this.plugin.graphState.oscConfig,
+					}),
+				onClose: () => this.close(),
+			},
 		});
 	}
 
@@ -100,19 +111,21 @@ class OSCConfigModal extends Modal {
 export const VIEW_TYPE_LINK_PANEL = "link-view";
 
 export class LinkView extends ItemView {
-	component: Component | undefined;
-	plugin: ExamplePlugin | undefined;
+	// component: Component | undefined;
+	component: ReturnType<typeof mount> | undefined;
+
+	plugin: ExamplePlugin;
 
 	constructor(leaf: WorkspaceLeaf, plugin: ExamplePlugin) {
 		super(leaf);
 		this.plugin = plugin;
-	};
+	}
 
 	getViewType(): string {
 		return VIEW_TYPE_LINK_PANEL;
 	}
 	getDisplayText(): string {
-		return 'Graph Link Edit Panel';
+		return "Graph Link Edit Panel";
 	}
 
 	getIcon() {
@@ -124,8 +137,8 @@ export class LinkView extends ItemView {
 			target: this.contentEl,
 			props: {
 				//Here I should define the props, the runes I am passing to the component
-				graphState: this.plugin.graphState
-			}
+				graphState: this.plugin.graphState,
+			},
 		});
 	}
 
@@ -143,19 +156,21 @@ export class LinkView extends ItemView {
 export const VIEW_TYPE_METADATA_PANEL = "metadata-view";
 
 export class MetadataView extends ItemView {
-	component: Component | undefined;
-	plugin: ExamplePlugin | undefined;
+	// component: Component | undefined;
+	component: ReturnType<typeof mount> | undefined;
+
+	plugin: ExamplePlugin;
 
 	constructor(leaf: WorkspaceLeaf, plugin: ExamplePlugin) {
 		super(leaf);
 		this.plugin = plugin;
-	};
+	}
 
 	getViewType(): string {
 		return VIEW_TYPE_METADATA_PANEL;
 	}
 	getDisplayText(): string {
-		return 'Properties';
+		return "Properties";
 	}
 	getIcon() {
 		return "info"; // lucide icon id shown in the tab
@@ -169,7 +184,7 @@ export class MetadataView extends ItemView {
 				graphState: this.plugin.graphState,
 				app: this.app,
 				// onToggleMetadata: () => this.plugin.toggleMetadataView()
-			}
+			},
 		});
 	}
 
@@ -189,7 +204,9 @@ export const VIEW_TYPE_FILTER_PANEL = "filter-panel-view";
 export class FilterPanelView extends ItemView {
 	// First get the component I had created externally
 	// component: ReturnType<typeof InfoPanelComponent> | undefined;
-	component: Component | undefined;
+	// component: Component | undefined;
+	component: ReturnType<typeof mount> | undefined;
+
 	plugin: ExamplePlugin;
 	//This is a bit unclear but I guess it needs to access the plugin and leaf
 	constructor(leaf: WorkspaceLeaf, plugin: ExamplePlugin) {
@@ -202,7 +219,7 @@ export class FilterPanelView extends ItemView {
 	}
 	//When the software calls this it gets this name, probably popup when hovering
 	getDisplayText(): string {
-		return 'Graph Filter Panel';
+		return "Graph Filter Panel";
 	}
 
 	getIcon() {
@@ -218,7 +235,7 @@ export class FilterPanelView extends ItemView {
 				//Here I should define the props, the runes I am passing to the component
 				// graphState: (this.app as any).plugins.plugins[''];
 				graphState: this.plugin.graphState,
-			}
+			},
 		});
 	}
 
@@ -228,7 +245,6 @@ export class FilterPanelView extends ItemView {
 			unmount(this.component);
 		}
 	}
-
 }
 
 //================================================================================================
@@ -240,7 +256,9 @@ export const VIEW_TYPE_INFO_PANEL = "info-panel-view";
 export class InfoPanelView extends ItemView {
 	// First get the component I had created externally
 	// component: ReturnType<typeof InfoPanelComponent> | undefined;
-	component: Component | undefined;
+	// component: Component | undefined;
+	component: ReturnType<typeof mount> | undefined;
+
 	plugin: ExamplePlugin;
 	//This is a bit unclear but I guess it inherits the constructor
 	constructor(leaf: WorkspaceLeaf, plugin: ExamplePlugin) {
@@ -253,7 +271,7 @@ export class InfoPanelView extends ItemView {
 	}
 	//When the software calls this it gets this name, probably popup when hovering
 	getDisplayText(): string {
-		return 'Graph Info Panel';
+		return "Graph Info Panel";
 	}
 
 	getIcon() {
@@ -268,8 +286,8 @@ export class InfoPanelView extends ItemView {
 			props: {
 				//Here I should define the props, the runes I am passing to the component
 				// graphState: (this.app as any).plugins.plugins[''];
-				graphState: this.plugin.graphState
-			}
+				graphState: this.plugin.graphState,
+			},
 		});
 	}
 
@@ -279,20 +297,21 @@ export class InfoPanelView extends ItemView {
 			unmount(this.component);
 		}
 	}
-
 }
 
 //================================================================================================
 // Graph View
 //================================================================================================
 
-export const VIEW_TYPE_FORCE_GRAPH = 'graph-view';
+export const VIEW_TYPE_FORCE_GRAPH = "graph-view";
 
 export class GraphView extends ItemView {
 	// A variable to hold on to the Counter instance mounted in this ItemView.
 	// counter: ReturnType<typeof ForceGraphComponent> | undefined;
-	component: Component | undefined;
-	plugin: ExamplePlugin
+	component: ReturnType<typeof mount> | undefined;
+
+	// component: Component | undefined;
+	plugin: ExamplePlugin;
 
 	constructor(leaf: WorkspaceLeaf, plugin: ExamplePlugin) {
 		super(leaf);
@@ -304,7 +323,7 @@ export class GraphView extends ItemView {
 	}
 
 	getDisplayText() {
-		return 'Force-layout graph';
+		return "Force-layout graph";
 	}
 
 	getIcon() {
@@ -317,11 +336,10 @@ export class GraphView extends ItemView {
 	// }
 
 	async onOpen() {
-
 		if (!this.plugin.graphState.graphData) {
-			this.contentEl.createEl('div', {
-				text: 'Loading graph data...',
-				cls: 'graph-loading'
+			this.contentEl.createEl("div", {
+				text: "Loading graph data...",
+				cls: "graph-loading",
 			});
 
 			await this.plugin.dataLoaderPromise;
@@ -339,8 +357,8 @@ export class GraphView extends ItemView {
 			target: this.contentEl,
 			props: {
 				// data: graphData,
-				graphState: this.plugin.graphState
-			}
+				graphState: this.plugin.graphState,
+			},
 		});
 
 		//
@@ -355,10 +373,8 @@ export class GraphView extends ItemView {
 		}
 	}
 
-	async getGraphData() {
-	}
+	async getGraphData() {}
 }
-
 
 //================================================================================================
 // Main Plugin Class
@@ -368,8 +384,9 @@ export default class ExamplePlugin extends Plugin {
 	oscManager: OSCManager;
 	oscConfig: Record<string, string[]> = {};
 	config: Config;
-	dataLoaderPromise: Promise<void> | undefined;
-	replState: OSReplState;
+	bridge: Bridge;
+	dataLoaderPromise: Promise<void>;
+	// replState: OSReplState;
 
 	private dataLoadedResolve: () => void;
 	DEFAULT_CONFIG = DEFAULT_CONFIG;
@@ -384,18 +401,30 @@ export default class ExamplePlugin extends Plugin {
 			//Initialize config
 			this.config = new Config();
 			await this.config.load(this);
+			if (!this.config) return;
 			this.config.onChange(() => this.config.save(this));
 
 			await this.initializeOSC();
-			this.replState = createOSReplState(this.oscManager);
+			// this.replState = createOSReplState(this.oscManager);
 			this.oscConfig = (await this.loadData())?.oscConfig ?? {};
 			// this.oscManager = new OSCManager(57122, '127.0.0.1', 57120);
 
-			this.graphState = createGraphState(this.oscManager, this.config);
+			this.bridge = new Bridge("ws://127.0.0.1:8000/ws", () =>
+				this.graphState.snapshot(),
+			);
+			this.bridge.connect();
+			console.log(this.bridge);
+			this.graphState = createGraphState(
+				this.oscManager,
+				this.config,
+				this.bridge,
+			);
 			this.graphState.oscConfig = this.oscConfig;
+			this.graphState.bridge = this.bridge;
 			this.dataLoaderPromise = new Promise((resolve) => {
 				this.dataLoadedResolve = resolve;
-			})
+			});
+
 			// from claude
 			this.graphState.openMetadata = () => this.activateMetadataView();
 			this.graphState.closeMetadata = () =>
@@ -403,7 +432,9 @@ export default class ExamplePlugin extends Plugin {
 			// end claude
 
 			const fileLoader = new FileLoader(this.graphState);
-			const dataPath = this.config.current.paths.defaultDataPath + '/5-co-cit-coupling.json';// /sandbox.json 5-co-cit-coupling
+			const dataPath =
+				this.config.current.paths.defaultDataPath +
+				"/5-co-cit-coupling.json"; // /sandbox.json 5-co-cit-coupling
 
 			// Try loading the graph
 			try {
@@ -415,7 +446,9 @@ export default class ExamplePlugin extends Plugin {
 			}
 
 			const statusBar = this.addStatusBarItem();
-			statusBar.createEl('span', { text: 'Cardew © Maurizio Berta, 2026' });
+			statusBar.createEl("span", {
+				text: "Cardew © Maurizio Berta, 2026",
+			});
 
 			this.registerView(
 				VIEW_TYPE_FORCE_GRAPH,
@@ -423,46 +456,38 @@ export default class ExamplePlugin extends Plugin {
 			);
 			this.registerView(
 				VIEW_TYPE_INFO_PANEL,
-				(leaf) => new InfoPanelView(leaf, this)
+				(leaf) => new InfoPanelView(leaf, this),
 			);
 			this.registerView(
 				VIEW_TYPE_FILTER_PANEL,
-				(leaf) => new FilterPanelView(leaf, this)
+				(leaf) => new FilterPanelView(leaf, this),
 			);
 
 			this.registerView(
 				VIEW_TYPE_METADATA_PANEL,
-				(leaf) => new MetadataView(leaf, this)
+				(leaf) => new MetadataView(leaf, this),
 			);
 
-			this.registerView(
-				VIEW_TYPE_OSREPL,
-				(leaf) => new OSReplView(leaf, this)
-			);
+			// this.registerView(
+			// 	VIEW_TYPE_OSREPL,
+			// 	(leaf) => new OSReplView(leaf, this),
+			// );
 
 			this.registerView(
 				VIEW_TYPE_LINK_PANEL,
-				(leaf) => new LinkView(leaf, this)
+				(leaf) => new LinkView(leaf, this),
 			);
 
-
-			this.addRibbonIcon(
-				'folder-pen',
-				'Create New Graph',
-				async () => {
-					const fileLoader = new FileLoader(this.graphState);
-					const dataPath = this.config.current.paths.defaultDataPath + '/sandbox.json';// /sandbox.json 5-co-cit-coupling
-					if (this.config.current.hasEdits == true) {
-						if (window.confirm("This graph has unsaved edits.\nAre you sure you want to load a new graph?")) {
-							try {
-								await fileLoader.loadGraphData(dataPath);
-								this.dataLoadedResolve();
-							} catch (error) {
-								console.error("Failed to load graph data:", error);
-								this.dataLoadedResolve();
-							}
-						}
-					} else {
+			this.addRibbonIcon("folder-pen", "Create New Graph", async () => {
+				const fileLoader = new FileLoader(this.graphState);
+				const dataPath =
+					this.config.current.paths.defaultDataPath + "/sandbox.json"; // /sandbox.json 5-co-cit-coupling
+				if (this.config.current.hasEdits == true) {
+					if (
+						window.confirm(
+							"This graph has unsaved edits.\nAre you sure you want to load a new graph?",
+						)
+					) {
 						try {
 							await fileLoader.loadGraphData(dataPath);
 							this.dataLoadedResolve();
@@ -471,74 +496,83 @@ export default class ExamplePlugin extends Plugin {
 							this.dataLoadedResolve();
 						}
 					}
+				} else {
+					try {
+						await fileLoader.loadGraphData(dataPath);
+						this.dataLoadedResolve();
+					} catch (error) {
+						console.error("Failed to load graph data:", error);
+						this.dataLoadedResolve();
+					}
 				}
+			});
+
+			this.addRibbonIcon("link", "Open Link View", () =>
+				this.activateLinkView(),
 			);
 
-			this.addRibbonIcon(
-				'link',
-				'Open Link View',
-				() => this.activateLinkView()
+			this.addRibbonIcon("info", "Open Metadata View", () =>
+				this.activateMetadataView(),
 			);
 
-			this.addRibbonIcon(
-				'info',
-				'Open Metadata View',
-				() => this.activateMetadataView()
-			);
+			// this.addRibbonIcon("terminal", "Open OS REPL", () =>
+			// 	this.activateReplView(),
+			// );
 
-			this.addRibbonIcon(
-				'terminal',
-				'Open OS REPL',
-				() => this.activateReplView()
-			);
-
-			this.addRibbonIcon('git-fork', 'Open Force Graph', () => {
+			this.addRibbonIcon("git-fork", "Open Force Graph", () => {
 				// this.activateView();
 				this.activateBothViews();
 			});
 
-			this.addRibbonIcon('chevrons-left-right-ellipsis', 'Open OSC Configuration', () => {
-				new OSCConfigModal(this.app, this).open();
-			})
+			this.addRibbonIcon(
+				"chevrons-left-right-ellipsis",
+				"Open OSC Configuration",
+				() => {
+					new OSCConfigModal(this.app, this).open();
+				},
+			);
 
-			this.addRibbonIcon("paintbrush", 'Open Shape and Color Configuration', () => {
-				new ShapeConfigModal(this.app, this).open();
-			})
+			this.addRibbonIcon(
+				"paintbrush",
+				"Open Shape and Color Configuration",
+				() => {
+					new ShapeConfigModal(this.app, this).open();
+				},
+			);
 
 			this.addSettingTab(new ForceGraphSettingTab(this.app, this));
 
 			this.addCommand({
-				id: 'config-metadata-osc',
-				name: 'Config OSC Metadata',
+				id: "config-metadata-osc",
+				name: "Config OSC Metadata",
 				callback: () => {
 					new OSCConfigModal(this.app, this).open();
-				}
+				},
 			});
 
 			this.addCommand({
-				id: 'config-shapes',
-				name: 'Config Shapes and Colours',
+				id: "config-shapes",
+				name: "Config Shapes and Colours",
 				callback: () => {
 					new ShapeConfigModal(this.app, this).open();
-				}
+				},
 			});
 
 			this.addCommand({
-				id: 'metadata-view-toggle',
-				name: 'Open and close metadata view',
+				id: "metadata-view-toggle",
+				name: "Open and close metadata view",
 				callback: () => {
-					this.toggleMetadataView()
-				}
+					this.toggleMetadataView();
+				},
 			});
 
 			this.addCommand({
-				id: 'link-view-toggle',
-				name: 'Open and close link view',
+				id: "link-view-toggle",
+				name: "Open and close link view",
 				callback: () => {
-					this.toggleLinkView()
-				}
+					this.toggleLinkView();
+				},
 			});
-
 
 			this.app.workspace.onLayoutReady(() => {
 				this.activateBothViews();
@@ -548,12 +582,15 @@ export default class ExamplePlugin extends Plugin {
 			});
 
 			//claude
-			this.registerEvent(this.app.workspace.on('layout-change', () => {
-				this.graphState.metadataOpen =
-					this.app.workspace.getLeavesOfType(VIEW_TYPE_METADATA_PANEL).length > 0;
-			}));
+			this.registerEvent(
+				this.app.workspace.on("layout-change", () => {
+					this.graphState.metadataOpen =
+						this.app.workspace.getLeavesOfType(
+							VIEW_TYPE_METADATA_PANEL,
+						).length > 0;
+				}),
+			);
 			//endclaude
-
 		} catch (error) {
 			console.error("Plugin initialization failed:", error);
 			new Notice("Failed to initialize Force Graph plugin");
@@ -564,9 +601,11 @@ export default class ExamplePlugin extends Plugin {
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 
 	async toggleMetadataView() {
-		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_METADATA_PANEL);
+		const leaves = this.app.workspace.getLeavesOfType(
+			VIEW_TYPE_METADATA_PANEL,
+		);
 		if (leaves.length > 0) {
-			leaves.forEach(l => l.detach());
+			leaves.forEach((l) => l.detach());
 		} else {
 			await this.activateMetadataView();
 		}
@@ -575,7 +614,7 @@ export default class ExamplePlugin extends Plugin {
 	async toggleLinkView() {
 		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_LINK_PANEL);
 		if (leaves.length > 0) {
-			leaves.forEach(l => l.detach());
+			leaves.forEach((l) => l.detach());
 		} else {
 			await this.activateLinkView();
 		}
@@ -584,17 +623,17 @@ export default class ExamplePlugin extends Plugin {
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	//
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-	async activateReplView() {
-		const { workspace } = this.app;
-		const leaves = workspace.getLeavesOfType(VIEW_TYPE_OSREPL);
-		if (leaves.length > 0) {
-			workspace.revealLeaf(leaves[0]);
-		} else {
-			const leaf = workspace.getLeaf('split', 'vertical');
-			await leaf.setViewState({ type: VIEW_TYPE_OSREPL, active: true });
-			workspace.revealLeaf(leaf);
-		}
-	}
+	// async activateReplView() {
+	// 	const { workspace } = this.app;
+	// 	const leaves = workspace.getLeavesOfType(VIEW_TYPE_OSREPL);
+	// 	if (leaves.length > 0) {
+	// 		workspace.revealLeaf(leaves[0]);
+	// 	} else {
+	// 		const leaf = workspace.getLeaf("split", "vertical");
+	// 		await leaf.setViewState({ type: VIEW_TYPE_OSREPL, active: true });
+	// 		workspace.revealLeaf(leaf);
+	// 	}
+	// }
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	//
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -603,10 +642,12 @@ export default class ExamplePlugin extends Plugin {
 		const leaves = workspace.getLeavesOfType(VIEW_TYPE_LINK_PANEL);
 		if (leaves.length > 0) {
 			workspace.revealLeaf(leaves[0]);
-		}
-		else {
-			const leaf = workspace.getLeaf('split', 'horizontal');
-			await leaf.setViewState({ type: VIEW_TYPE_LINK_PANEL, active: true });
+		} else {
+			const leaf = workspace.getLeaf("split", "horizontal");
+			await leaf.setViewState({
+				type: VIEW_TYPE_LINK_PANEL,
+				active: true,
+			});
 			workspace.revealLeaf(leaf);
 			const tabGroup = leaf.parent as any;
 			if (tabGroup?.setStacked) {
@@ -620,8 +661,6 @@ export default class ExamplePlugin extends Plugin {
 		// const leaf = workspace.createLeafInParent(parentLeaf.parent, 1);
 		// await leaf.setViewState({ type: VIEW_TYPE_LINK_PANEL, active: true });
 		// workspace.revealLeaf(leaf);
-
-
 	}
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	//
@@ -634,7 +673,10 @@ export default class ExamplePlugin extends Plugin {
 		} else {
 			const leaf = workspace.getRightLeaf(false);
 			if (!leaf) return;
-			await leaf.setViewState({ type: VIEW_TYPE_METADATA_PANEL, active: false });
+			await leaf.setViewState({
+				type: VIEW_TYPE_METADATA_PANEL,
+				active: false,
+			});
 			workspace.revealLeaf(leaf);
 		}
 	}
@@ -660,25 +702,26 @@ export default class ExamplePlugin extends Plugin {
 		} else {
 			// workspace.setActiveLeaf(forceGraphLeaf, { focus: true });
 			//create it
-			const leaf = workspace.getLeftLeaf(false
-			);
+			const leaf = workspace.getLeftLeaf(false);
 			// This construct allows to remove the  blablaleaf is possibly null
 			// because I write if null then stop so then it's for sure WorkSpaceLeaf
 			if (!leaf) return;
 			infoPanelLeaf = leaf;
 			await infoPanelLeaf.setViewState({
 				type: VIEW_TYPE_INFO_PANEL,
-				active: true
-			})
+				active: true,
+			});
 		}
 
-		workspace.revealLeaf(infoPanelLeaf)
+		workspace.revealLeaf(infoPanelLeaf);
 
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		// Activate the filter view
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		let filterPanelLeaf: WorkspaceLeaf | null = null;
-		const filterPanelLeaves = workspace.getLeavesOfType(VIEW_TYPE_FILTER_PANEL);
+		const filterPanelLeaves = workspace.getLeavesOfType(
+			VIEW_TYPE_FILTER_PANEL,
+		);
 
 		if (filterPanelLeaves.length > 0) {
 			//it exist reveal it
@@ -686,24 +729,25 @@ export default class ExamplePlugin extends Plugin {
 		} else {
 			// workspace.setActiveLeaf(forceGraphLeaf, { focus: true });
 			//create it
-			const leaf = workspace.getLeftLeaf(true
-			);
+			const leaf = workspace.getLeftLeaf(true);
 			// This construct allows to remove the  blablaleaf is possibly null
 			// because I write if null then stop so then it's for sure WorkSpaceLeaf
 			if (!leaf) return;
 			filterPanelLeaf = leaf;
 			await filterPanelLeaf.setViewState({
 				type: VIEW_TYPE_FILTER_PANEL,
-				active: true
-			})
+				active: true,
+			});
 		}
-		workspace.revealLeaf(filterPanelLeaf)
+		workspace.revealLeaf(filterPanelLeaf);
 
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		// Activate the metadata edit view
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		let metadataPanelLeaf: WorkspaceLeaf | null = null;
-		const metadataPanelLeaves = workspace.getLeavesOfType(VIEW_TYPE_METADATA_PANEL);
+		const metadataPanelLeaves = workspace.getLeavesOfType(
+			VIEW_TYPE_METADATA_PANEL,
+		);
 
 		if (metadataPanelLeaves.length > 0) {
 			//it exist reveal it
@@ -711,8 +755,7 @@ export default class ExamplePlugin extends Plugin {
 		} else {
 			// workspace.setActiveLeaf(forceGraphLeaf, { focus: true });
 			//create it
-			const leaf = workspace.getRightLeaf(false
-			);
+			const leaf = workspace.getRightLeaf(false);
 			// This construct allows to remove the  blablaleaf is possibly null
 			// because I write if null then stop so then it's for sure WorkSpaceLeaf
 			if (!leaf) return;
@@ -720,12 +763,11 @@ export default class ExamplePlugin extends Plugin {
 			if (!metadataPanelLeaf) return;
 			await metadataPanelLeaf.setViewState({
 				type: VIEW_TYPE_METADATA_PANEL,
-				active: true
-			})
+				active: true,
+			});
 		}
 
-		workspace.revealLeaf(metadataPanelLeaf)
-
+		workspace.revealLeaf(metadataPanelLeaf);
 
 		//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 		// Activate the graph view
@@ -733,11 +775,13 @@ export default class ExamplePlugin extends Plugin {
 		// First I activate the ForceGraph View
 		// I should check if with this method both gets open or I can control them individually
 		let forceGraphLeaf: WorkspaceLeaf | null = null;
-		const forceGraphLeaves = workspace.getLeavesOfType(VIEW_TYPE_FORCE_GRAPH)
+		const forceGraphLeaves = workspace.getLeavesOfType(
+			VIEW_TYPE_FORCE_GRAPH,
+		);
 
 		if (forceGraphLeaves.length > 0) {
 			// It exist, so show it
-			forceGraphLeaf = forceGraphLeaves[0]
+			forceGraphLeaf = forceGraphLeaves[0];
 		} else {
 			// Create it
 			const leaf = workspace.getLeaf(false);
@@ -746,13 +790,11 @@ export default class ExamplePlugin extends Plugin {
 			// forceGraphLeaf = workspace.getRightLeaf(false);
 			await forceGraphLeaf.setViewState({
 				type: VIEW_TYPE_FORCE_GRAPH,
-				active: true
+				active: true,
 			});
 		}
 
 		await workspace.revealLeaf(forceGraphLeaf);
-
-
 	}
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	// Where is this used???
@@ -787,16 +829,19 @@ export default class ExamplePlugin extends Plugin {
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	private async initializeOSC(): Promise<void> {
 		try {
-			const { localPort, remoteAddress, remotePort, ipVersion } = this.config.current.osc;
+			const { localPort, remoteAddress, remotePort, ipVersion } =
+				this.config.current.osc;
 
 			this.oscManager = new OSCManager(
 				localPort,
 				remoteAddress,
 				remotePort,
-				ipVersion
+				ipVersion,
 			);
 
-			console.log(`OSC initialized: ${localPort} -> ${remoteAddress}:${remotePort}`);
+			console.log(
+				`OSC initialized: ${localPort} -> ${remoteAddress}:${remotePort}`,
+			);
 		} catch (error) {
 			console.error("Failed to initialize OSC:", error);
 			throw error;
@@ -807,7 +852,7 @@ export default class ExamplePlugin extends Plugin {
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 	async restartOSC(): Promise<void> {
 		try {
-			new Notice('Restarting OSC connection...');
+			new Notice("Restarting OSC connection...");
 
 			// Close existing connection
 			if (this.oscManager) {
@@ -820,10 +865,10 @@ export default class ExamplePlugin extends Plugin {
 			// Update graphState with new OSC manager
 			this.graphState.oscManager = this.oscManager;
 
-			new Notice('OSC connection restarted successfully');
+			new Notice("OSC connection restarted successfully");
 		} catch (error) {
 			console.error("Failed to restart OSC:", error);
-			new Notice('Failed to restart OSC connection');
+			new Notice("Failed to restart OSC connection");
 		}
 	}
 	//––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -838,7 +883,7 @@ export default class ExamplePlugin extends Plugin {
 		this.app.workspace.detachLeavesOfType(VIEW_TYPE_FILTER_PANEL);
 		this.app.workspace.detachLeavesOfType(VIEW_TYPE_METADATA_PANEL);
 		this.app.workspace.detachLeavesOfType(VIEW_TYPE_LINK_PANEL);
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_OSREPL);
+		// this.app.workspace.detachLeavesOfType(VIEW_TYPE_OSREPL);
 
 		if (this.graphState) {
 			this.graphState.close();
@@ -846,7 +891,8 @@ export default class ExamplePlugin extends Plugin {
 		if (this.oscManager) {
 			this.oscManager.close();
 		}
-		if (this.replState) this.replState.close();
+		// if (this.replState) this.replState.close();
+		if (this.bridge) this.bridge.close();
 		// Release any resources configured by the plugin.
 	}
 }

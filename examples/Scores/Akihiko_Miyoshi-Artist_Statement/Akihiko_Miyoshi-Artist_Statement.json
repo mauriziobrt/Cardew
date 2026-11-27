@@ -1,0 +1,4380 @@
+{
+  "nodes": [
+    {
+      "id": 1,
+      "label": "can",
+      "__indexColor": "#38028a",
+      "x": 510.78535528816906,
+      "y": 72.64939875527905,
+      "index": 0,
+      "vx": -2.731923191458004e-12,
+      "vy": -2.2223138961554385e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 2,
+      "label": "I",
+      "__indexColor": "#24028b",
+      "x": 453.23448451698266,
+      "y": 66.34489371171654,
+      "index": 1,
+      "vx": -1.4691383719021704e-12,
+      "vy": -2.0949636707509822e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 3,
+      "label": "make",
+      "__indexColor": "#10028c",
+      "x": 381.41857885563286,
+      "y": 61.25860682702133,
+      "index": 2,
+      "vx": 6.39007603242764e-13,
+      "vy": -3.532404426168397e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 4,
+      "label": "let",
+      "__indexColor": "#fc028d",
+      "x": 388.91745468439905,
+      "y": 28.98736940964292,
+      "index": 3,
+      "vx": -4.175018095938014e-14,
+      "vy": -5.089537711237282e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 5,
+      "label": "write",
+      "__indexColor": "#e8028e",
+      "x": 359.96104735286605,
+      "y": 50.41019511224964,
+      "index": 4,
+      "vx": 6.618081601926487e-13,
+      "vy": -7.111561684607303e-14,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 6,
+      "label": "not",
+      "__indexColor": "#d4028f",
+      "x": 363.56145313838135,
+      "y": 75.06732532404335,
+      "index": 5,
+      "vx": -9.657906952926253e-13,
+      "vy": -3.825814846960775e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 7,
+      "label": "myself",
+      "__indexColor": "#c00290",
+      "x": 310.2319066791065,
+      "y": 57.97494143263223,
+      "index": 6,
+      "vx": 3.4272093134508998e-12,
+      "vy": -5.134605197063943e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 8,
+      "label": "a",
+      "__indexColor": "#ac0291",
+      "x": 249.56546297954588,
+      "y": 29.217089180402905,
+      "index": 7,
+      "vx": 1.6327828212282406e-12,
+      "vy": -7.35619205710236e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 9,
+      "label": "machine",
+      "__indexColor": "#980292",
+      "x": 93.84201081721125,
+      "y": -9.884482663551172,
+      "index": 8,
+      "vx": 1.3674051417460738e-14,
+      "vy": -9.103865231016558e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 10,
+      "label": "functional",
+      "__indexColor": "#840293",
+      "x": 305.40016882909526,
+      "y": 26.22047152527538,
+      "index": 9,
+      "vx": 8.178256042419772e-13,
+      "vy": -9.450939405596193e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 11,
+      "label": "purpose",
+      "__indexColor": "#700294",
+      "x": 113.58587578000366,
+      "y": -23.41064536423811,
+      "index": 10,
+      "vx": 1.5947104431679904e-12,
+      "vy": 1.3846200769125614e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 12,
+      "label": "?",
+      "__indexColor": "#5c0295",
+      "x": -14.824329980633614,
+      "y": -68.79351298652976,
+      "index": 11,
+      "vx": -3.5429511419909786e-13,
+      "vy": -2.680179922119095e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 13,
+      "label": "human",
+      "__indexColor": "#480296",
+      "x": 35.82442548476317,
+      "y": -35.242531384594756,
+      "index": 12,
+      "vx": -1.072707876747855e-12,
+      "vy": -4.615483144552334e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 14,
+      "label": "possible",
+      "__indexColor": "#340297",
+      "x": 104.32124528151527,
+      "y": 333.12670002519195,
+      "index": 13,
+      "vx": -2.5753575816497246e-12,
+      "vy": -1.715912620076887e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 15,
+      "label": "myself",
+      "__indexColor": "#200298",
+      "x": -3.1385997011108477,
+      "y": 148.12460436892744,
+      "index": 14,
+      "vx": -4.600780338719856e-13,
+      "vy": -1.4990299400702173e-12,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 16,
+      "label": "lie",
+      "__indexColor": "#0c0299",
+      "x": 40.68570327652823,
+      "y": -0.24860699891933155,
+      "index": 15,
+      "vx": -3.0198918698620026e-12,
+      "vy": -1.2034489112132192e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 17,
+      "label": "so",
+      "__indexColor": "#f8029a",
+      "x": 60.23457786826234,
+      "y": -4.386417846668556,
+      "index": 16,
+      "vx": -1.3832373861601017e-12,
+      "vy": -9.125367276221862e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 18,
+      "label": "like",
+      "__indexColor": "#e4029b",
+      "x": 53.438126444215605,
+      "y": -16.715603147284053,
+      "index": 17,
+      "vx": -2.4377247044409022e-12,
+      "vy": -5.720230351927341e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 19,
+      "label": "do",
+      "__indexColor": "#d0029c",
+      "x": 79.3117936464256,
+      "y": -175.25644033366427,
+      "index": 18,
+      "vx": -3.807660756252668e-12,
+      "vy": -9.131287081951003e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 20,
+      "label": "it",
+      "__indexColor": "#bc029d",
+      "x": 32.44101576021057,
+      "y": -198.15059476995577,
+      "index": 19,
+      "vx": -1.0654976216751888e-12,
+      "vy": -7.981095881176515e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 21,
+      "label": "care",
+      "__indexColor": "#a8029e",
+      "x": 75.49291817065233,
+      "y": -159.86762891814365,
+      "index": 20,
+      "vx": -4.831889969013881e-12,
+      "vy": -2.0941084597538845e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 22,
+      "label": "be",
+      "__indexColor": "#94029f",
+      "x": -160.65765200252338,
+      "y": -214.95410262281794,
+      "index": 21,
+      "vx": -4.907648126179219e-12,
+      "vy": 1.3785355400379902e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 23,
+      "label": "nothing",
+      "__indexColor": "#8002a0",
+      "x": 96.06033522437292,
+      "y": -137.33217038704248,
+      "index": 22,
+      "vx": -2.0132922171511165e-12,
+      "vy": -4.589064076738677e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 24,
+      "label": "everything",
+      "__indexColor": "#6c02a1",
+      "x": 81.59226037846628,
+      "y": -139.74738708674695,
+      "index": 23,
+      "vx": -1.4269212153582507e-12,
+      "vy": -2.339659273666053e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 25,
+      "label": "connect",
+      "__indexColor": "#5802a2",
+      "x": 22.316060553671967,
+      "y": -134.6371660882859,
+      "index": 24,
+      "vx": -2.2716827263916137e-12,
+      "vy": -2.0039996395521604e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 26,
+      "label": "imagination",
+      "__indexColor": "#4402a3",
+      "x": 39.17587541511382,
+      "y": -89.05452188211007,
+      "index": 25,
+      "vx": -1.5692620941417156e-12,
+      "vy": -4.68876994421716e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 27,
+      "label": "chance",
+      "__indexColor": "#3002a4",
+      "x": 48.204662521661746,
+      "y": -89.44258892336349,
+      "index": 26,
+      "vx": -1.6235009984970985e-12,
+      "vy": -2.755600267790583e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 28,
+      "label": "go",
+      "__indexColor": "#1c02a5",
+      "x": 12.04479670346651,
+      "y": -137.09969265526348,
+      "index": 27,
+      "vx": -2.2779373731268984e-12,
+      "vy": -4.168186647366594e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 29,
+      "label": "effect",
+      "__indexColor": "#0802a6",
+      "x": -60.39393264549924,
+      "y": -160.56882542317396,
+      "index": 28,
+      "vx": -1.881325835950315e-12,
+      "vy": 5.433477759314186e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 30,
+      "label": "complexity",
+      "__indexColor": "#f402a7",
+      "x": -139.24486835967696,
+      "y": -144.30598193864967,
+      "index": 29,
+      "vx": -2.1689745268754628e-12,
+      "vy": 1.2467106696901067e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 31,
+      "label": "order",
+      "__indexColor": "#e002a8",
+      "x": -138.8258310508589,
+      "y": -152.8083067864585,
+      "index": 30,
+      "vx": -2.0952408746597173e-12,
+      "vy": 1.1570922465369251e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 32,
+      "label": "there",
+      "__indexColor": "#cc02a9",
+      "x": 14.54018006273909,
+      "y": -86.49048263744767,
+      "index": 31,
+      "vx": -1.3314265735093963e-12,
+      "vy": -2.7878945394289456e-14,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 33,
+      "label": "here",
+      "__indexColor": "#b802aa",
+      "x": -14.59934057743057,
+      "y": -47.11609315909662,
+      "index": 32,
+      "vx": -1.907695256848318e-12,
+      "vy": 8.096252898570708e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 34,
+      "label": "what",
+      "__indexColor": "#a402ab",
+      "x": -259.2336858459559,
+      "y": 92.82678108681279,
+      "index": 33,
+      "vx": -1.8112824399307895e-12,
+      "vy": -2.9995783461651098e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 35,
+      "label": "is",
+      "__indexColor": "#9002ac",
+      "x": -215.0511501829589,
+      "y": 90.96309707839275,
+      "index": 34,
+      "vx": -2.1985273969764105e-12,
+      "vy": 1.5970441388219469e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 36,
+      "label": "does",
+      "__indexColor": "#7c02ad",
+      "x": -295.5106846692075,
+      "y": 95.31044074145713,
+      "index": 35,
+      "vx": -1.891978362881288e-12,
+      "vy": -3.043161864521105e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 37,
+      "label": "the",
+      "__indexColor": "#6802ae",
+      "x": -176.3957033476726,
+      "y": 63.09505553225638,
+      "index": 36,
+      "vx": -3.5859713412394605e-12,
+      "vy": -8.466110501420651e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 38,
+      "label": "relationship",
+      "__indexColor": "#5402af",
+      "x": -38.931411157152596,
+      "y": 76.17115607587371,
+      "index": 37,
+      "vx": -6.944329806036041e-13,
+      "vy": -9.49926533618947e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 39,
+      "label": "boundary",
+      "__indexColor": "#4002b0",
+      "x": -139.986992310001,
+      "y": -2.607077078846983,
+      "index": 38,
+      "vx": -2.881360743271218e-12,
+      "vy": -6.64050419274198e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 40,
+      "label": "agreement",
+      "__indexColor": "#2c02b1",
+      "x": -140.3592390055944,
+      "y": -11.566215290015558,
+      "index": 39,
+      "vx": -3.060973623915056e-12,
+      "vy": -6.165088369654624e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 41,
+      "label": "between",
+      "__indexColor": "#1802b2",
+      "x": -5.67374307438435,
+      "y": 98.13055257609082,
+      "index": 40,
+      "vx": 2.7197534735359722e-15,
+      "vy": -2.8086463786560075e-12,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 42,
+      "label": "man",
+      "__indexColor": "#0402b3",
+      "x": 43.29173410843052,
+      "y": 95.15401302426743,
+      "index": 41,
+      "vx": -1.2373023051132116e-12,
+      "vy": -3.454717058856616e-12,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 43,
+      "label": "and",
+      "__indexColor": "#f002b4",
+      "x": 67.40066769653164,
+      "y": 50.565730052987256,
+      "index": 42,
+      "vx": 1.7663425494682046e-12,
+      "vy": -2.1257152461109134e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 44,
+      "label": "where",
+      "__indexColor": "#dc02b5",
+      "x": -244.96487276262667,
+      "y": 99.22013482068316,
+      "index": 43,
+      "vx": -2.1899886252806425e-12,
+      "vy": -2.3220264817542354e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 45,
+      "label": "go",
+      "__indexColor": "#c802b6",
+      "x": 255.78562165870335,
+      "y": -14.92006081162003,
+      "index": 44,
+      "vx": 2.250272902896467e-12,
+      "vy": -9.284166516702235e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 46,
+      "label": "of",
+      "__indexColor": "#b402b7",
+      "x": 137.97344150454535,
+      "y": -48.77762902234227,
+      "index": 45,
+      "vx": -6.425834191495357e-14,
+      "vy": -2.1724555873020622e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 47,
+      "label": "everything",
+      "__indexColor": "#a002b8",
+      "x": 62.194178001924755,
+      "y": -66.79314317371818,
+      "index": 46,
+      "vx": -4.1448348404287947e-13,
+      "vy": -4.1547951701658647e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 48,
+      "label": "aesthetics",
+      "__indexColor": "#8c02b9",
+      "x": 64.78825550497073,
+      "y": -54.063876527496454,
+      "index": 47,
+      "vx": -6.927648382243927e-13,
+      "vy": -5.115896041792772e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 49,
+      "label": "style",
+      "__indexColor": "#7802ba",
+      "x": 54.86518783188808,
+      "y": -56.09656412250343,
+      "index": 48,
+      "vx": -6.760632014466005e-13,
+      "vy": -3.662413415697622e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 50,
+      "label": "program",
+      "__indexColor": "#6402bb",
+      "x": 356.4655435814572,
+      "y": 29.61002026571332,
+      "index": 49,
+      "vx": -1.5238783024227757e-12,
+      "vy": -7.901178951222322e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 51,
+      "label": "without",
+      "__indexColor": "#5002bc",
+      "x": 306.271071043358,
+      "y": 39.353267199819804,
+      "index": 50,
+      "vx": 3.7286834455924614e-13,
+      "vy": -5.486974096215411e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 52,
+      "label": "it",
+      "__indexColor": "#3c02bd",
+      "x": 47.779558570357615,
+      "y": 24.789723954647556,
+      "index": 51,
+      "vx": -1.4093478987318435e-12,
+      "vy": -9.867574351229183e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 53,
+      "label": "provide",
+      "__indexColor": "#2802be",
+      "x": 8.165559202636732,
+      "y": -15.98987942415335,
+      "index": 52,
+      "vx": -1.535347954920215e-12,
+      "vy": -2.7495275506226975e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 54,
+      "label": "deny",
+      "__indexColor": "#1402bf",
+      "x": 197.95968813638183,
+      "y": 56.73462928146131,
+      "index": 53,
+      "vx": 4.65124987888084e-13,
+      "vy": -2.7390478925640485e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 55,
+      "label": "what",
+      "__indexColor": "#0002c0",
+      "x": -361.4499792799296,
+      "y": -291.6854833130537,
+      "index": 54,
+      "vx": -1.7309127028429748e-12,
+      "vy": 3.4341722125218765e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 56,
+      "label": "if",
+      "__indexColor": "#ec02c1",
+      "x": -336.55025972609184,
+      "y": -326.8366187365436,
+      "index": 55,
+      "vx": -8.776610410735421e-13,
+      "vy": 5.977890762899692e-14,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 57,
+      "label": "is",
+      "__indexColor": "#d802c2",
+      "x": -334.0082513676031,
+      "y": -239.04225171867748,
+      "index": 56,
+      "vx": -1.0044108888692273e-12,
+      "vy": 6.026065553237798e-14,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 58,
+      "label": "I",
+      "__indexColor": "#c402c3",
+      "x": -288.0178878410083,
+      "y": -302.8421527822271,
+      "index": 57,
+      "vx": -1.0351872880801157e-12,
+      "vy": 4.825791303608421e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 59,
+      "label": "was",
+      "__indexColor": "#b002c4",
+      "x": -171.12148391975308,
+      "y": -142.04786951602907,
+      "index": 58,
+      "vx": -4.018643229057297e-12,
+      "vy": -1.0314545122273541e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 60,
+      "label": "read",
+      "__indexColor": "#9c02c5",
+      "x": -244.38143584332562,
+      "y": -281.118693704195,
+      "index": 59,
+      "vx": -3.179603986743587e-12,
+      "vy": -7.553026370074075e-14,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 61,
+      "label": "draw",
+      "__indexColor": "#8802c6",
+      "x": -276.91009317929587,
+      "y": -260.54311735146814,
+      "index": 60,
+      "vx": -1.409443307162454e-12,
+      "vy": -8.581992600833461e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 62,
+      "label": "make",
+      "__indexColor": "#7402c7",
+      "x": -290.38195033559134,
+      "y": -259.63143107584386,
+      "index": 61,
+      "vx": -1.5736920457578215e-12,
+      "vy": -4.72674299103947e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 63,
+      "label": "not",
+      "__indexColor": "#6002c8",
+      "x": -147.46384603803938,
+      "y": -88.1368713911488,
+      "index": 62,
+      "vx": -3.0405957276898303e-12,
+      "vy": -2.1952257454339106e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 64,
+      "label": "a possibility",
+      "__indexColor": "#4c02c9",
+      "x": -59.36286285990642,
+      "y": -99.40639141530148,
+      "index": 63,
+      "vx": -3.49437841947589e-12,
+      "vy": -1.5047736918856881e-12,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 65,
+      "label": "an impossibility",
+      "__indexColor": "#3802ca",
+      "x": -53.79259465120571,
+      "y": -108.8226400206899,
+      "index": 64,
+      "vx": -4.207928190636626e-12,
+      "vy": -1.824503544920701e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 66,
+      "label": "to be",
+      "__indexColor": "#2402cb",
+      "x": -148.71625764491938,
+      "y": -66.3587971738735,
+      "index": 65,
+      "vx": -3.2110880793855564e-12,
+      "vy": -7.749764528380753e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 67,
+      "label": "can",
+      "__indexColor": "#1002cc",
+      "x": -320.5890334669371,
+      "y": -333.16228197437727,
+      "index": 66,
+      "vx": 6.546236104297554e-13,
+      "vy": 3.572336973725651e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 68,
+      "label": "a",
+      "__indexColor": "#fc02cd",
+      "x": -256.69574949960634,
+      "y": -209.61263703185065,
+      "index": 67,
+      "vx": -1.759328986186854e-12,
+      "vy": 9.089419430784651e-14,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 69,
+      "label": "someone's",
+      "__indexColor": "#e802ce",
+      "x": -207.244504761428,
+      "y": -205.9851130242308,
+      "index": 68,
+      "vx": -5.022235705529691e-12,
+      "vy": 5.13773898431042e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 70,
+      "label": "mind",
+      "__indexColor": "#d402cf",
+      "x": -140.61033467814988,
+      "y": -115.24746502404993,
+      "index": 69,
+      "vx": -2.819709489666389e-12,
+      "vy": -2.0174839766952034e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 71,
+      "label": "program",
+      "__indexColor": "#c002d0",
+      "x": -251.74842806407005,
+      "y": -169.77956715041196,
+      "index": 70,
+      "vx": -1.4465722831962516e-12,
+      "vy": 9.65793218059668e-14,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 72,
+      "label": "machine",
+      "__indexColor": "#ac02d1",
+      "x": -255.6885126842495,
+      "y": -159.707518164485,
+      "index": 71,
+      "vx": -2.5786660794672427e-12,
+      "vy": -6.706415105260952e-14,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 73,
+      "label": "drawing",
+      "__indexColor": "#9802d2",
+      "x": -214.82432998063217,
+      "y": -148.74174218410693,
+      "index": 72,
+      "vx": 5.025801528155785e-13,
+      "vy": -1.114813390347969e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 74,
+      "label": "digital image",
+      "__indexColor": "#8402d3",
+      "x": -150.54912590325537,
+      "y": -105.94141384876596,
+      "index": 73,
+      "vx": -3.0928581627664103e-12,
+      "vy": -6.610057187100016e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 75,
+      "label": "function",
+      "__indexColor": "#7002d4",
+      "x": -194.5183094538494,
+      "y": -155.64460123028522,
+      "index": 74,
+      "vx": -2.480889303854004e-12,
+      "vy": -4.740757689322554e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 76,
+      "label": "be",
+      "__indexColor": "#5c02d5",
+      "x": -220.11788353353322,
+      "y": -121.20107182427644,
+      "index": 75,
+      "vx": -2.7163909737952353e-12,
+      "vy": 1.1319032340358006e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 77,
+      "label": "poetic",
+      "__indexColor": "#4802d6",
+      "x": -143.70129116966626,
+      "y": -77.20654394692349,
+      "index": 76,
+      "vx": -2.58804710887425e-12,
+      "vy": -4.932834833727116e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 78,
+      "label": "the",
+      "__indexColor": "#3402d7",
+      "x": -381.35193874026845,
+      "y": -233.87522813074048,
+      "index": 77,
+      "vx": -1.7131497362213713e-12,
+      "vy": 4.4268728954995304e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 79,
+      "label": "relationship",
+      "__indexColor": "#2002d8",
+      "x": -363.3787352582246,
+      "y": -189.3339824226363,
+      "index": 78,
+      "vx": -1.0341419708684907e-12,
+      "vy": 1.2263556760701687e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 80,
+      "label": "between",
+      "__indexColor": "#0c02d9",
+      "x": -294.4070604961073,
+      "y": -160.34537711168082,
+      "index": 79,
+      "vx": -1.320339335773895e-12,
+      "vy": 5.644959810952529e-15,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 81,
+      "label": "and",
+      "__indexColor": "#f802da",
+      "x": -209.52624590044087,
+      "y": -107.653503440554,
+      "index": 80,
+      "vx": -4.461654514665297e-12,
+      "vy": 4.610324411483928e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 82,
+      "label": "that",
+      "__indexColor": "#e402db",
+      "x": -281.24916093875834,
+      "y": -184.98395081466234,
+      "index": 81,
+      "vx": -5.166882466410413e-13,
+      "vy": -2.710996731391937e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 83,
+      "label": "how",
+      "__indexColor": "#d002dc",
+      "x": -344.08777219660834,
+      "y": -371.51442233630564,
+      "index": 82,
+      "vx": -3.5869562862535807e-13,
+      "vy": 5.374009735952672e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 84,
+      "label": "has",
+      "__indexColor": "#bc02dd",
+      "x": -300.1288378474708,
+      "y": -215.95530946132567,
+      "index": 83,
+      "vx": -1.5156375894088901e-12,
+      "vy": -3.044730170871875e-15,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 85,
+      "label": "image",
+      "__indexColor": "#a802de",
+      "x": 135.23211212503318,
+      "y": 463.29573579234807,
+      "index": 84,
+      "vx": -2.3250493444257944e-13,
+      "vy": -1.2523086698444817e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 86,
+      "label": "graph",
+      "__indexColor": "#9402df",
+      "x": 128.59299863172066,
+      "y": 446.6870790910541,
+      "index": 85,
+      "vx": -1.918133342183072e-13,
+      "vy": 4.4578907109885526e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 87,
+      "label": "code",
+      "__indexColor": "#8002e0",
+      "x": 115.71226076699092,
+      "y": 452.27361185191137,
+      "index": 86,
+      "vx": -1.8820259214683753e-12,
+      "vy": 1.5259346957366893e-14,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 88,
+      "label": "statement",
+      "__indexColor": "#6c02e1",
+      "x": 147.75347494598023,
+      "y": 457.9783488214269,
+      "index": 87,
+      "vx": 5.229656984840878e-13,
+      "vy": -6.204021855375327e-14,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 89,
+      "label": "world",
+      "__indexColor": "#5802e2",
+      "x": 123.230640278142,
+      "y": 459.7757484895282,
+      "index": 88,
+      "vx": -1.1784438700476723e-12,
+      "vy": -3.095334470056649e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 90,
+      "label": "beautiful",
+      "__indexColor": "#4402e3",
+      "x": 157.9274558900143,
+      "y": 517.5811933622751,
+      "index": 89,
+      "vx": 2.1579786681901206e-12,
+      "vy": -8.948579226558751e-14,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 91,
+      "label": "confusing",
+      "__indexColor": "#3002e4",
+      "x": 129.7092197092213,
+      "y": 506.3981881640639,
+      "index": 90,
+      "vx": 5.585843043938219e-13,
+      "vy": -2.867228109713947e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 92,
+      "label": "logical",
+      "__indexColor": "#1c02e5",
+      "x": 116.05118178113334,
+      "y": 498.4253012224615,
+      "index": 91,
+      "vx": 7.98150685554507e-13,
+      "vy": 7.138853770277738e-14,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 93,
+      "label": "most",
+      "__indexColor": "#0802e6",
+      "x": 142.50185379135826,
+      "y": 551.2035913106407,
+      "index": 92,
+      "vx": 8.331849603912128e-13,
+      "vy": -3.2777065407981033e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 94,
+      "label": "the",
+      "__indexColor": "#f402e7",
+      "x": 139.98250850799727,
+      "y": 508.7983366210855,
+      "index": 93,
+      "vx": -6.640118823740172e-13,
+      "vy": 1.1519688141673264e-12,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 95,
+      "label": "make",
+      "__indexColor": "#e002e8",
+      "x": 103.49160483252297,
+      "y": 551.6144570849382,
+      "index": 94,
+      "vx": -1.8120217100764821e-12,
+      "vy": 2.532379429423918e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 96,
+      "label": "if",
+      "__indexColor": "#cc02e9",
+      "x": 129.72457978234104,
+      "y": 406.5876877872892,
+      "index": 95,
+      "vx": 1.6539166117454275e-12,
+      "vy": 7.796944761532956e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 97,
+      "label": "I",
+      "__indexColor": "#b802ea",
+      "x": 49.55869501848627,
+      "y": 533.5713127918742,
+      "index": 96,
+      "vx": -1.1999975654480193e-12,
+      "vy": 1.008046906800574e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 98,
+      "label": "can",
+      "__indexColor": "#a402eb",
+      "x": 22.205600152282138,
+      "y": 612.0323512516167,
+      "index": 97,
+      "vx": 4.801078595751731e-13,
+      "vy": 8.561653350098865e-14,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 99,
+      "label": "truth",
+      "__indexColor": "#9002ec",
+      "x": 101.49769330283027,
+      "y": 539.8682231384439,
+      "index": 98,
+      "vx": -2.230105894496233e-12,
+      "vy": 1.750408905379679e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 100,
+      "label": "how",
+      "__indexColor": "#7c02ed",
+      "x": 13.435433934371144,
+      "y": 648.679835774416,
+      "index": 99,
+      "vx": -9.902386349800175e-13,
+      "vy": 5.994816955617885e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 101,
+      "label": "contradicting",
+      "__indexColor": "#6802ee",
+      "x": -13.959336938688653,
+      "y": 246.53622583167206,
+      "index": 100,
+      "vx": -1.6422939924255172e-12,
+      "vy": -6.6184854946159e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 102,
+      "label": "contradict",
+      "__indexColor": "#5402ef",
+      "x": 25.04164417573967,
+      "y": 360.985361850553,
+      "index": 101,
+      "vx": -1.230637295762489e-12,
+      "vy": -1.302528396076311e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 103,
+      "label": "without",
+      "__indexColor": "#4002f0",
+      "x": 0.14143411268828782,
+      "y": 257.10294160856444,
+      "index": 102,
+      "vx": 6.665343206745445e-13,
+      "vy": -1.138093644112641e-12,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 104,
+      "label": "machine",
+      "__indexColor": "#2c02f1",
+      "x": 94.84249716587034,
+      "y": 47.67431669073177,
+      "index": 103,
+      "vx": -2.128330519095603e-12,
+      "vy": -2.119175168556185e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 105,
+      "label": "a",
+      "__indexColor": "#1802f2",
+      "x": 25.679058347004446,
+      "y": 664.1837355998697,
+      "index": 104,
+      "vx": 2.8675623955716075e-13,
+      "vy": 2.0965007192069172e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 106,
+      "label": "was",
+      "__indexColor": "#0402f3",
+      "x": 62.10460021062189,
+      "y": 652.7129862968039,
+      "index": 105,
+      "vx": -6.132000526551592e-13,
+      "vy": 6.726477691816276e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 107,
+      "label": "it",
+      "__indexColor": "#f002f4",
+      "x": 138.82494109863194,
+      "y": 55.93574913882541,
+      "index": 106,
+      "vx": 1.478028841390748e-13,
+      "vy": 7.855258731573685e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 108,
+      "label": "is",
+      "__indexColor": "#dc02f5",
+      "x": 171.58300311109338,
+      "y": 17.781531932552195,
+      "index": 107,
+      "vx": 2.378105159663049e-12,
+      "vy": 2.308277827242323e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 109,
+      "label": "does",
+      "__indexColor": "#c802f6",
+      "x": 132.42250780870913,
+      "y": 134.87056835121882,
+      "index": 108,
+      "vx": 1.6960005080922699e-12,
+      "vy": -1.1674355616328055e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 110,
+      "label": "why",
+      "__indexColor": "#b402f7",
+      "x": 195.54230623526936,
+      "y": -12.759869009342843,
+      "index": 109,
+      "vx": 2.3370905219227795e-12,
+      "vy": 1.950479222977431e-12,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 111,
+      "label": "found",
+      "__indexColor": "#a002f8",
+      "x": 57.67408496950725,
+      "y": 594.3729339097132,
+      "index": 110,
+      "vx": -7.417506918326916e-13,
+      "vy": 1.0843578526372204e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 112,
+      "label": "what",
+      "__indexColor": "#8c02f9",
+      "x": 122.4280145075639,
+      "y": 280.31244527279813,
+      "index": 111,
+      "vx": 3.287567089804184e-12,
+      "vy": 7.398090899464058e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 113,
+      "label": "look",
+      "__indexColor": "#7802fa",
+      "x": 120.29362353976703,
+      "y": 42.94896912304492,
+      "index": 112,
+      "vx": -5.933170270591458e-13,
+      "vy": 3.7466510611565435e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 114,
+      "label": "she",
+      "__indexColor": "#6402fb",
+      "x": 146.63759851312847,
+      "y": 91.78067610420996,
+      "index": 113,
+      "vx": 3.3711061826062e-13,
+      "vy": 2.4905642068708843e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 115,
+      "label": "he",
+      "__indexColor": "#5002fc",
+      "x": 127.01759343244728,
+      "y": 77.67684641557662,
+      "index": 114,
+      "vx": -2.997150663458535e-12,
+      "vy": 5.970676990534021e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 116,
+      "label": "why",
+      "__indexColor": "#3c02fd",
+      "x": 103.12261357387779,
+      "y": -205.76497311672094,
+      "index": 115,
+      "vx": 4.4680263557219417e-13,
+      "vy": -8.686296916446879e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 117,
+      "label": "does",
+      "__indexColor": "#2802fe",
+      "x": 20.625896496166256,
+      "y": -267.11668935306903,
+      "index": 116,
+      "vx": 3.240674400137259e-13,
+      "vy": -8.539225148913342e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 118,
+      "label": "forget",
+      "__indexColor": "#1402ff",
+      "x": 86.30853268436928,
+      "y": -239.89537944768418,
+      "index": 117,
+      "vx": -6.919160361289066e-13,
+      "vy": -9.428143181862491e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 119,
+      "label": "remember",
+      "__indexColor": "#000300",
+      "x": 95.3019486630931,
+      "y": -240.08927183743634,
+      "index": 118,
+      "vx": -6.994080030782379e-13,
+      "vy": -4.0286640323248074e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 120,
+      "label": "replaces",
+      "__indexColor": "#ec0301",
+      "x": -5.183846950498961,
+      "y": -267.5225595306367,
+      "index": 119,
+      "vx": 3.515134525689417e-13,
+      "vy": -1.626335812715423e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 121,
+      "label": "what",
+      "__indexColor": "#d80302",
+      "x": -50.14406183460863,
+      "y": -317.9400502539111,
+      "index": 120,
+      "vx": -1.5425791327924053e-12,
+      "vy": 5.104632127892452e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 122,
+      "label": "where",
+      "__indexColor": "#c40303",
+      "x": 23.367109258930842,
+      "y": -307.8598437759737,
+      "index": 121,
+      "vx": 8.577809279888329e-13,
+      "vy": -1.1928124021106697e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 123,
+      "label": "I",
+      "__indexColor": "#b00304",
+      "x": 142.01635994351696,
+      "y": -252.74415846127098,
+      "index": 122,
+      "vx": 7.334464807799876e-14,
+      "vy": -3.0477293023035626e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 124,
+      "label": "can",
+      "__indexColor": "#9c0305",
+      "x": 185.06189180446106,
+      "y": -318.133683357748,
+      "index": 123,
+      "vx": 2.303857727626478e-13,
+      "vy": 5.755523742505925e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 125,
+      "label": "input",
+      "__indexColor": "#880306",
+      "x": -177.51874532823533,
+      "y": -277.1051763953105,
+      "index": 124,
+      "vx": -6.685704107303735e-12,
+      "vy": -6.017293015236955e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 126,
+      "label": "output",
+      "__indexColor": "#740307",
+      "x": -170.23619147612865,
+      "y": -260.6063547010947,
+      "index": 125,
+      "vx": -7.155972337239211e-12,
+      "vy": 1.4446463182741162e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 127,
+      "label": "friction",
+      "__indexColor": "#600308",
+      "x": -188.89849160445576,
+      "y": -263.5509126274289,
+      "index": 126,
+      "vx": -6.704220147300916e-12,
+      "vy": 1.5318985628051078e-12,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 128,
+      "label": "temperature",
+      "__indexColor": "#4c0309",
+      "x": -191.55729174742243,
+      "y": -254.4855113598145,
+      "index": 127,
+      "vx": -7.691962196636855e-12,
+      "vy": 1.759566555809914e-12,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 129,
+      "label": "resistance",
+      "__indexColor": "#38030a",
+      "x": -186.49368625243596,
+      "y": -272.50899168167973,
+      "index": 128,
+      "vx": -6.334486779082183e-12,
+      "vy": 1.7342120651592893e-12,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 130,
+      "label": "the",
+      "__indexColor": "#24030b",
+      "x": -170.03095888344802,
+      "y": -234.86843555040974,
+      "index": 129,
+      "vx": -4.168748562129814e-12,
+      "vy": -6.954359897831441e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 131,
+      "label": "should",
+      "__indexColor": "#10030c",
+      "x": -150.29938443405857,
+      "y": -300.0440230918176,
+      "index": 130,
+      "vx": -2.7156639611131594e-12,
+      "vy": 9.316834522965063e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 132,
+      "label": "is",
+      "__indexColor": "#fc030d",
+      "x": -158.00530256553105,
+      "y": -309.7561668541371,
+      "index": 131,
+      "vx": -2.86258572950544e-12,
+      "vy": 9.149048336633092e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 133,
+      "label": "say",
+      "__indexColor": "#e8030e",
+      "x": 138.90086183385247,
+      "y": -191.33285942738104,
+      "index": 132,
+      "vx": -4.744574669571756e-14,
+      "vy": -2.046509255355637e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 134,
+      "label": "leave",
+      "__indexColor": "#d4030f",
+      "x": 128.11922907825485,
+      "y": -199.08476949082265,
+      "index": 133,
+      "vx": 2.7777212852286098e-14,
+      "vy": 6.342698559444687e-14,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 135,
+      "label": "how",
+      "__indexColor": "#c00310",
+      "x": 212.68966862418156,
+      "y": -352.5738261924781,
+      "index": 134,
+      "vx": -9.872142640737833e-14,
+      "vy": -1.0741200732796183e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 136,
+      "label": "to",
+      "__indexColor": "#ac0311",
+      "x": 98.0549710773768,
+      "y": -105.64023201573397,
+      "index": 135,
+      "vx": -4.0145328047548126e-13,
+      "vy": -4.738380608252657e-13,
+      "showNode": "false",
+      "className": "Text",
+      "hideNode": null
+    },
+    {
+      "id": 137,
+      "label": "you",
+      "__indexColor": "#980312",
+      "x": -12.621683454658136,
+      "y": -98.56103724834708,
+      "index": 136,
+      "vx": -1.287213099321325e-12,
+      "vy": 3.2702838847368624e-13,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 138,
+      "label": "are",
+      "__indexColor": "#840313",
+      "x": -11.614106267463841,
+      "y": -135.79484564816943,
+      "index": 137,
+      "vx": -1.1938550312041784e-12,
+      "vy": 3.0109838446890633e-15,
+      "showNode": "false",
+      "hideNode": null,
+      "className": "Text"
+    },
+    {
+      "id": 300,
+      "x": 553.7754559906036,
+      "y": 76.20033238165628,
+      "name": "how",
+      "__indexColor": "#ac0511",
+      "className": "Text",
+      "showNode": "false",
+      "label": "how",
+      "index": 138,
+      "vx": -1.9074016209067713e-12,
+      "vy": -2.1059012483395818e-14,
+      "hideNode": null
+    },
+    {
+      "id": "nodo3",
+      "x": -1.559430610496601,
+      "y": 191.89141351783098,
+      "name": "nodo3",
+      "__indexColor": "#840513",
+      "className": "axis",
+      "axis": true,
+      "index": 139,
+      "vx": -7.305862911907883e-13,
+      "vy": 3.2730823151203896e-12,
+      "ghost": true,
+      "physics": true,
+      "angle": 0,
+      "length": 1000,
+      "strength": 1000,
+      "range": 100
+    },
+    {
+      "id": "nodo5",
+      "x": -114.82432998063419,
+      "y": 105.38766325998104,
+      "name": "nodo5",
+      "__indexColor": "#700514",
+      "className": "axis",
+      "axis": true,
+      "ghost": true,
+      "index": 140,
+      "vx": -2.087550813075761e-12,
+      "vy": 3.2506754474649267e-12,
+      "physics": true,
+      "angle": 90,
+      "length": 1000,
+      "strength": 1000,
+      "range": 100
+    }
+  ],
+  "links": [
+    {
+      "source": 1,
+      "target": 2,
+      "__indexColor": "#5c0415",
+      "index": 0,
+      "__controlPoints": [
+        481.04533063091077,
+        78.30242946148933
+      ]
+    },
+    {
+      "source": 1,
+      "target": 2,
+      "__indexColor": "#480416",
+      "index": 1,
+      "__controlPoints": [
+        481.04533063091077,
+        78.30242946148933
+      ]
+    },
+    {
+      "source": 1,
+      "target": 2,
+      "__indexColor": "#340417",
+      "index": 2,
+      "__controlPoints": [
+        481.04533063091077,
+        78.30242946148933
+      ]
+    },
+    {
+      "source": 1,
+      "target": 2,
+      "__indexColor": "#200418",
+      "index": 3,
+      "__controlPoints": [
+        481.04533063091077,
+        78.30242946148933
+      ]
+    },
+    {
+      "source": 1,
+      "target": 2,
+      "__indexColor": "#0c0419",
+      "index": 4,
+      "__controlPoints": [
+        481.04533063091077,
+        78.30242946148933
+      ]
+    },
+    {
+      "source": 2,
+      "target": 3,
+      "__indexColor": "#f8041a",
+      "index": 5,
+      "__controlPoints": [
+        416.5483297929494,
+        74.78958383555546
+      ]
+    },
+    {
+      "source": 2,
+      "target": 3,
+      "__indexColor": "#e4041b",
+      "index": 6,
+      "__controlPoints": [
+        416.5483297929494,
+        74.78958383555546
+      ]
+    },
+    {
+      "source": 2,
+      "target": 4,
+      "__indexColor": "#d0041c",
+      "index": 7,
+      "__controlPoints": [
+        415.36026838247363,
+        57.506637125065026
+      ]
+    },
+    {
+      "source": 2,
+      "target": 5,
+      "__indexColor": "#bc041d",
+      "index": 8,
+      "__controlPoints": [
+        404.15975704920595,
+        72.64838029809293
+      ]
+    },
+    {
+      "source": 2,
+      "target": 6,
+      "__indexColor": "#a8041e",
+      "index": 9,
+      "__controlPoints": [
+        409.73250086436803,
+        84.42608331880595
+      ]
+    },
+    {
+      "source": 3,
+      "target": 7,
+      "__indexColor": "#94041f",
+      "index": 10,
+      "__controlPoints": [
+        345.3228419620281,
+        70.50833497283531
+      ]
+    },
+    {
+      "source": 3,
+      "target": 8,
+      "__indexColor": "#800420",
+      "index": 11,
+      "__controlPoints": [
+        310.5896687176567,
+        65.41137473275343
+      ]
+    },
+    {
+      "source": 7,
+      "target": 8,
+      "__indexColor": "#6c0421",
+      "index": 12,
+      "__controlPoints": [
+        275.4987334347351,
+        52.87798119255034
+      ]
+    },
+    {
+      "source": 8,
+      "target": 9,
+      "__indexColor": "#580422",
+      "index": 13,
+      "__controlPoints": [
+        165.7211964062536,
+        33.49199143926306
+      ]
+    },
+    {
+      "source": 8,
+      "target": 9,
+      "__indexColor": "#440423",
+      "index": 14,
+      "__controlPoints": [
+        165.7211964062536,
+        33.49199143926306
+      ]
+    },
+    {
+      "source": 8,
+      "target": 10,
+      "__indexColor": "#300424",
+      "index": 15,
+      "__controlPoints": [
+        277.024333403086,
+        19.176070357858084
+      ]
+    },
+    {
+      "source": 8,
+      "target": 11,
+      "__indexColor": "#1c0425",
+      "index": 16,
+      "__controlPoints": [
+        173.5236259944447,
+        23.708098749612354
+      ]
+    },
+    {
+      "source": 9,
+      "target": 12,
+      "__indexColor": "#080426",
+      "index": 17,
+      "__controlPoints": [
+        30.49575877887309,
+        -22.713047682970195
+      ]
+    },
+    {
+      "source": 9,
+      "target": 12,
+      "__indexColor": "#f40427",
+      "index": 18,
+      "__controlPoints": [
+        30.49575877887309,
+        -22.713047682970195
+      ]
+    },
+    {
+      "source": 9,
+      "target": 13,
+      "__indexColor": "#e00428",
+      "index": 19,
+      "__controlPoints": [
+        60.95343669666754,
+        -13.686816468208406
+      ]
+    },
+    {
+      "source": 14,
+      "target": 12,
+      "__indexColor": "#cc0429",
+      "index": 20,
+      "__controlPoints": [
+        -16.745334940352613,
+        150.39586653443985
+      ]
+    },
+    {
+      "source": 15,
+      "target": 12,
+      "__indexColor": "#b8042a",
+      "index": 21,
+      "__controlPoints": [
+        -42.169936796257176,
+        41.45346242396581
+      ]
+    },
+    {
+      "source": 16,
+      "target": 12,
+      "__indexColor": "#a4042b",
+      "index": 22,
+      "__controlPoints": [
+        2.4433160318429117,
+        -26.028024904378782
+      ]
+    },
+    {
+      "source": 16,
+      "target": 12,
+      "__indexColor": "#90042c",
+      "index": 23,
+      "__controlPoints": [
+        2.4433160318429117,
+        -26.028024904378782
+      ]
+    },
+    {
+      "source": 17,
+      "target": 12,
+      "__indexColor": "#7c042d",
+      "index": 24,
+      "__controlPoints": [
+        12.850838387415592,
+        -25.10595251571808
+      ]
+    },
+    {
+      "source": 18,
+      "target": 12,
+      "__indexColor": "#68042e",
+      "index": 25,
+      "__controlPoints": [
+        11.3389780263864,
+        -32.31040223390498
+      ]
+    },
+    {
+      "source": 19,
+      "target": 12,
+      "__indexColor": "#54042f",
+      "index": 26,
+      "__controlPoints": [
+        48.53255971700757,
+        -107.62214974515696
+      ]
+    },
+    {
+      "source": 20,
+      "target": 12,
+      "__indexColor": "#400430",
+      "index": 27,
+      "__controlPoints": [
+        28.59997640265265,
+        -126.24045597989361
+      ]
+    },
+    {
+      "source": 20,
+      "target": 12,
+      "__indexColor": "#2c0431",
+      "index": 28,
+      "__controlPoints": [
+        28.59997640265265,
+        -126.24045597989361
+      ]
+    },
+    {
+      "source": 21,
+      "target": 12,
+      "__indexColor": "#180432",
+      "index": 29,
+      "__controlPoints": [
+        44.268633832546286,
+        -100.51203198518995
+      ]
+    },
+    {
+      "source": 22,
+      "target": 12,
+      "__indexColor": "#040433",
+      "index": 30,
+      "__controlPoints": [
+        -65.3784207772264,
+        -164.18630607402298
+      ]
+    },
+    {
+      "source": 23,
+      "target": 12,
+      "__indexColor": "#f00434",
+      "index": 31,
+      "__controlPoints": [
+        51.10441720414809,
+        -86.09748791042013
+      ]
+    },
+    {
+      "source": 24,
+      "target": 12,
+      "__indexColor": "#dc0435",
+      "index": 32,
+      "__controlPoints": [
+        44.23990793624955,
+        -89.51871171169607
+      ]
+    },
+    {
+      "source": 25,
+      "target": 12,
+      "__indexColor": "#c80436",
+      "index": 33,
+      "__controlPoints": [
+        13.819944211087865,
+        -96.03285978565907
+      ]
+    },
+    {
+      "source": 26,
+      "target": 12,
+      "__indexColor": "#b40437",
+      "index": 34,
+      "__controlPoints": [
+        15.275707078263892,
+        -70.66198600877057
+      ]
+    },
+    {
+      "source": 27,
+      "target": 12,
+      "__indexColor": "#a00438",
+      "index": 35,
+      "__controlPoints": [
+        19.849474888849628,
+        -69.47461510209544
+      ]
+    },
+    {
+      "source": 28,
+      "target": 12,
+      "__indexColor": "#8c0439",
+      "index": 36,
+      "__controlPoints": [
+        9.061078850732708,
+        -98.83562643822931
+      ]
+    },
+    {
+      "source": 29,
+      "target": 12,
+      "__indexColor": "#78043a",
+      "index": 37,
+      "__controlPoints": [
+        -23.567508510259863,
+        -121.65331841257631
+      ]
+    },
+    {
+      "source": 30,
+      "target": 12,
+      "__indexColor": "#64043b",
+      "index": 38,
+      "__controlPoints": [
+        -65.48119142048094,
+        -125.58608983458335
+      ]
+    },
+    {
+      "source": 31,
+      "target": 12,
+      "__indexColor": "#50043c",
+      "index": 39,
+      "__controlPoints": [
+        -63.97081706435716,
+        -129.7731395502386
+      ]
+    },
+    {
+      "source": 32,
+      "target": 12,
+      "__indexColor": "#3c043d",
+      "index": 40,
+      "__controlPoints": [
+        2.5655613976431773,
+        -73.1492277753527
+      ]
+    },
+    {
+      "source": 33,
+      "target": 12,
+      "__indexColor": "#28043e",
+      "index": 41,
+      "__controlPoints": [
+        -18.028480512629365,
+        -57.92037969412313
+      ]
+    },
+    {
+      "source": 34,
+      "target": 35,
+      "__indexColor": "#14043f",
+      "index": 42,
+      "__controlPoints": [
+        -237.42756166774566,
+        85.13501112616423
+      ]
+    },
+    {
+      "source": 34,
+      "target": 35,
+      "__indexColor": "#000440",
+      "index": 43,
+      "__controlPoints": [
+        -237.42756166774566,
+        85.13501112616423
+      ]
+    },
+    {
+      "source": 34,
+      "target": 36,
+      "__indexColor": "#ec0441",
+      "index": 44,
+      "__controlPoints": [
+        -276.9921853304211,
+        99.61899173409245
+      ]
+    },
+    {
+      "source": 35,
+      "target": 37,
+      "__indexColor": "#d80442",
+      "index": 45,
+      "__controlPoints": [
+        -199.98723712187464,
+        71.11479293952576
+      ]
+    },
+    {
+      "source": 35,
+      "target": 37,
+      "__indexColor": "#c40443",
+      "index": 46,
+      "__controlPoints": [
+        -199.98723712187464,
+        71.11479293952576
+      ]
+    },
+    {
+      "source": 35,
+      "target": 37,
+      "__indexColor": "#b00444",
+      "index": 47,
+      "__controlPoints": [
+        -199.98723712187464,
+        71.11479293952576
+      ]
+    },
+    {
+      "source": 37,
+      "target": 38,
+      "__indexColor": "#9c0445",
+      "index": 48,
+      "__controlPoints": [
+        -105.66291386923915,
+        48.6010690989155
+      ]
+    },
+    {
+      "source": 37,
+      "target": 39,
+      "__indexColor": "#880446",
+      "index": 49,
+      "__controlPoints": [
+        -168.2437741183356,
+        24.673456437940942
+      ]
+    },
+    {
+      "source": 37,
+      "target": 40,
+      "__indexColor": "#740447",
+      "index": 50,
+      "__controlPoints": [
+        -169.8006456124411,
+        20.250841076782446
+      ]
+    },
+    {
+      "source": 38,
+      "target": 41,
+      "__indexColor": "#600448",
+      "index": 51,
+      "__controlPoints": [
+        -18.942789451235253,
+        82.06243110931872
+      ]
+    },
+    {
+      "source": 41,
+      "target": 42,
+      "__indexColor": "#4c0449",
+      "index": 52,
+      "__controlPoints": [
+        18.353584965594106,
+        89.15056479120844
+      ]
+    },
+    {
+      "source": 42,
+      "target": 43,
+      "__indexColor": "#38044a",
+      "index": 53,
+      "__controlPoints": [
+        48.52419360787521,
+        69.17120469964787
+      ]
+    },
+    {
+      "source": 43,
+      "target": 9,
+      "__indexColor": "#24044b",
+      "index": 54,
+      "__controlPoints": [
+        71.37245671124106,
+        16.295098197254056
+      ]
+    },
+    {
+      "source": 44,
+      "target": 35,
+      "__indexColor": "#10044c",
+      "index": 55,
+      "__controlPoints": [
+        -231.27133824736322,
+        90.51481639484878
+      ]
+    },
+    {
+      "source": 39,
+      "target": 12,
+      "__indexColor": "#fc044d",
+      "index": 56,
+      "__controlPoints": [
+        -87.53218583919278,
+        -54.85018236908158
+      ]
+    },
+    {
+      "source": 13,
+      "target": 12,
+      "__indexColor": "#e8044e",
+      "index": 57,
+      "__controlPoints": [
+        5.3667475669687175,
+        -44.268762599356556
+      ]
+    },
+    {
+      "source": 4,
+      "target": 45,
+      "__indexColor": "#d4044f",
+      "index": 58,
+      "__controlPoints": [
+        315.6337013476979,
+        27.402824751942884
+      ]
+    },
+    {
+      "source": 45,
+      "target": 46,
+      "__indexColor": "#c00450",
+      "index": 59,
+      "__controlPoints": [
+        191.69932364538386,
+        -13.823581353394975
+      ]
+    },
+    {
+      "source": 46,
+      "target": 47,
+      "__indexColor": "#ac0451",
+      "index": 60,
+      "__controlPoints": [
+        97.32743608807452,
+        -46.19115878212928
+      ]
+    },
+    {
+      "source": 46,
+      "target": 48,
+      "__indexColor": "#980452",
+      "index": 61,
+      "__controlPoints": [
+        100.57205263646944,
+        -40.22341931698445
+      ]
+    },
+    {
+      "source": 46,
+      "target": 49,
+      "__indexColor": "#840453",
+      "index": 62,
+      "__controlPoints": [
+        95.29951759789206,
+        -39.72153376050628
+      ]
+    },
+    {
+      "source": 47,
+      "target": 12,
+      "__indexColor": "#700454",
+      "index": 63,
+      "__controlPoints": [
+        23.378867429285396,
+        -56.00949635879254
+      ]
+    },
+    {
+      "source": 48,
+      "target": 12,
+      "__indexColor": "#5c0455",
+      "index": 64,
+      "__controlPoints": [
+        22.728328383936457,
+        -49.247969177715646
+      ]
+    },
+    {
+      "source": 49,
+      "target": 12,
+      "__indexColor": "#480456",
+      "index": 65,
+      "__controlPoints": [
+        18.077795749431203,
+        -51.78254232920078
+      ]
+    },
+    {
+      "source": 5,
+      "target": 8,
+      "__indexColor": "#340457",
+      "index": 66,
+      "__controlPoints": [
+        301.5207099586334,
+        56.70416655544426
+      ]
+    },
+    {
+      "source": 10,
+      "target": 50,
+      "__indexColor": "#200458",
+      "index": 67,
+      "__controlPoints": [
+        331.45145716256326,
+        20.102243558382973
+      ]
+    },
+    {
+      "source": 50,
+      "target": 51,
+      "__indexColor": "#0c0459",
+      "index": 68,
+      "__controlPoints": [
+        332.85902409332596,
+        42.16139803109574
+      ]
+    },
+    {
+      "source": 51,
+      "target": 8,
+      "__indexColor": "#f8045a",
+      "index": 69,
+      "__controlPoints": [
+        276.36743177448113,
+        42.961136223874604
+      ]
+    },
+    {
+      "source": 11,
+      "target": 12,
+      "__indexColor": "#e4045b",
+      "index": 70,
+      "__controlPoints": [
+        42.4371941534744,
+        -26.455317694006435
+      ]
+    },
+    {
+      "source": 38,
+      "target": 52,
+      "__indexColor": "#d0045c",
+      "index": 71,
+      "__controlPoints": [
+        -3.4372854079450903,
+        37.213661646951564
+      ]
+    },
+    {
+      "source": 52,
+      "target": 12,
+      "__indexColor": "#bc045d",
+      "index": 72,
+      "__controlPoints": [
+        2.1593790428618753,
+        -12.423499567639444
+      ]
+    },
+    {
+      "source": 52,
+      "target": 53,
+      "__indexColor": "#a8045e",
+      "index": 73,
+      "__controlPoints": [
+        21.733279569540635,
+        10.460864168508394
+      ]
+    },
+    {
+      "source": 53,
+      "target": 12,
+      "__indexColor": "#94045f",
+      "index": 74,
+      "__controlPoints": [
+        -11.40834132404203,
+        -38.8742431603012
+      ]
+    },
+    {
+      "source": 40,
+      "target": 12,
+      "__indexColor": "#800460",
+      "index": 75,
+      "__controlPoints": [
+        -86.34756104068067,
+        -59.38670521909166
+      ]
+    },
+    {
+      "source": 6,
+      "target": 54,
+      "__indexColor": "#6c0461",
+      "index": 76,
+      "__controlPoints": [
+        277.95566814286656,
+        91.23804734805825
+      ]
+    },
+    {
+      "source": 54,
+      "target": 52,
+      "__indexColor": "#580462",
+      "index": 77,
+      "__controlPoints": [
+        117.98205283836721,
+        63.739736441656135
+      ]
+    },
+    {
+      "source": 55,
+      "target": 56,
+      "__indexColor": "#440463",
+      "index": 78,
+      "__controlPoints": [
+        -354.3782432228047,
+        -313.0707081165358
+      ]
+    },
+    {
+      "source": 55,
+      "target": 57,
+      "__indexColor": "#300464",
+      "index": 79,
+      "__controlPoints": [
+        -339.6747008898268,
+        -269.5624518864515
+      ]
+    },
+    {
+      "source": 56,
+      "target": 58,
+      "__indexColor": "#1c0465",
+      "index": 80,
+      "__controlPoints": [
+        -308.6129204925397,
+        -322.2648386578031
+      ]
+    },
+    {
+      "source": 58,
+      "target": 59,
+      "__indexColor": "#080466",
+      "index": 81,
+      "__controlPoints": [
+        -204.96816054065238,
+        -240.33016094908015
+      ]
+    },
+    {
+      "source": 58,
+      "target": 60,
+      "__indexColor": "#f40467",
+      "index": 82,
+      "__controlPoints": [
+        -262.87597260322804,
+        -298.6568003988565
+      ]
+    },
+    {
+      "source": 58,
+      "target": 61,
+      "__indexColor": "#e00468",
+      "index": 83,
+      "__controlPoints": [
+        -275.992238089246,
+        -283.3921276500896
+      ]
+    },
+    {
+      "source": 58,
+      "target": 62,
+      "__indexColor": "#cc0469",
+      "index": 84,
+      "__controlPoints": [
+        -282.5886786672232,
+        -280.87509036736424
+      ]
+    },
+    {
+      "source": 58,
+      "target": 62,
+      "__indexColor": "#b8046a",
+      "index": 85,
+      "__controlPoints": [
+        -282.5886786672232,
+        -280.87509036736424
+      ]
+    },
+    {
+      "source": 59,
+      "target": 63,
+      "__indexColor": "#a4046b",
+      "index": 86,
+      "__controlPoints": [
+        -151.04428226578955,
+        -118.71198904949112
+      ]
+    },
+    {
+      "source": 59,
+      "target": 64,
+      "__indexColor": "#90046c",
+      "index": 87,
+      "__controlPoints": [
+        -108.71802724041842,
+        -137.8261994878218
+      ]
+    },
+    {
+      "source": 59,
+      "target": 65,
+      "__indexColor": "#7c046d",
+      "index": 88,
+      "__controlPoints": [
+        -107.3735791726925,
+        -143.38657482644723
+      ]
+    },
+    {
+      "source": 59,
+      "target": 66,
+      "__indexColor": "#68046e",
+      "index": 89,
+      "__controlPoints": [
+        -148.3384427139864,
+        -107.63133296500085
+      ]
+    },
+    {
+      "source": 63,
+      "target": 12,
+      "__indexColor": "#54046f",
+      "index": 90,
+      "__controlPoints": [
+        -78.18455417342979,
+        -98.75903814562236
+      ]
+    },
+    {
+      "source": 64,
+      "target": 12,
+      "__indexColor": "#400470",
+      "index": 91,
+      "__controlPoints": [
+        -32.40982602066794,
+        -90.91434773144437
+      ]
+    },
+    {
+      "source": 65,
+      "target": 12,
+      "__indexColor": "#2c0471",
+      "index": 92,
+      "__controlPoints": [
+        -28.18400587969316,
+        -94.77022099820738
+      ]
+    },
+    {
+      "source": 66,
+      "target": 12,
+      "__indexColor": "#180472",
+      "index": 93,
+      "__controlPoints": [
+        -82.14280533211291,
+        -88.06162001283735
+      ]
+    },
+    {
+      "source": 67,
+      "target": 58,
+      "__indexColor": "#040473",
+      "index": 94,
+      "__controlPoints": [
+        -299.66448088757375,
+        -322.9856026590693
+      ]
+    },
+    {
+      "source": 67,
+      "target": 58,
+      "__indexColor": "#f00474",
+      "index": 95,
+      "__controlPoints": [
+        -299.66448088757375,
+        -322.9856026590693
+      ]
+    },
+    {
+      "source": 67,
+      "target": 58,
+      "__indexColor": "#dc0475",
+      "index": 96,
+      "__controlPoints": [
+        -299.66448088757375,
+        -322.9856026590693
+      ]
+    },
+    {
+      "source": 67,
+      "target": 58,
+      "__indexColor": "#c80476",
+      "index": 97,
+      "__controlPoints": [
+        -299.66448088757375,
+        -322.9856026590693
+      ]
+    },
+    {
+      "source": 67,
+      "target": 68,
+      "__indexColor": "#b40477",
+      "index": 98,
+      "__controlPoints": [
+        -269.7392958070651,
+        -281.1631319501156
+      ]
+    },
+    {
+      "source": 60,
+      "target": 69,
+      "__indexColor": "#a00478",
+      "index": 99,
+      "__controlPoints": [
+        -214.3175324583423,
+        -249.23385381974322
+      ]
+    },
+    {
+      "source": 69,
+      "target": 70,
+      "__indexColor": "#8c0479",
+      "index": 100,
+      "__controlPoints": [
+        -160.04455957576124,
+        -170.81131704688192
+      ]
+    },
+    {
+      "source": 70,
+      "target": 12,
+      "__indexColor": "#78047a",
+      "index": 101,
+      "__controlPoints": [
+        -70.60987766765116,
+        -111.26574772400983
+      ]
+    },
+    {
+      "source": 68,
+      "target": 71,
+      "__indexColor": "#64047b",
+      "index": 102,
+      "__controlPoints": [
+        -248.12762908997806,
+        -190.45304227076835
+      ]
+    },
+    {
+      "source": 68,
+      "target": 72,
+      "__indexColor": "#50047c",
+      "index": 103,
+      "__controlPoints": [
+        -248.55664790522098,
+        -184.81418483091744
+      ]
+    },
+    {
+      "source": 68,
+      "target": 73,
+      "__indexColor": "#3c047d",
+      "index": 104,
+      "__controlPoints": [
+        -226.44679282841446,
+        -185.58351679438184
+      ]
+    },
+    {
+      "source": 68,
+      "target": 73,
+      "__indexColor": "#28047e",
+      "index": 105,
+      "__controlPoints": [
+        -226.44679282841446,
+        -185.58351679438184
+      ]
+    },
+    {
+      "source": 68,
+      "target": 74,
+      "__indexColor": "#14047f",
+      "index": 106,
+      "__controlPoints": [
+        -187.76074055441887,
+        -174.01745885055
+      ]
+    },
+    {
+      "source": 68,
+      "target": 75,
+      "__indexColor": "#000480",
+      "index": 107,
+      "__controlPoints": [
+        -217.34991999908834,
+        -192.14176745806873
+      ]
+    },
+    {
+      "source": 68,
+      "target": 75,
+      "__indexColor": "#ec0481",
+      "index": 108,
+      "__controlPoints": [
+        -217.34991999908834,
+        -192.14176745806873
+      ]
+    },
+    {
+      "source": 71,
+      "target": 76,
+      "__indexColor": "#d80482",
+      "index": 109,
+      "__controlPoints": [
+        -228.5006460139029,
+        -150.32979280051634
+      ]
+    },
+    {
+      "source": 76,
+      "target": 77,
+      "__indexColor": "#c40483",
+      "index": 110,
+      "__controlPoints": [
+        -175.1784245863647,
+        -110.8955465172716
+      ]
+    },
+    {
+      "source": 77,
+      "target": 12,
+      "__indexColor": "#b00484",
+      "index": 111,
+      "__controlPoints": [
+        -77.9756168382097,
+        -92.71820352864863
+      ]
+    },
+    {
+      "source": 72,
+      "target": 76,
+      "__indexColor": "#9c0485",
+      "index": 112,
+      "__controlPoints": [
+        -232.01171181883944,
+        -145.8966012544403
+      ]
+    },
+    {
+      "source": 57,
+      "target": 68,
+      "__indexColor": "#880486",
+      "index": 113,
+      "__controlPoints": [
+        -290.84926938652023,
+        -236.15625716106757
+      ]
+    },
+    {
+      "source": 57,
+      "target": 78,
+      "__indexColor": "#740487",
+      "index": 114,
+      "__controlPoints": [
+        -356.88954044498144,
+        -229.2151557566912
+      ]
+    },
+    {
+      "source": 78,
+      "target": 79,
+      "__indexColor": "#600488",
+      "index": 115,
+      "__controlPoints": [
+        -365.5505264059066,
+        -214.35450540944112
+      ]
+    },
+    {
+      "source": 79,
+      "target": 80,
+      "__indexColor": "#4c0489",
+      "index": 116,
+      "__controlPoints": [
+        -324.45764126458977,
+        -185.39234600576248
+      ]
+    },
+    {
+      "source": 80,
+      "target": 73,
+      "__indexColor": "#38048a",
+      "index": 117,
+      "__controlPoints": [
+        -252.84033909445094,
+        -166.71971741676154
+      ]
+    },
+    {
+      "source": 73,
+      "target": 12,
+      "__indexColor": "#24048b",
+      "index": 118,
+      "__controlPoints": [
+        -102.59225091340359,
+        -139.3676275853181
+      ]
+    },
+    {
+      "source": 73,
+      "target": 81,
+      "__indexColor": "#10048c",
+      "index": 119,
+      "__controlPoints": [
+        -205.88878741277293,
+        -129.0082296765997
+      ]
+    },
+    {
+      "source": 73,
+      "target": 82,
+      "__indexColor": "#fc048d",
+      "index": 120,
+      "__controlPoints": [
+        -253.58180338017024,
+        -156.69984736279133
+      ]
+    },
+    {
+      "source": 81,
+      "target": 74,
+      "__indexColor": "#e8048e",
+      "index": 121,
+      "__controlPoints": [
+        -179.77573619430456,
+        -115.82095800422937
+      ]
+    },
+    {
+      "source": 74,
+      "target": 12,
+      "__indexColor": "#d4048f",
+      "index": 122,
+      "__controlPoints": [
+        -77.00309911002236,
+        -108.13335719380899
+      ]
+    },
+    {
+      "source": 74,
+      "target": 12,
+      "__indexColor": "#c00490",
+      "index": 123,
+      "__controlPoints": [
+        -77.00309911002236,
+        -108.13335719380899
+      ]
+    },
+    {
+      "source": 61,
+      "target": 68,
+      "__indexColor": "#ac0491",
+      "index": 124,
+      "__controlPoints": [
+        -259.0105578505497,
+        -238.1706717746519
+      ]
+    },
+    {
+      "source": 83,
+      "target": 67,
+      "__indexColor": "#980492",
+      "index": 125,
+      "__controlPoints": [
+        -326.4705253563977,
+        -355.9336591809811
+      ]
+    },
+    {
+      "source": 83,
+      "target": 67,
+      "__indexColor": "#840493",
+      "index": 126,
+      "__controlPoints": [
+        -326.4705253563977,
+        -355.9336591809811
+      ]
+    },
+    {
+      "source": 62,
+      "target": 68,
+      "__indexColor": "#700494",
+      "index": 127,
+      "__controlPoints": [
+        -265.8859744288679,
+        -239.77602278175294
+      ]
+    },
+    {
+      "source": 62,
+      "target": 68,
+      "__indexColor": "#5c0495",
+      "index": 128,
+      "__controlPoints": [
+        -265.8859744288679,
+        -239.77602278175294
+      ]
+    },
+    {
+      "source": 82,
+      "target": 57,
+      "__indexColor": "#480496",
+      "index": 129,
+      "__controlPoints": [
+        -315.89962619149503,
+        -203.94096043105665
+      ]
+    },
+    {
+      "source": 82,
+      "target": 84,
+      "__indexColor": "#340497",
+      "index": 130,
+      "__controlPoints": [
+        -295.427617266054,
+        -197.581039570961
+      ]
+    },
+    {
+      "source": 84,
+      "target": 68,
+      "__indexColor": "#200498",
+      "index": 131,
+      "__controlPoints": [
+        -277.4418647918289,
+        -219.42923576381145
+      ]
+    },
+    {
+      "source": 75,
+      "target": 12,
+      "__indexColor": "#0c0499",
+      "index": 132,
+      "__controlPoints": [
+        -91.38310321594693,
+        -139.7122359678095
+      ]
+    },
+    {
+      "source": 75,
+      "target": 82,
+      "__indexColor": "#f8049a",
+      "index": 133,
+      "__controlPoints": [
+        -242.37265568271357,
+        -157.04445574528273
+      ]
+    },
+    {
+      "source": 85,
+      "target": 14,
+      "__indexColor": "#e4049b",
+      "index": 134,
+      "__controlPoints": [
+        99.86081623089935,
+        402.94058053582825
+      ]
+    },
+    {
+      "source": 86,
+      "target": 14,
+      "__indexColor": "#d0049c",
+      "index": 135,
+      "__controlPoints": [
+        99.08238395954106,
+        393.62046782070445
+      ]
+    },
+    {
+      "source": 87,
+      "target": 14,
+      "__indexColor": "#bc049d",
+      "index": 136,
+      "__controlPoints": [
+        91.78727551476501,
+        394.4429813078295
+      ]
+    },
+    {
+      "source": 88,
+      "target": 14,
+      "__indexColor": "#a8049e",
+      "index": 137,
+      "__controlPoints": [
+        106.9350578479238,
+        402.19765556197257
+      ]
+    },
+    {
+      "source": 89,
+      "target": 14,
+      "__indexColor": "#94049f",
+      "index": 138,
+      "__controlPoints": [
+        94.3986383647852,
+        399.344361691844
+      ]
+    },
+    {
+      "source": 91,
+      "target": 85,
+      "__indexColor": "#8004a0",
+      "index": 139,
+      "__controlPoints": [
+        125.8759907042547,
+        484.00195943858677
+      ]
+    },
+    {
+      "source": 91,
+      "target": 85,
+      "__indexColor": "#6c04a1",
+      "index": 140,
+      "__controlPoints": [
+        125.8759907042547,
+        484.00195943858677
+      ]
+    },
+    {
+      "source": 92,
+      "target": 85,
+      "__indexColor": "#5804a2",
+      "index": 141,
+      "__controlPoints": [
+        120.26682344227592,
+        477.9258361647881
+      ]
+    },
+    {
+      "source": 93,
+      "target": 90,
+      "__indexColor": "#4404a3",
+      "index": 142,
+      "__controlPoints": [
+        145.07042795458634,
+        532.0322752153636
+      ]
+    },
+    {
+      "source": 94,
+      "target": 93,
+      "__indexColor": "#3004a4",
+      "index": 143,
+      "__controlPoints": [
+        147.73018511717973,
+        529.6155041375089
+      ]
+    },
+    {
+      "source": 95,
+      "target": 94,
+      "__indexColor": "#1c04a5",
+      "index": 144,
+      "__controlPoints": [
+        115.18619023929067,
+        524.6232885906643
+      ]
+    },
+    {
+      "source": 96,
+      "target": 94,
+      "__indexColor": "#0804a6",
+      "index": 145,
+      "__controlPoints": [
+        150.49177341674002,
+        456.12354910916196
+      ]
+    },
+    {
+      "source": 97,
+      "target": 95,
+      "__indexColor": "#f404a7",
+      "index": 146,
+      "__controlPoints": [
+        79.2857510023434,
+        534.3411497368586
+      ]
+    },
+    {
+      "source": 98,
+      "target": 97,
+      "__indexColor": "#e004a8",
+      "index": 147,
+      "__controlPoints": [
+        23.877608701043613,
+        568.6168085072162
+      ]
+    },
+    {
+      "source": 98,
+      "target": 97,
+      "__indexColor": "#cc04a9",
+      "index": 148,
+      "__controlPoints": [
+        23.877608701043613,
+        568.6168085072162
+      ]
+    },
+    {
+      "source": 99,
+      "target": 97,
+      "__indexColor": "#b804aa",
+      "index": 149,
+      "__controlPoints": [
+        74.5647668776331,
+        544.6664347026637
+      ]
+    },
+    {
+      "source": 100,
+      "target": 98,
+      "__indexColor": "#a404ab",
+      "index": 150,
+      "__controlPoints": [
+        12.213451911338339,
+        629.0142580816758
+      ]
+    },
+    {
+      "source": 100,
+      "target": 98,
+      "__indexColor": "#9004ac",
+      "index": 151,
+      "__controlPoints": [
+        12.213451911338339,
+        629.0142580816758
+      ]
+    },
+    {
+      "source": 91,
+      "target": 86,
+      "__indexColor": "#7c04ad",
+      "index": 152,
+      "__controlPoints": [
+        120.0153094823005,
+        476.7134154524166
+      ]
+    },
+    {
+      "source": 91,
+      "target": 86,
+      "__indexColor": "#6804ae",
+      "index": 153,
+      "__controlPoints": [
+        120.0153094823005,
+        476.7134154524166
+      ]
+    },
+    {
+      "source": 92,
+      "target": 86,
+      "__indexColor": "#5404af",
+      "index": 154,
+      "__controlPoints": [
+        114.40614222032167,
+        470.63729217861794
+      ]
+    },
+    {
+      "source": 91,
+      "target": 87,
+      "__indexColor": "#4004b0",
+      "index": 155,
+      "__controlPoints": [
+        114.42968006234676,
+        481.47743472614894
+      ]
+    },
+    {
+      "source": 91,
+      "target": 87,
+      "__indexColor": "#2c04b1",
+      "index": 156,
+      "__controlPoints": [
+        114.42968006234676,
+        481.47743472614894
+      ]
+    },
+    {
+      "source": 92,
+      "target": 87,
+      "__indexColor": "#1804b2",
+      "index": 157,
+      "__controlPoints": [
+        108.82051280036796,
+        475.4013114523502
+      ]
+    },
+    {
+      "source": 90,
+      "target": 88,
+      "__indexColor": "#0404b3",
+      "index": 158,
+      "__controlPoints": [
+        143.7212302032475,
+        489.3363901762882
+      ]
+    },
+    {
+      "source": 91,
+      "target": 88,
+      "__indexColor": "#f004b4",
+      "index": 159,
+      "__controlPoints": [
+        131.32311190817728,
+        479.42749744152127
+      ]
+    },
+    {
+      "source": 92,
+      "target": 88,
+      "__indexColor": "#dc04b5",
+      "index": 160,
+      "__controlPoints": [
+        125.7139446461985,
+        473.3513741677226
+      ]
+    },
+    {
+      "source": 91,
+      "target": 89,
+      "__indexColor": "#c804b6",
+      "index": 161,
+      "__controlPoints": [
+        119.33669672347769,
+        484.0781909797512
+      ]
+    },
+    {
+      "source": 91,
+      "target": 89,
+      "__indexColor": "#b404b7",
+      "index": 162,
+      "__controlPoints": [
+        119.33669672347769,
+        484.0781909797512
+      ]
+    },
+    {
+      "source": 92,
+      "target": 89,
+      "__indexColor": "#a004b8",
+      "index": 163,
+      "__controlPoints": [
+        113.72752946149888,
+        478.0020677059525
+      ]
+    },
+    {
+      "source": 93,
+      "target": 91,
+      "__indexColor": "#8c04b9",
+      "index": 164,
+      "__controlPoints": [
+        129.25031006886354,
+        530.7581627519193
+      ]
+    },
+    {
+      "source": 93,
+      "target": 91,
+      "__indexColor": "#7804ba",
+      "index": 165,
+      "__controlPoints": [
+        129.25031006886354,
+        530.7581627519193
+      ]
+    },
+    {
+      "source": 93,
+      "target": 91,
+      "__indexColor": "#6404bb",
+      "index": 166,
+      "__controlPoints": [
+        129.25031006886354,
+        530.7581627519193
+      ]
+    },
+    {
+      "source": 93,
+      "target": 91,
+      "__indexColor": "#5004bc",
+      "index": 167,
+      "__controlPoints": [
+        129.25031006886354,
+        530.7581627519193
+      ]
+    },
+    {
+      "source": 93,
+      "target": 91,
+      "__indexColor": "#3c04bd",
+      "index": 168,
+      "__controlPoints": [
+        129.25031006886354,
+        530.7581627519193
+      ]
+    },
+    {
+      "source": 93,
+      "target": 92,
+      "__indexColor": "#2804be",
+      "index": 169,
+      "__controlPoints": [
+        121.20143940275437,
+        528.8613990841155
+      ]
+    },
+    {
+      "source": 101,
+      "target": 15,
+      "__indexColor": "#1404bf",
+      "index": 170,
+      "__controlPoints": [
+        -23.605946403699676,
+        195.67484230295034
+      ]
+    },
+    {
+      "source": 102,
+      "target": 15,
+      "__indexColor": "#0004c0",
+      "index": 171,
+      "__controlPoints": [
+        -21.616173657374294,
+        258.8665604228983
+      ]
+    },
+    {
+      "source": 103,
+      "target": 101,
+      "__indexColor": "#ec04c1",
+      "index": 172,
+      "__controlPoints": [
+        -8.525658926864716,
+        253.97700169097894
+      ]
+    },
+    {
+      "source": 15,
+      "target": 103,
+      "__indexColor": "#d804c2",
+      "index": 173,
+      "__controlPoints": [
+        15.175102803453182,
+        202.11192781523468
+      ]
+    },
+    {
+      "source": 97,
+      "target": 102,
+      "__indexColor": "#c404c3",
+      "index": 174,
+      "__controlPoints": [
+        10.894519103090822,
+        451.02944610015385
+      ]
+    },
+    {
+      "source": 104,
+      "target": 16,
+      "__indexColor": "#b004c4",
+      "index": 175,
+      "__controlPoints": [
+        60.43189289668267,
+        31.998844310975564
+      ]
+    },
+    {
+      "source": 115,
+      "target": 16,
+      "__indexColor": "#9c04c5",
+      "index": 176,
+      "__controlPoints": [
+        71.92905398206989,
+        51.92289890218426
+      ]
+    },
+    {
+      "source": 115,
+      "target": 104,
+      "__indexColor": "#8804c6",
+      "index": 177,
+      "__controlPoints": [
+        106.33965825125756,
+        67.59837128194047
+      ]
+    },
+    {
+      "source": 98,
+      "target": 105,
+      "__indexColor": "#7404c7",
+      "index": 178,
+      "__controlPoints": [
+        31.92149105492601,
+        637.5766043219506
+      ]
+    },
+    {
+      "source": 106,
+      "target": 105,
+      "__indexColor": "#6004c8",
+      "index": 179,
+      "__controlPoints": [
+        45.64685392218223,
+        664.0214688534703
+      ]
+    },
+    {
+      "source": 107,
+      "target": 17,
+      "__indexColor": "#4c04c9",
+      "index": 180,
+      "__controlPoints": [
+        90.30046793466657,
+        37.79899122032498
+      ]
+    },
+    {
+      "source": 108,
+      "target": 107,
+      "__indexColor": "#3804ca",
+      "index": 181,
+      "__controlPoints": [
+        161.04156733742246,
+        41.8706240235954
+      ]
+    },
+    {
+      "source": 109,
+      "target": 107,
+      "__indexColor": "#2404cb",
+      "index": 182,
+      "__controlPoints": [
+        123.54669711417435,
+        94.42358645166392
+      ]
+    },
+    {
+      "source": 110,
+      "target": 108,
+      "__indexColor": "#1004cc",
+      "index": 183,
+      "__controlPoints": [
+        188.23548901729131,
+        6.176604839603602
+      ]
+    },
+    {
+      "source": 111,
+      "target": 106,
+      "__indexColor": "#fc04cd",
+      "index": 184,
+      "__controlPoints": [
+        68.81537060528946,
+        622.865091271368
+      ]
+    },
+    {
+      "source": 97,
+      "target": 111,
+      "__indexColor": "#e804ce",
+      "index": 185,
+      "__controlPoints": [
+        62.919038025026126,
+        562.7304686882875
+      ]
+    },
+    {
+      "source": 94,
+      "target": 99,
+      "__indexColor": "#d404cf",
+      "index": 186,
+      "__controlPoints": [
+        125.4937935425696,
+        530.2214566061552
+      ]
+    },
+    {
+      "source": 112,
+      "target": 96,
+      "__indexColor": "#c004d0",
+      "index": 187,
+      "__controlPoints": [
+        145.3964092496696,
+        342.33369204300277
+      ]
+    },
+    {
+      "source": 113,
+      "target": 18,
+      "__indexColor": "#ac04d1",
+      "index": 188,
+      "__controlPoints": [
+        77.73719543463099,
+        23.345574043499795
+      ]
+    },
+    {
+      "source": 107,
+      "target": 113,
+      "__indexColor": "#9804d2",
+      "index": 189,
+      "__controlPoints": [
+        127.57230497678508,
+        52.27765071744149
+      ]
+    },
+    {
+      "source": 114,
+      "target": 113,
+      "__indexColor": "#8404d3",
+      "index": 190,
+      "__controlPoints": [
+        125.99435985832949,
+        71.39545078455174
+      ]
+    },
+    {
+      "source": 115,
+      "target": 113,
+      "__indexColor": "#7004d4",
+      "index": 191,
+      "__controlPoints": [
+        118.3422432603498,
+        61.34167516289085
+      ]
+    },
+    {
+      "source": 109,
+      "target": 114,
+      "__indexColor": "#5c04d5",
+      "index": 192,
+      "__controlPoints": [
+        132.93729964712642,
+        111.15071334993823
+      ]
+    },
+    {
+      "source": 112,
+      "target": 109,
+      "__indexColor": "#4804d6",
+      "index": 193,
+      "__controlPoints": [
+        105.17265398913489,
+        206.06234933693324
+      ]
+    },
+    {
+      "source": 109,
+      "target": 115,
+      "__indexColor": "#3404d7",
+      "index": 194,
+      "__controlPoints": [
+        120.96941116442495,
+        107.10065928296578
+      ]
+    },
+    {
+      "source": 20,
+      "target": 19,
+      "__indexColor": "#2004d8",
+      "index": 195,
+      "__controlPoints": [
+        59.379210332070684,
+        -193.87474656840092
+      ]
+    },
+    {
+      "source": 116,
+      "target": 19,
+      "__indexColor": "#0c04d9",
+      "index": 196,
+      "__controlPoints": [
+        95.88500912595937,
+        -186.86765127629243
+      ]
+    },
+    {
+      "source": 117,
+      "target": 20,
+      "__indexColor": "#f804da",
+      "index": 197,
+      "__controlPoints": [
+        37.08526859940474,
+        -234.44135530891117
+      ]
+    },
+    {
+      "source": 117,
+      "target": 20,
+      "__indexColor": "#e404db",
+      "index": 198,
+      "__controlPoints": [
+        37.08526859940474,
+        -234.44135530891117
+      ]
+    },
+    {
+      "source": 117,
+      "target": 20,
+      "__indexColor": "#d004dc",
+      "index": 199,
+      "__controlPoints": [
+        37.08526859940474,
+        -234.44135530891117
+      ]
+    },
+    {
+      "source": 118,
+      "target": 20,
+      "__indexColor": "#bc04dd",
+      "index": 200,
+      "__controlPoints": [
+        65.76172627798238,
+        -210.78125701942366
+      ]
+    },
+    {
+      "source": 119,
+      "target": 20,
+      "__indexColor": "#a804de",
+      "index": 201,
+      "__controlPoints": [
+        70.28809980297636,
+        -209.50221056955505
+      ]
+    },
+    {
+      "source": 120,
+      "target": 20,
+      "__indexColor": "#9404df",
+      "index": 202,
+      "__controlPoints": [
+        24.24249501323999,
+        -238.5931811450348
+      ]
+    },
+    {
+      "source": 121,
+      "target": 117,
+      "__indexColor": "#8004e0",
+      "index": 203,
+      "__controlPoints": [
+        -6.983108451392345,
+        -303.35617342809866
+      ]
+    },
+    {
+      "source": 122,
+      "target": 117,
+      "__indexColor": "#6c04e1",
+      "index": 204,
+      "__controlPoints": [
+        28.23020550425296,
+        -287.0688610118184
+      ]
+    },
+    {
+      "source": 122,
+      "target": 117,
+      "__indexColor": "#5804e2",
+      "index": 205,
+      "__controlPoints": [
+        28.23020550425296,
+        -287.0688610118184
+      ]
+    },
+    {
+      "source": 123,
+      "target": 21,
+      "__indexColor": "#4404e3",
+      "index": 206,
+      "__controlPoints": [
+        122.96474807718313,
+        -196.12780709845902
+      ]
+    },
+    {
+      "source": 19,
+      "target": 123,
+      "__indexColor": "#3004e4",
+      "index": 207,
+      "__controlPoints": [
+        98.80845592144746,
+        -223.59409804092263
+      ]
+    },
+    {
+      "source": 124,
+      "target": 123,
+      "__indexColor": "#1c04e5",
+      "index": 208,
+      "__controlPoints": [
+        173.54372318314998,
+        -278.852954534785
+      ]
+    },
+    {
+      "source": 124,
+      "target": 123,
+      "__indexColor": "#0804e6",
+      "index": 209,
+      "__controlPoints": [
+        173.54372318314998,
+        -278.852954534785
+      ]
+    },
+    {
+      "source": 124,
+      "target": 123,
+      "__indexColor": "#f404e7",
+      "index": 210,
+      "__controlPoints": [
+        173.54372318314998,
+        -278.852954534785
+      ]
+    },
+    {
+      "source": 126,
+      "target": 22,
+      "__indexColor": "#e004e8",
+      "index": 211,
+      "__controlPoints": [
+        -158.46212717134966,
+        -239.24574520141792
+      ]
+    },
+    {
+      "source": 126,
+      "target": 22,
+      "__indexColor": "#cc04e9",
+      "index": 212,
+      "__controlPoints": [
+        -158.46212717134966,
+        -239.24574520141792
+      ]
+    },
+    {
+      "source": 127,
+      "target": 22,
+      "__indexColor": "#b804ea",
+      "index": 213,
+      "__controlPoints": [
+        -167.34275987278411,
+        -243.57335608421909
+      ]
+    },
+    {
+      "source": 128,
+      "target": 22,
+      "__indexColor": "#a404eb",
+      "index": 214,
+      "__controlPoints": [
+        -170.05916633821244,
+        -239.44745187228577
+      ]
+    },
+    {
+      "source": 129,
+      "target": 22,
+      "__indexColor": "#9004ec",
+      "index": 215,
+      "__controlPoints": [
+        -164.76977110147382,
+        -247.68446039248545
+      ]
+    },
+    {
+      "source": 130,
+      "target": 125,
+      "__indexColor": "#7c04ed",
+      "index": 216,
+      "__controlPoints": [
+        -180.23707345511147,
+        -254.84117464680764
+      ]
+    },
+    {
+      "source": 131,
+      "target": 130,
+      "__indexColor": "#6804ee",
+      "index": 217,
+      "__controlPoints": [
+        -150.1933067649179,
+        -264.43729843035715
+      ]
+    },
+    {
+      "source": 132,
+      "target": 130,
+      "__indexColor": "#5404ef",
+      "index": 218,
+      "__controlPoints": [
+        -152.56030783501924,
+        -270.47237578563215
+      ]
+    },
+    {
+      "source": 132,
+      "target": 130,
+      "__indexColor": "#4004f0",
+      "index": 219,
+      "__controlPoints": [
+        -152.56030783501924,
+        -270.47237578563215
+      ]
+    },
+    {
+      "source": 121,
+      "target": 131,
+      "__indexColor": "#2c04f1",
+      "index": 220,
+      "__controlPoints": [
+        -97.4836309785333,
+        -293.66827231514856
+      ]
+    },
+    {
+      "source": 130,
+      "target": 126,
+      "__indexColor": "#1804f2",
+      "index": 221,
+      "__controlPoints": [
+        -174.07147680984315,
+        -247.70599453907207
+      ]
+    },
+    {
+      "source": 130,
+      "target": 127,
+      "__indexColor": "#0404f3",
+      "index": 222,
+      "__controlPoints": [
+        -183.8531442367358,
+        -246.32294158260513
+      ]
+    },
+    {
+      "source": 130,
+      "target": 128,
+      "__indexColor": "#f004f4",
+      "index": 223,
+      "__controlPoints": [
+        -183.79553791427415,
+        -241.38344452692402
+      ]
+    },
+    {
+      "source": 130,
+      "target": 129,
+      "__indexColor": "#dc04f5",
+      "index": 224,
+      "__controlPoints": [
+        -184.0213276560263,
+        -251.16991632858958
+      ]
+    },
+    {
+      "source": 133,
+      "target": 23,
+      "__indexColor": "#c804f6",
+      "index": 225,
+      "__controlPoints": [
+        125.7427039522845,
+        -157.77791433596138
+      ]
+    },
+    {
+      "source": 134,
+      "target": 23,
+      "__indexColor": "#b404f7",
+      "index": 226,
+      "__controlPoints": [
+        121.53792981419225,
+        -163.30345917928864
+      ]
+    },
+    {
+      "source": 123,
+      "target": 133,
+      "__indexColor": "#a004f8",
+      "index": 227,
+      "__controlPoints": [
+        149.8545396408699,
+        -221.56183773354732
+      ]
+    },
+    {
+      "source": 135,
+      "target": 124,
+      "__indexColor": "#8c04f9",
+      "index": 228,
+      "__controlPoints": [
+        204.14512206803502,
+        -331.1267049216959
+      ]
+    },
+    {
+      "source": 135,
+      "target": 124,
+      "__indexColor": "#7804fa",
+      "index": 229,
+      "__controlPoints": [
+        204.14512206803502,
+        -331.1267049216959
+      ]
+    },
+    {
+      "source": 135,
+      "target": 124,
+      "__indexColor": "#6404fb",
+      "index": 230,
+      "__controlPoints": [
+        204.14512206803502,
+        -331.1267049216959
+      ]
+    },
+    {
+      "source": 133,
+      "target": 24,
+      "__indexColor": "#5004fc",
+      "index": 231,
+      "__controlPoints": [
+        118.13913837427638,
+        -156.77190723438991
+      ]
+    },
+    {
+      "source": 134,
+      "target": 24,
+      "__indexColor": "#3c04fd",
+      "index": 232,
+      "__controlPoints": [
+        113.93436423618414,
+        -162.29745207771717
+      ]
+    },
+    {
+      "source": 20,
+      "target": 25,
+      "__indexColor": "#2804fe",
+      "index": 233,
+      "__controlPoints": [
+        37.09609274523676,
+        -164.8447622825204
+      ]
+    },
+    {
+      "source": 136,
+      "target": 26,
+      "__indexColor": "#1404ff",
+      "index": 234,
+      "__controlPoints": [
+        71.15303689668977,
+        -88.33887531259577
+      ]
+    },
+    {
+      "source": 23,
+      "target": 136,
+      "__indexColor": "#000500",
+      "index": 235,
+      "__controlPoints": [
+        101.90651972168507,
+        -121.79138048689782
+      ]
+    },
+    {
+      "source": 24,
+      "target": 136,
+      "__indexColor": "#ec0501",
+      "index": 236,
+      "__controlPoints": [
+        95.04201045378653,
+        -125.21260428817378
+      ]
+    },
+    {
+      "source": 123,
+      "target": 134,
+      "__indexColor": "#d80502",
+      "index": 237,
+      "__controlPoints": [
+        143.2776810233645,
+        -223.7882029536617
+      ]
+    },
+    {
+      "source": 136,
+      "target": 27,
+      "__indexColor": "#c40503",
+      "index": 238,
+      "__controlPoints": [
+        75.60805619265196,
+        -89.91431326052434
+      ]
+    },
+    {
+      "source": 123,
+      "target": 118,
+      "__indexColor": "#b00504",
+      "index": 239,
+      "__controlPoints": [
+        116.1283095030219,
+        -237.796471383828
+      ]
+    },
+    {
+      "source": 123,
+      "target": 119,
+      "__indexColor": "#9c0505",
+      "index": 240,
+      "__controlPoints": [
+        120.59535195675173,
+        -239.2694102234488
+      ]
+    },
+    {
+      "source": 121,
+      "target": 120,
+      "__indexColor": "#880506",
+      "index": 241,
+      "__controlPoints": [
+        -19.95007831189281,
+        -299.61021776954266
+      ]
+    },
+    {
+      "source": 20,
+      "target": 28,
+      "__indexColor": "#740507",
+      "index": 242,
+      "__controlPoints": [
+        31.58369425538646,
+        -164.50452219692778
+      ]
+    },
+    {
+      "source": 130,
+      "target": 29,
+      "__indexColor": "#600508",
+      "index": 243,
+      "__controlPoints": [
+        -103.84460541500655,
+        -214.493095501198
+      ]
+    },
+    {
+      "source": 121,
+      "target": 132,
+      "__indexColor": "#4c0509",
+      "index": 244,
+      "__controlPoints": [
+        -102.82254803990442,
+        -297.345338722193
+      ]
+    },
+    {
+      "source": 121,
+      "target": 132,
+      "__indexColor": "#38050a",
+      "index": 245,
+      "__controlPoints": [
+        -102.82254803990442,
+        -297.345338722193
+      ]
+    },
+    {
+      "source": 130,
+      "target": 30,
+      "__indexColor": "#24050b",
+      "index": 246,
+      "__controlPoints": [
+        -140.7818582189632,
+        -194.29748059466667
+      ]
+    },
+    {
+      "source": 130,
+      "target": 31,
+      "__indexColor": "#10050c",
+      "index": 247,
+      "__controlPoints": [
+        -141.8731952662689,
+        -198.61275572682027
+      ]
+    },
+    {
+      "source": 137,
+      "target": 32,
+      "__indexColor": "#fc050d",
+      "index": 248,
+      "__controlPoints": [
+        2.806043159508086,
+        -96.68152506105915
+      ]
+    },
+    {
+      "source": 138,
+      "target": 137,
+      "__indexColor": "#e8050e",
+      "index": 249,
+      "__controlPoints": [
+        -6.42112217588817,
+        -117.02378213861752
+      ]
+    },
+    {
+      "source": 137,
+      "target": 33,
+      "__indexColor": "#d4050f",
+      "index": 250,
+      "__controlPoints": [
+        -5.739435570389033,
+        -72.53598366393767
+      ]
+    },
+    {
+      "source": 63,
+      "target": 66,
+      "__indexColor": "#c00510",
+      "index": 251,
+      "__controlPoints": [
+        -144.75800648623627,
+        -77.05621530665852
+      ]
+    },
+    {
+      "source": 300,
+      "target": 1,
+      "__indexColor": "#980512",
+      "index": 252,
+      "__controlPoints": [
+        531.7371127945506,
+        81.00235097594016
+      ]
+    }
+  ]
+}
